@@ -17,6 +17,15 @@ namespace Echelon.TimelineApi
         /// <summary>
         /// Creates a new TimelineService object.
         /// </summary>
+        /// <param name="baseUrl">The base URL of the IdeaGen server</param>
+        /// <param name="authToken">The authentication token needed by the API</param>
+        /// <param name="tenantId">The ID which identifies our team to IdeaGen</param>
+        public TimelineService(string baseUrl, string authToken, string tenantId)
+            : this(new WebClientHelper(), baseUrl, authToken, tenantId) { }
+
+        /// <summary>
+        /// Creates a new TimelineService object.
+        /// </summary>
         /// <param name="client">The web client helper used for web requests</param>
         /// <param name="baseUrl">The base URL of the IdeaGen server</param>
         /// <param name="authToken">The authentication token needed by the API</param>

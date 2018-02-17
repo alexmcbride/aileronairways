@@ -12,14 +12,14 @@ namespace Echelon.TimelineApi.TestConsole
 
         static void Main(string[] args)
         {
-            IWebClientHelper client = new WebClientHelper();
-            Stopwatch stopwatch = new Stopwatch(); // For timing.
+            // Time how long operation takes.
+            Stopwatch stopwatch = new Stopwatch(); 
             stopwatch.Start();
 
-            // Create new API object and set some parameters.
-            ITimelineService api = new TimelineService(client, BaseUrl, AuthToken, TenantId);
+            // Create new API object and pass in our parameters.
+            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
-            // Get the timelines from this API.
+            // Get the timelines assciated with this API object.
             IList<Timeline> timelines = Timeline.GetTimelines(api);
 
             // Display timelines.
@@ -35,9 +35,9 @@ namespace Echelon.TimelineApi.TestConsole
                 Console.WriteLine();
             }
 
+            // Output elapsed time.
             stopwatch.Stop();
             Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
-
 
             // Stop program from exiting.
             Console.WriteLine("Press any key to continue...");
