@@ -62,6 +62,11 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject(json).ToString();
         }
 
+        /// <summary>
+        /// Makes a HTTP GET request to the API and returns the response as JSON.
+        /// </summary>
+        /// <param name="resource">The resource to use .e.g. Timeline/GetTimelines</param>
+        /// <returns>The response as JSON.</returns>
         public string GetJson(string resource)
         {
             return GetJson(resource, new NameValueCollection());

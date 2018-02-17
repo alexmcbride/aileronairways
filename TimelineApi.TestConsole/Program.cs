@@ -6,9 +6,9 @@ namespace Echelon.TimelineApi.TestConsole
 {
     class Program
     {
-        public const string BaseUrl = "https://gcu.ideagen-development.com/";
-        public const string AuthToken = "5e906627-a997-4ab1-94c5-07fcb6c9383d";
-        public const string TenantId = "Team3";
+        const string BaseUrl = "https://gcu.ideagen-development.com/";
+        const string AuthToken = "5e906627-a997-4ab1-94c5-07fcb6c9383d";
+        const string TenantId = "Team3";
 
         static void Main(string[] args)
         {
@@ -19,7 +19,7 @@ namespace Echelon.TimelineApi.TestConsole
             // Create new API object and pass in our parameters.
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
-            // Get the timelines assciated with this API object.
+            // Get the timelines associated with this API object.
             IList<Timeline> timelines = Timeline.GetTimelines(api);
 
             // Display timelines.
