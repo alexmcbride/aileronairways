@@ -13,29 +13,15 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             // Time how long operation takes.
-            Stopwatch stopwatch = new Stopwatch(); 
+            Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
             // Create new API object and pass in our parameters.
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
-            // Get the timelines associated with this API object.
-            IList<Timeline> timelines = Timeline.GetTimelines(api);
+            TestGetTimelines(api);
 
-            // Display timelines.
-            foreach (Timeline timeline in timelines)
-            {
-                Console.WriteLine("Timeline:");
-                Console.WriteLine($"ID: {timeline.Id}");
-                Console.WriteLine($"Title: {timeline.Title}");
-                Console.WriteLine($"Creation: {timeline.CreationTimeStamp}");
-                Console.WriteLine($"Is Deleted: {timeline.IsDeleted}");
-                Console.WriteLine($"Tenant ID: {timeline.TenantId}");
-                Console.Write("----");
-                Console.WriteLine();
-            }
-
-            //Timeline timeline = Timeline.Create(api, "Test Timeline");
+            //TestCreate(api);
 
             // Output elapsed time.
             stopwatch.Stop();
@@ -44,6 +30,55 @@ namespace Echelon.TimelineApi.TestConsole
             // Stop program from exiting.
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
+        }
+
+        private static void TestGetTimelines(ITimelineService api)
+        {
+            // Get the timelines associated with this API object.
+            IList<Timeline> timelines = Timeline.GetTimelines(api);
+
+            // Display timelines.
+            Console.WriteLine("Test Get Timelines");
+            foreach (Timeline timeline in timelines)
+            {
+                DisplayTimeline(timeline);
+                Console.Write("----");
+                Console.WriteLine();
+            }
+        }
+
+        private static void TestTimelineActions(ITimelineService api)
+        {
+            Console.WriteLine("Test Timeline Actions");
+
+            // Create new timeline.
+            Timeline timeline = Timeline.Create(api, "Test Timeline");
+            string id = timeline.Id; // Save ID
+            
+            // Get timeline and display it.
+            timeline = Timeline.GetTimeline(api, id);
+            DisplayTimeline(timeline);
+
+            // Edit title
+            timeline.Title = "Edited Title";
+            timeline.EditTitle(api);
+
+            // Get and display timeline again.
+            timeline = Timeline.GetTimeline(api, id);
+            DisplayTimeline(timeline);
+        
+            // Remove timeline.
+            timeline.Delete(api);
+        }
+
+        private static void DisplayTimeline(Timeline timeline)
+        {
+            Console.WriteLine("Timeline:");
+            Console.WriteLine($"ID: {timeline.Id}");
+            Console.WriteLine($"Title: {timeline.Title}");
+            Console.WriteLine($"Creation: {timeline.CreationTimeStamp}");
+            Console.WriteLine($"Is Deleted: {timeline.IsDeleted}");
+            Console.WriteLine($"Tenant ID: {timeline.TenantId}");
         }
     }
 }

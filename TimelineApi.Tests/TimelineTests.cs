@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Newtonsoft.Json;
 using System.Collections.Specialized;
 
 namespace Echelon.TimelineApi.Tests
@@ -51,6 +52,49 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(timelines.Count, 2);
             Assert.AreEqual(timelines[0].Id, "ID1");
             Assert.AreEqual(timelines[1].Id, "ID2");
+        }
+
+        [TestMethod]
+        public void TestEditTitle()
+        {
+            var mock = new Mock<ITimelineService>();
+
+            Timeline timeline = new Timeline
+            {
+                Id = "ID1",
+                Title = "Test Title 2"
+            };
+            timeline.EditTitle(mock.Object);
+
+            mock.Verify(m => m.PutJson("Timeline/EditTitle", It.Is<object>(t => VerifyObject(t, "TimelineId", "ID1") && VerifyObject(t, "Title", "Test Title 2"))));
+        }
+
+        [TestMethod]
+        public void TestDelete()
+        {
+            var mock = new Mock<ITimelineService>();
+
+            Timeline timeline = new Timeline
+            {
+                Id = "ID1",
+            };
+            timeline.Delete(mock.Object);
+
+            mock.Verify(m => m.PutJson("Timeline/Delete", It.Is<object>(t => VerifyObject(t, "TimelineId", "ID1"))));
+        }
+
+        // Verifies that a particular property is present in an object.
+        private static bool VerifyObject(object obj, string key, object value)
+        {
+            var properties = obj.GetType().GetProperties();
+            foreach (var prop in properties)
+            {
+                if (prop.Name == key)
+                {
+                    return prop.GetValue(obj) == value;
+                }
+            }
+            return false;
         }
     }
 }

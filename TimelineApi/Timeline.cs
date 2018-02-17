@@ -52,22 +52,22 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<Timeline>(json);
         }
 
-        //public void EditTitle(ITimelineService api)
-        //{
-        //    api.PutJson("Timeline/EditTitle", new
-        //    {
-        //        TimelineId = Id,
-        //        Title
-        //    });
-        //}
+        public void EditTitle(ITimelineService api)
+        {
+            api.PutJson("Timeline/EditTitle", new
+            {
+                TimelineId = Id,
+                Title
+            });
+        }
 
-        //public void Delete(ITimelineService api)
-        //{
-        //    api.PutJson("Timeline/Delete", new
-        //    {
-        //        TimelineId = Id,
-        //    });
-        //}
+        public void Delete(ITimelineService api)
+        {
+            api.PutJson("Timeline/Delete", new
+            {
+                TimelineId = Id,
+            });
+        }
 
         /// <summary>
         /// Gets a timeline from the API.
