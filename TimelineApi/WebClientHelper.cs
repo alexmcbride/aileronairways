@@ -4,7 +4,7 @@ using System.Net;
 namespace Echelon.TimelineApi
 {
     /// <summary>
-    /// Helper thay wraps a WebClient, in order to make testing easier.
+    /// Helper that wraps a WebClient, in order to make testing easier.
     /// </summary>
     public class WebClientHelper : IWebClientHelper
     {
