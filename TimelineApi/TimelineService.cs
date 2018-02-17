@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
+using System.Net;
 
 namespace Echelon.TimelineApi
 {
@@ -93,8 +94,23 @@ namespace Echelon.TimelineApi
 
             // Get JSON response.
             string url = GetUrl(resource);
-            string response = _client.DownloadString(url, headers);
-            return CleanupResponse(response);
+
+            try
+            {
+                string response = _client.DownloadString(url, headers);
+                return CleanupResponse(response);
+            }
+            catch (WebException ex)
+            {
+                var status = _client.GetStatusCode(ex.Response);
+                if (status == HttpStatusCode.BadRequest || status == HttpStatusCode.InternalServerError)
+                {
+                    string message = _client.GetResponseMessage(ex.Response);
+                    string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
+                    throw new TimelineException($"{type} Error: {message}");
+                }
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.IO;
 using System.Net;
 
 namespace Echelon.TimelineApi
@@ -35,6 +36,38 @@ namespace Echelon.TimelineApi
             {
                 return client.UploadString(url, "PUT", body);
             }
+        }
+
+        /// <summary>
+        /// Gets an HttpStatusCode from a WebResponse.
+        /// </summary>
+        /// <param name="response">The response to get the code from.</param>
+        /// <returns>The resulting code</returns>
+        public HttpStatusCode GetStatusCode(WebResponse response)
+        {
+            if (response is HttpWebResponse http)
+            {
+                return http.StatusCode;
+            }
+            return HttpStatusCode.OK;
+        }
+
+        /// <summary>
+        /// Gets the message from a web response.
+        /// </summary>
+        /// <param name="response">The response to get the message from.</param>
+        /// <returns>The message.</returns>
+        public string GetResponseMessage(WebResponse response)
+        {
+            if (response is HttpWebResponse http)
+            {
+                using (Stream stream = http.GetResponseStream())
+                using (TextReader reader = new StreamReader(stream))
+                {
+                    return reader.ReadToEnd();
+                }
+            }
+            return null;
         }
     }
 }

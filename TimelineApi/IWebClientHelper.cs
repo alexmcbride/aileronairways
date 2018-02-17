@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.Net;
 
 namespace Echelon.TimelineApi
 {
@@ -22,5 +23,19 @@ namespace Echelon.TimelineApi
         /// <param name="body">The body of the request as JSON</param>
         /// <returns>The response as a string.</returns>
         string DownloadString(string url, NameValueCollection headers);
+
+        /// <summary>
+        /// Gets an HttpStatusCode from a WebResponse.
+        /// </summary>
+        /// <param name="response">The response to get the code from.</param>
+        /// <returns>The resulting code</returns>
+        HttpStatusCode GetStatusCode(WebResponse response);
+
+        /// <summary>
+        /// Gets the message from a web response.
+        /// </summary>
+        /// <param name="response">The response to get the message from.</param>
+        /// <returns>The message.</returns>
+        string GetResponseMessage(WebResponse response);
     }
 }

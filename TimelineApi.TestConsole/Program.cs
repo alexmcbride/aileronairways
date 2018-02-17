@@ -50,11 +50,8 @@ namespace Echelon.TimelineApi.TestConsole
         {
             Console.WriteLine("Create timeline");
             Timeline timeline = Timeline.Create(api, "Test Timeline");
-            string id = timeline.Id; // Store ID
-
-            Console.WriteLine("Display new timeline");
-            timeline = Timeline.GetTimeline(api, id);
             DisplayTimeline(timeline);
+            string id = timeline.Id; // Store ID
 
             Console.WriteLine("Edit timeline");
             timeline.Title = "Edited Title";
