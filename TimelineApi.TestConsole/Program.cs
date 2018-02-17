@@ -35,6 +35,8 @@ namespace Echelon.TimelineApi.TestConsole
                 Console.WriteLine();
             }
 
+            //Timeline timeline = Timeline.Create(api, "Test Timeline");
+
             // Output elapsed time.
             stopwatch.Stop();
             Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");

@@ -43,6 +43,13 @@ namespace Echelon.TimelineApi
             return $"{_baseUrl}{resource}";
         }
 
+        private static string CleanupResponse(string value)
+        {
+            // Need to remove these characters from response or JSON does not deserialize correctly. Not sure if this 
+            // is an issue with IdeaGen's API, or something on our end. Anyway, this works.
+            return value.Replace("\\", string.Empty).Trim('"');
+        }
+
         /// <summary>
         /// Makes a HTTP PUT request to the API and returns the response as JSON.
         /// </summary>
@@ -58,8 +65,8 @@ namespace Echelon.TimelineApi
 
             // Make request and get JSON response.
             string url = GetUrl(resource);
-            string json = _client.UploadString(url, body.ToString());
-            return JsonConvert.DeserializeObject(json).ToString();
+            string response = _client.UploadString(url, body.ToString());
+            return CleanupResponse(response);
         }
 
         /// <summary>
@@ -86,8 +93,8 @@ namespace Echelon.TimelineApi
 
             // Get JSON response.
             string url = GetUrl(resource);
-            string json = _client.DownloadString($"{_baseUrl}{resource}", headers);
-            return JsonConvert.DeserializeObject(json).ToString();
+            string response = _client.DownloadString($"{_baseUrl}{resource}", headers);
+            return CleanupResponse(response);
         }
     }
 }
