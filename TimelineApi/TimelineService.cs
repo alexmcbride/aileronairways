@@ -92,24 +92,26 @@ namespace Echelon.TimelineApi
             headers.Add("AuthToken", _authToken);
             headers.Add("TenantId", _tenantId);
 
-            // Get JSON response.
-            string url = GetUrl(resource);
-
             try
-            {
+            {            
+                // Get JSON response.
+                string url = GetUrl(resource);
                 string response = _client.DownloadString(url, headers);
                 return CleanupResponse(response);
             }
             catch (WebException ex)
             {
+                // Check if this was a 400 or 500 message.
                 var status = _client.GetStatusCode(ex.Response);
                 if (status == HttpStatusCode.BadRequest || status == HttpStatusCode.InternalServerError)
                 {
+                    // Get response message and throw new exception.
                     string message = _client.GetResponseMessage(ex.Response);
                     string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
-                    throw new TimelineException($"{type} Error: {message}");
+                    throw new TimelineException($"{type} Error: {message}", ex);
                 }
-                throw;
+
+                throw; // Throw original exception if we don't handle it.
             }
         }
     }
