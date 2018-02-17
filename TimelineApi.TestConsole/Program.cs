@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Echelon.TimelineApi.TestConsole
 {
@@ -12,6 +13,8 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             IWebClientHelper client = new WebClientHelper();
+            Stopwatch stopwatch = new Stopwatch(); // For timing.
+            stopwatch.Start();
 
             // Create new API object and set some parameters.
             ITimelineService api = new TimelineService(client, BaseUrl, AuthToken, TenantId);
@@ -29,7 +32,12 @@ namespace Echelon.TimelineApi.TestConsole
                 Console.WriteLine($"Is Deleted: {timeline.IsDeleted}");
                 Console.WriteLine($"Tenant ID: {timeline.TenantId}");
                 Console.Write("----");
+                Console.WriteLine();
             }
+
+            stopwatch.Stop();
+            Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
+
 
             // Stop program from exiting.
             Console.WriteLine("Press any key to continue...");
