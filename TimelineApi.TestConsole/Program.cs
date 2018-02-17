@@ -19,9 +19,9 @@ namespace Echelon.TimelineApi.TestConsole
             // Create new API object and pass in our parameters.
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
+            // Test methods.
             TestGetTimelines(api);
-
-            //TestCreate(api);
+            TestTimelineActions(api);
 
             // Output elapsed time.
             stopwatch.Stop();
@@ -38,36 +38,34 @@ namespace Echelon.TimelineApi.TestConsole
             IList<Timeline> timelines = Timeline.GetTimelines(api);
 
             // Display timelines.
-            Console.WriteLine("Test Get Timelines");
+            Console.WriteLine("Display list of all timelines");
             foreach (Timeline timeline in timelines)
             {
                 DisplayTimeline(timeline);
-                Console.Write("----");
-                Console.WriteLine();
             }
+            Console.WriteLine();
         }
 
         private static void TestTimelineActions(ITimelineService api)
         {
-            Console.WriteLine("Test Timeline Actions");
-
-            // Create new timeline.
+            Console.WriteLine("Create timeline");
             Timeline timeline = Timeline.Create(api, "Test Timeline");
-            string id = timeline.Id; // Save ID
-            
-            // Get timeline and display it.
+            string id = timeline.Id; // Store ID
+
+            Console.WriteLine("Display new timeline");
             timeline = Timeline.GetTimeline(api, id);
             DisplayTimeline(timeline);
 
-            // Edit title
+            Console.WriteLine("Edit timeline");
             timeline.Title = "Edited Title";
             timeline.EditTitle(api);
 
             // Get and display timeline again.
             timeline = Timeline.GetTimeline(api, id);
             DisplayTimeline(timeline);
-        
+
             // Remove timeline.
+            Console.WriteLine("Delete timeline");
             timeline.Delete(api);
         }
 
@@ -79,6 +77,8 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine($"Creation: {timeline.CreationTimeStamp}");
             Console.WriteLine($"Is Deleted: {timeline.IsDeleted}");
             Console.WriteLine($"Tenant ID: {timeline.TenantId}");
+            Console.Write("----");
+            Console.WriteLine();
         }
     }
 }

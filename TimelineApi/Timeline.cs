@@ -52,6 +52,10 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<Timeline>(json);
         }
 
+        /// <summary>
+        /// Saves an edited title to the API.
+        /// </summary>
+        /// <param name="api">The API to save the edited title to.</param>
         public void EditTitle(ITimelineService api)
         {
             api.PutJson("Timeline/EditTitle", new
@@ -61,6 +65,10 @@ namespace Echelon.TimelineApi
             });
         }
 
+        /// <summary>
+        /// Deletes the timeline.
+        /// </summary>
+        /// <param name="api">The API to delete the timeline from.</param>
         public void Delete(ITimelineService api)
         {
             api.PutJson("Timeline/Delete", new
