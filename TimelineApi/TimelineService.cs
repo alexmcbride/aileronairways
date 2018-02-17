@@ -93,7 +93,7 @@ namespace Echelon.TimelineApi
 
             // Get JSON response.
             string url = GetUrl(resource);
-            string response = _client.DownloadString($"{_baseUrl}{resource}", headers);
+            string response = _client.DownloadString(url, headers);
             return CleanupResponse(response);
         }
     }
