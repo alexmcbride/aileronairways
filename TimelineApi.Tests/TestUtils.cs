@@ -28,6 +28,32 @@ namespace Echelon.TimelineApi.Tests
             return false;
         }
 
+        public static bool VerifyObject(this object obj, string name, bool value)
+        {
+            var properties = obj.GetType().GetProperties();
+            foreach (var prop in properties)
+            {
+                if (prop.Name == name && prop.GetValue(obj) is bool eh)
+                {
+                    return eh == value;
+                }
+            }
+            return false;
+        }
+
+        public static bool VerifyObject(this object obj, string name, DateTime value)
+        {
+            var properties = obj.GetType().GetProperties();
+            foreach (var prop in properties)
+            {
+                if (prop.Name == name && prop.GetValue(obj) is DateTime dt)
+                {
+                    return dt == value;
+                }
+            }
+            return false;
+        }
+
         /// <summary>
         /// Uses reflection to verify if an object property is a GUID.
         /// </summary>

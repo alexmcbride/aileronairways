@@ -15,7 +15,7 @@ namespace Echelon.TimelineApi.Tests
             "{\"Id\": \"ID2\", \"Title\": \"Test Title 2\", \"CreationTimeStamp\": \"636544632350000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}]";
 
         [TestMethod]
-        public async Task TestCreate()
+        public async Task TestTimelineCreate()
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
@@ -61,7 +61,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEditTitle()
+        public async Task TestTimelineEditTitle()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -77,7 +77,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestDelete()
+        public async Task TestTimelineDelete()
         {
             var mock = new Mock<ITimelineService>();
 
