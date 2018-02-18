@@ -4,9 +4,6 @@ using System;
 
 namespace Echelon.TimelineApi
 {
-    /// <summary>
-    /// Converter for converting ticks string to DateTime object and visa-versa.
-    /// </summary>
     public class CustomDateTimeConverter : DateTimeConverterBase
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)

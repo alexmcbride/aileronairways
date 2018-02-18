@@ -8,18 +8,12 @@ namespace Echelon.TimelineApi
     public class TimelineEvent
     {
         public string Id { get; set; }
-
         public string TenantId { get; set; }
-
         public string Title { get; set; }
-
         public string Description { get; set; }
-
         public bool IsDeleted { get; set; }
-
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
-
         public string Location { get; set; }
 
         public async Task<TimelineEvent> CreateAsync(ITimelineService api)
