@@ -38,5 +38,49 @@ namespace Echelon.TimelineApi
             TenantId = result.TenantId;
             return this;
         }
+
+        public Task EditTitleAsync(ITimelineService api)
+        {
+            return api.PutJsonAsync("TimelineEvent/EditTitle", new
+            {
+                TimelineEventId = Id,
+                Title
+            });
+        }
+
+        public Task EditDescriptionAsync(ITimelineService api)
+        {
+            return api.PutJsonAsync("TimelineEvent/EditDescription", new
+            {
+                TimelineEventId = Id,
+                Description
+            });
+        }
+
+        public Task EditLocationAsync(ITimelineService api)
+        {
+            return api.PutJsonAsync("TimelineEvent/EditLocation", new
+            {
+                TimelineEventId = Id,
+                Location
+            });
+        }
+
+        public Task EditEventDateTimeAsync(ITimelineService api)
+        {
+            return api.PutJsonAsync("TimelineEvent/EditEventDateTime", new
+            {
+                TimelineEventId = Id,
+                EventDateTime
+            });
+        }
+
+        public Task DeleteAsync(ITimelineService api)
+        {
+            return api.PutJsonAsync("TimelineEvent/Delete", new
+            {
+                TimelineEventId = Id
+            });
+        }
     }
 }
