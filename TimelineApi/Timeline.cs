@@ -122,7 +122,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public async Task<IList<LinkedEvent>> GetEvents(ITimelineService api)
+        public async Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api)
         {
             string json = await api.GetJsonAsync("Timeline/GetEvents", new NameValueCollection
             {

@@ -132,7 +132,7 @@ namespace Echelon.TimelineApi.Tests
 
             var timeline = new Timeline();
             timeline.Id = "ID1";
-            var linkedEvents = await timeline.GetEvents(mock.Object);
+            var linkedEvents = await timeline.GetEventsAsync(mock.Object);
 
             mock.Verify(m => m.GetJsonAsync("Timeline/GetEvents", It.Is<NameValueCollection>(c => c.VerifyContains("TimelineId", "ID1"))));
             Assert.AreEqual(2, linkedEvents.Count);
