@@ -67,7 +67,8 @@ namespace Echelon.TimelineApi.Tests
             };
             await timeline.EditTitleAsync(mock.Object);
 
-            mock.Verify(m => m.PutJsonAsync("Timeline/EditTitle", It.Is<object>(t => TestUtils.VerifyObject(t, "TimelineId", "ID1") && TestUtils.VerifyObject(t, "Title", "Test Title 2"))));
+            mock.Verify(m => m.PutJsonAsync("Timeline/EditTitle", It.Is<object>(t => t.VerifyObject("TimelineId", "ID1"))));
+            mock.Verify(m => m.PutJsonAsync("Timeline/EditTitle", It.Is<object>(t => t.VerifyObject("Title", "Test Title 2"))));
         }
 
         [TestMethod]
@@ -81,7 +82,7 @@ namespace Echelon.TimelineApi.Tests
             };
             await timeline.DeleteAsync(mock.Object);
 
-            mock.Verify(m => m.PutJsonAsync("Timeline/Delete", It.Is<object>(t => TestUtils.VerifyObject(t, "TimelineId", "ID1"))));
+            mock.Verify(m => m.PutJsonAsync("Timeline/Delete", It.Is<object>(t => t.VerifyObject("TimelineId", "ID1"))));
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.TestConsole
@@ -20,7 +19,6 @@ namespace Echelon.TimelineApi.TestConsole
             RunTestsAsync(api);
 
             // Stop program from exiting.
-            Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
         }
 

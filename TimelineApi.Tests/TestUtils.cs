@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -13,7 +15,7 @@ namespace Echelon.TimelineApi.Tests
         /// <param name="name">The name of the property.</param>
         /// <param name="value">The value of the property.</param>
         /// <returns>True if it exists.</returns>
-        public static bool VerifyObject(object obj, string name, object value)
+        public static bool VerifyObject(this object obj, string name, object value)
         {
             var properties = obj.GetType().GetProperties();
             foreach (var prop in properties)
@@ -24,6 +26,24 @@ namespace Echelon.TimelineApi.Tests
                 }
             }
             return false;
+        }
+
+        /// <summary>
+        /// Checks if the name/value pair are present in the collection.
+        /// </summary>
+        /// <param name="c">The collection to check.</param>
+        /// <param name="name">The name to check for.</param>
+        /// <param name="value">The value to check for.</param>
+        /// <returns>True if it exists.</returns>
+        public static bool Contains(this NameValueCollection c, string name, string value)
+        {
+            return c.Get(name) == value;
+        }
+
+        public static bool VerifyJson(this string s, string name, string value)
+        {
+            JObject o = JObject.Parse(s);
+            return o.GetValue(name).ToString() == value;
         }
 
         /// <summary>

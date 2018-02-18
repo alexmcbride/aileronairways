@@ -15,8 +15,7 @@ namespace Echelon.TimelineApi.Tests
         [TestMethod]
         public async Task TestGetJson()
         {
-            // We need it in the same deserialised state as the returned json object, otherwise it all goes wrong.
-            string json = JsonConvert.DeserializeObject("{\"Test\": \"Result\"}").ToString();
+            string json = "{\"Test\": \"Result\"}";
 
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(json));
@@ -25,17 +24,18 @@ namespace Echelon.TimelineApi.Tests
 
             string result = await api.GetJsonAsync("Test/Get");
 
+            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.Contains("AuthToken", "ABC"))));
+            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.Contains("TenantId", "123"))));
             Assert.AreEqual(json, result);
         }
 
         [TestMethod]
         public async Task TestPutJson()
         {
-            // We need it in the same deserialised state as the returned json object, otherwise it all goes wrong.
-            string json = JsonConvert.DeserializeObject("{\"Test\": \"Result\"}").ToString();
+            string json = "{\"Test\": \"Result\"}";
 
             var mock = new Mock<IWebClientHelper>();
-            mock.Setup(m => m.UploadStringAsync($"{BaseUrl}Test/Put", It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(json));
+            mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(json));
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
 
@@ -44,6 +44,8 @@ namespace Echelon.TimelineApi.Tests
                 Test = "Result"
             });
 
+            mock.Verify(m => m.UploadStringAsync($"{BaseUrl}Test/Put", It.Is<string>(s => s.VerifyJson("AuthToken", "ABC"))));
+            mock.Verify(m => m.UploadStringAsync($"{BaseUrl}Test/Put", It.Is<string>(s => s.VerifyJson("TenantId", "123"))));
             Assert.AreEqual(json, result);
         }
 
