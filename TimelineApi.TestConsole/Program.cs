@@ -38,8 +38,7 @@ namespace Echelon.TimelineApi.TestConsole
                 Title = "Test Event Title",
                 Description = "Test description",
                 EventDateTime = DateTime.Now,
-                Longitude = -1.1234,
-                Latitude = 1.1234
+                Location = "-1.1234,1.1234",
             };
             evt = await evt.CreateAsync(api);
             string id = evt.Id;

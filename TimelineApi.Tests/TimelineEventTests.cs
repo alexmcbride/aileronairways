@@ -79,12 +79,11 @@ namespace Echelon.TimelineApi.Tests
             await new TimelineEvent
             {
                 Id = "ID1",
-                Location = "-1.1234,1.1234"
+                Location = "-1.1234,2.1234"
             }.EditLocationAsync(mock.Object);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/EditLocation", It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") &&
-
-            o.VerifyObject("Location", "-1.1234,1.1234"))));
+                o.VerifyObject("Location", "-1.1234,2.1234"))));
         }
 
         [TestMethod]
@@ -134,19 +133,6 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(evt.EventDateTime, dt);
             Assert.AreEqual(evt.Location, "-1.1234,1.1234");
             Assert.IsTrue(evt.IsDeleted);
-        }
-
-        [TestMethod]
-        public void TestLocation()
-        {
-            TimelineEvent evt = new TimelineEvent();
-            evt.Location = "1.1234,2.1234";
-            Assert.AreEqual(evt.Longitude, 1.1234);
-            Assert.AreEqual(evt.Latitude, 2.1234);
-
-            evt.Longitude = 2.2345;
-            evt.Latitude = 3.2345;
-            Assert.AreEqual(evt.Location, "2.2345,3.2345");
         }
     }
 }

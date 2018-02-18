@@ -14,28 +14,7 @@ namespace Echelon.TimelineApi
         public bool IsDeleted { get; set; }
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
-
-        public string Location
-        {
-            get { return $"{Longitude},{Latitude}"; }
-            set
-            {
-                string[] tokens = value?.Split(',');
-                if (tokens != null && tokens.Length == 2 && 
-                    double.TryParse(tokens[0], out double lon) && 
-                    double.TryParse(tokens[1], out double lat))
-                {
-                    Longitude = lon;
-                    Latitude = lat;
-                }
-            }
-        }
-
-        [JsonIgnore]
-        public double Longitude { get; set; }
-
-        [JsonIgnore]
-        public double Latitude { get; set; }
+        public string Location { get; set; }
 
         public async Task<TimelineEvent> CreateAsync(ITimelineService api)
         {
