@@ -28,20 +28,23 @@ namespace Echelon.TimelineApi.Tests
             return false;
         }
 
+        /// <summary>
+        /// Uses reflection to verify if an object property is a GUID.
+        /// </summary>
+        /// <param name="obj">The object to test.</param>
+        /// <param name="name">The name of the property.</param>
+        /// <returns>True if it's a GUID.</returns>
         public static bool VerifyIsGuid(this object obj, string name)
         {
+            var properties = obj.GetType().GetProperties();
+            foreach (var prop in properties)
             {
-                var properties = obj.GetType().GetProperties();
-                foreach (var prop in properties)
+                if (prop.Name == name && prop.GetValue(obj) is string value)
                 {
-                    if (prop.Name == name)
-                    {
-                        string value = (string)prop.GetValue(obj);
-                        return Guid.TryParse(value, out Guid result);
-                    }
+                    return Guid.TryParse(value, out Guid result);
                 }
-                return false;
             }
+            return false;
         }
 
         /// <summary>
