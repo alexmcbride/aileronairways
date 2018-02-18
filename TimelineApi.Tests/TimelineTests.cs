@@ -89,5 +89,45 @@ namespace Echelon.TimelineApi.Tests
 
             mock.Verify(m => m.PutJsonAsync("Timeline/Delete", It.Is<object>(t => t.VerifyObject("TimelineId", "ID1"))));
         }
+
+        [TestMethod]
+        public async Task TestTimelineLinkEvent()
+        {
+            var mock = new Mock<ITimelineService>();
+
+            Timeline timeline = new Timeline();
+            timeline.Id = "ID1";
+
+            TimelineEvent timelineEvent = new TimelineEvent();
+            timelineEvent.Id = "IDE1";
+
+            await timeline.LinkEventAsync(mock.Object, timelineEvent);
+
+            mock.Verify(m => m.PutJsonAsync("Timeline/LinkEvent", It.Is<object>(o => o.VerifyObject("TimelineId", "ID1") && o.VerifyObject("EventId", "IDE1"))));
+        }
+
+        [TestMethod]
+        public async Task TestTimelineUnlinkEvent()
+        {
+            var mock = new Mock<ITimelineService>();
+
+            Timeline timeline = new Timeline();
+            timeline.Id = "ID1";
+
+            TimelineEvent timelineEvent = new TimelineEvent();
+            timelineEvent.Id = "IDE1";
+
+            await timeline.UnlinkEventAsync(mock.Object, timelineEvent);
+
+            mock.Verify(m => m.PutJsonAsync("Timeline/UnlinkEvent", It.Is<object>(o => o.VerifyObject("TimelineId", "ID1") && o.VerifyObject("EventId", "IDE1"))));
+        }
+
+        //[TestMethod]
+        //public void TestTimelineGetLinkedEvents()
+        //{
+        //    string json = "";
+
+
+        //}
     }
 }
