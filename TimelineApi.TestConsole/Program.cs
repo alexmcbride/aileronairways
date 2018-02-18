@@ -24,8 +24,46 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static async void RunTestsAsync(ITimelineService api)
         {
-            await TestGetTimelinesAsync(api);
-            await TestTimelineActionsAsync(api);
+            //await TestGetTimelinesAsync(api);
+            //await TestTimelineActionsAsync(api);
+            await TestCreateEventsAsync(api);
+        }
+
+        private static async Task TestCreateEventsAsync(ITimelineService api)
+        {
+            // Create event.
+            Console.WriteLine("Creating event");
+            TimelineEvent evt = new TimelineEvent
+            {
+                Title = "Test Event Title",
+                Description = "Test description",
+                EventDateTime = DateTime.Now,
+                Location = "-1.1234,1.1234"
+            };
+            evt = await evt.CreateAsync(api);
+            string id = evt.Id;
+            DisplayTimelineEvent(evt);
+
+            Console.WriteLine();
+            Console.WriteLine("Getting event");
+            evt = await TimelineEvent.GetTimelineEventAsync(api, evt.Id);
+            DisplayTimelineEvent(evt);
+
+            Console.WriteLine();
+            Console.WriteLine("Deleteing...");
+            await evt.DeleteAsync(api);
+            Console.WriteLine("Done");
+        }
+
+        private static void DisplayTimelineEvent(TimelineEvent evt)
+        {
+            Console.WriteLine($"Id: {evt.Id}");
+            Console.WriteLine($"Title: {evt.Title}");
+            Console.WriteLine($"Description: {evt.Description}");
+            Console.WriteLine($"EventDateTime: {evt.EventDateTime}");
+            Console.WriteLine($"Location: {evt.Location}");
+            Console.WriteLine($"IsDeleted: {evt.IsDeleted}");
+            Console.WriteLine($"TenantId: {evt.TenantId}");
         }
 
         private static async Task TestGetTimelinesAsync(ITimelineService api)
@@ -60,6 +98,7 @@ namespace Echelon.TimelineApi.TestConsole
             // Remove timeline.
             Console.WriteLine("Delete timeline");
             await timeline.DeleteAsync(api);
+            Console.WriteLine("Done");
         }
 
         private static void DisplayTimeline(Timeline timeline)

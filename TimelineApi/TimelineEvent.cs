@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -31,12 +32,11 @@ namespace Echelon.TimelineApi
                 Title,
                 Description,
                 EventDateTime,
-                Location,
-                IsDeleted
+                Location
             });
             var result = JsonConvert.DeserializeObject<TimelineEvent>(json);
             TenantId = result.TenantId;
-            return this;
+            return result;
         }
 
         public Task EditTitleAsync(ITimelineService api)
@@ -81,6 +81,15 @@ namespace Echelon.TimelineApi
             {
                 TimelineEventId = Id
             });
+        }
+
+        public static async Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, string timelineEventId)
+        {
+            string json = await api.GetJsonAsync("TimelineEvent/GetTimelineEvent", new NameValueCollection
+            {
+                { "TimelineEventId", timelineEventId }
+            });
+            return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
     }
 }
