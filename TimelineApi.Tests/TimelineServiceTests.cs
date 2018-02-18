@@ -1,6 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
@@ -16,16 +15,14 @@ namespace Echelon.TimelineApi.Tests
         public async Task TestGetJson()
         {
             string json = "{\"Test\": \"Result\"}";
-
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(json));
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
-
             string result = await api.GetJsonAsync("Test/Get");
 
-            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.Contains("AuthToken", "ABC"))));
-            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.Contains("TenantId", "123"))));
+            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.VerifyContains("AuthToken", "ABC"))));
+            mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.VerifyContains("TenantId", "123"))));
             Assert.AreEqual(json, result);
         }
 
@@ -33,12 +30,10 @@ namespace Echelon.TimelineApi.Tests
         public async Task TestPutJson()
         {
             string json = "{\"Test\": \"Result\"}";
-
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(json));
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
-
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -49,8 +44,7 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(json, result);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TimelineException))]
+        [TestMethod, ExpectedException(typeof(TimelineException))]
         public async Task TestGet400Error()
         {
             var mock = new Mock<IWebClientHelper>();
@@ -59,12 +53,10 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
-
             await api.GetJsonAsync("Test/Get");
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(TimelineException))]
+        [TestMethod, ExpectedException(typeof(TimelineException))]
         public async Task TestGet500Error()
         {
             var mock = new Mock<IWebClientHelper>();
@@ -73,7 +65,6 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
-
             await api.GetJsonAsync("Test/Get");
         }
     }

@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace Echelon.TimelineApi
 {
+    /// <summary>
+    /// Class to represent a timeline exception.
+    /// </summary>
     [Serializable]
     public class TimelineException : Exception
     {

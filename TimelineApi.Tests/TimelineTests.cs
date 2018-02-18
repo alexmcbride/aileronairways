@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using Newtonsoft.Json;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
@@ -9,6 +8,7 @@ namespace Echelon.TimelineApi.Tests
     [TestClass]
     public class TimelineTests
     {
+        // Fake timeline JSON.
         private const string TimelineJson = "{\"Id\": \"ID1\", \"Title\": \"Test Title\", \"CreationTimeStamp\": \"636544632390000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}";
         private const string TimelinesJson = "[{\"Id\": \"ID1\", \"Title\": \"Test Title\", \"CreationTimeStamp\": \"636544632390000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}," +
             "{\"Id\": \"ID2\", \"Title\": \"Test Title 2\", \"CreationTimeStamp\": \"636544632350000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}]";
@@ -18,6 +18,7 @@ namespace Echelon.TimelineApi.Tests
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync("Timeline/Create", It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
+
             var timeline = await Timeline.CreateAsync(mock.Object, "Test Title");
 
             Assert.AreEqual(timeline.Id, "ID1");

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
@@ -35,11 +34,18 @@ namespace Echelon.TimelineApi.Tests
         /// <param name="name">The name to check for.</param>
         /// <param name="value">The value to check for.</param>
         /// <returns>True if it exists.</returns>
-        public static bool Contains(this NameValueCollection c, string name, string value)
+        public static bool VerifyContains(this NameValueCollection c, string name, string value)
         {
             return c.Get(name) == value;
         }
 
+        /// <summary>
+        /// Checks if a name/value pair exists in a json string.
+        /// </summary>
+        /// <param name="s">The string contaning json.</param>
+        /// <param name="name">The name to check for.</param>
+        /// <param name="value">The value to check for.</param>
+        /// <returns>True if it exists.</returns>
         public static bool VerifyJson(this string s, string name, string value)
         {
             JObject o = JObject.Parse(s);
