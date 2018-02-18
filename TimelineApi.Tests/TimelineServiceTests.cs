@@ -45,7 +45,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestGet400Error()
+        public async Task TestGetJson400Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
@@ -57,7 +57,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestGet500Error()
+        public async Task TestGetJson500Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
@@ -66,6 +66,37 @@ namespace Echelon.TimelineApi.Tests
 
             ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
             await api.GetJsonAsync("Test/Get");
+        }
+
+
+        [TestMethod, ExpectedException(typeof(TimelineException))]
+        public async Task TestPutJson400Error()
+        {
+            var mock = new Mock<IWebClientHelper>();
+            mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));
+            mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
+            mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Bad request error");
+
+            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            string result = await api.PutJsonAsync("Test/Put", new
+            {
+                Test = "Result"
+            });
+        }
+
+        [TestMethod, ExpectedException(typeof(TimelineException))]
+        public async Task TestPutJson500Error()
+        {
+            var mock = new Mock<IWebClientHelper>();
+            mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));
+            mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
+            mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Internal server error");
+
+            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            string result = await api.PutJsonAsync("Test/Put", new
+            {
+                Test = "Result"
+            });
         }
     }
 }

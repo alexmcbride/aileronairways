@@ -51,6 +51,19 @@ namespace Echelon.TimelineApi
             return value.Replace("\\", string.Empty).Trim('"');
         }
 
+        private void HandleError(WebException ex)
+        {
+            // Check if this was a 400 or 500 message.
+            var status = _client.GetStatusCode(ex.Response);
+            if (status == HttpStatusCode.BadRequest || status == HttpStatusCode.InternalServerError)
+            {
+                // Get response message and throw new exception.
+                string message = _client.GetResponseMessage(ex.Response);
+                string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
+                throw new TimelineException($"{type} Error: {message}", ex);
+            }
+        }
+
         /// <summary>
         /// Makes a HTTP PUT request to the API and returns the response as JSON.
         /// </summary>
@@ -64,10 +77,19 @@ namespace Echelon.TimelineApi
             body.Add("AuthToken", _authToken);
             body.Add("TenantId", _tenantId);
 
-            // Make request and get JSON response.
-            string url = GetUrl(resource);
-            string response = await _client.UploadStringAsync(url, body.ToString());
-            return CleanupResponse(response);
+            try
+            {
+                // Make request and get JSON response.
+                string url = GetUrl(resource);
+                string response = await _client.UploadStringAsync(url, body.ToString());
+                return CleanupResponse(response);
+            }
+            catch (WebException ex)
+            {
+                HandleError(ex);
+
+                throw; // Throw original exception if we don't handle it.
+            }
         }
 
         /// <summary>
@@ -93,7 +115,7 @@ namespace Echelon.TimelineApi
             headers.Add("TenantId", _tenantId);
 
             try
-            {            
+            {
                 // Get JSON response.
                 string url = GetUrl(resource);
                 string response = await _client.DownloadStringAsync(url, headers);
@@ -101,15 +123,7 @@ namespace Echelon.TimelineApi
             }
             catch (WebException ex)
             {
-                // Check if this was a 400 or 500 message.
-                var status = _client.GetStatusCode(ex.Response);
-                if (status == HttpStatusCode.BadRequest || status == HttpStatusCode.InternalServerError)
-                {
-                    // Get response message and throw new exception.
-                    string message = _client.GetResponseMessage(ex.Response);
-                    string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
-                    throw new TimelineException($"{type} Error: {message}", ex);
-                }
+                HandleError(ex);
 
                 throw; // Throw original exception if we don't handle it.
             }
