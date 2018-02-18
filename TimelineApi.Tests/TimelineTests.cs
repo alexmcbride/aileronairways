@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
@@ -17,10 +18,12 @@ namespace Echelon.TimelineApi.Tests
         public async Task TestCreate()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.PutJsonAsync("Timeline/Create", It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
+            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
 
             var timeline = await Timeline.CreateAsync(mock.Object, "Test Title");
 
+            mock.Verify(m => m.PutJsonAsync("Timeline/Create", It.Is<object>(o => o.VerifyObject("Title", "Test Title"))));
+            mock.Verify(m => m.PutJsonAsync("Timeline/Create", It.Is<object>(o => o.VerifyIsGuid("TimelineId"))));
             Assert.AreEqual(timeline.Id, "ID1");
             Assert.AreEqual(timeline.Title, "Test Title");
             Assert.AreEqual(timeline.CreationTimeStamp.Ticks.ToString(), "636544632390000000");
@@ -32,10 +35,11 @@ namespace Echelon.TimelineApi.Tests
         public async Task TestGetTimeline()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.GetJsonAsync("Timeline/GetTimeline", It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
 
             var timeline = await Timeline.GetTimelineAsync(mock.Object, "ID1");
 
+            mock.Verify(m => m.GetJsonAsync("Timeline/GetTimeline", It.Is<NameValueCollection>(c => c.VerifyContains("TimelineId", "ID1"))));
             Assert.AreEqual(timeline.Id, "ID1");
             Assert.AreEqual(timeline.Title, "Test Title");
             Assert.AreEqual(timeline.CreationTimeStamp.Ticks.ToString(), "636544632390000000");

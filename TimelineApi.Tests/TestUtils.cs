@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
@@ -25,6 +26,22 @@ namespace Echelon.TimelineApi.Tests
                 }
             }
             return false;
+        }
+
+        public static bool VerifyIsGuid(this object obj, string name)
+        {
+            {
+                var properties = obj.GetType().GetProperties();
+                foreach (var prop in properties)
+                {
+                    if (prop.Name == name)
+                    {
+                        string value = (string)prop.GetValue(obj);
+                        return Guid.TryParse(value, out Guid result);
+                    }
+                }
+                return false;
+            }
         }
 
         /// <summary>
