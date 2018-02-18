@@ -45,7 +45,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestGetJson400Error()
+        public async Task HandlesGetJson400Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
@@ -57,7 +57,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestGetJson500Error()
+        public async Task HandlesGetJson500Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
@@ -70,7 +70,7 @@ namespace Echelon.TimelineApi.Tests
 
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestPutJson400Error()
+        public async Task HandlesPutJson400Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));
@@ -85,7 +85,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task TestPutJson500Error()
+        public async Task HandlesPutJson500Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));
