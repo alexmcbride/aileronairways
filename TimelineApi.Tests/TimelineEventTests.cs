@@ -135,5 +135,18 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(evt.Location, "-1.1234,1.1234");
             Assert.IsTrue(evt.IsDeleted);
         }
+
+        [TestMethod]
+        public void TestLocation()
+        {
+            TimelineEvent evt = new TimelineEvent();
+            evt.Location = "1.1234,1.1234";
+            Assert.AreEqual(evt.Longitude, 1.1234);
+            Assert.AreEqual(evt.Latitude, 1.1234);
+
+            evt.Longitude = 2.2345;
+            evt.Latitude = 2.2345;
+            Assert.AreEqual(evt.Location, "2.2345,2.2345");
+        }
     }
 }

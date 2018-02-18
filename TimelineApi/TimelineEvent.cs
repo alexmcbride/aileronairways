@@ -16,6 +16,38 @@ namespace Echelon.TimelineApi
         public DateTime EventDateTime { get; set; }
         public string Location { get; set; }
 
+        [JsonIgnore]
+        public double Longitude
+        {
+            get
+            {
+                string[] tokens = Location.Split(',');
+                if (tokens.Length == 2 && double.TryParse(tokens[0], out double result))
+                {
+                    return result;
+                }
+                return 0;
+            }
+
+            set { Location = $"{value},{Latitude}"; }
+        }
+
+        [JsonIgnore]
+        public double Latitude
+        {
+            get
+            {
+                string[] tokens = Location.Split(',');
+                if (tokens.Length == 2 && double.TryParse(tokens[1], out double result))
+                {
+                    return result;
+                }
+                return 0;
+            }
+
+            set { Location = $"{Longitude},{value}"; }
+        }
+
         public async Task<TimelineEvent> CreateAsync(ITimelineService api)
         {
             string json = await api.PutJsonAsync("TimelineEvent/Create", new
