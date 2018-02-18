@@ -1,5 +1,6 @@
 ﻿using System.Collections.Specialized;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
@@ -14,7 +15,7 @@ namespace Echelon.TimelineApi
         /// <param name="url">The URL to download the string from.</param>
         /// <param name="headers">A collection of headers to add to the request.</param>
         /// <returns>The resulting string.</returns>
-        string UploadString(string url, string body);
+        Task<string> UploadStringAsync(string url, string body);
 
         /// <summary>
         /// Uploads a string using the WebClient and returns the response.
@@ -22,7 +23,7 @@ namespace Echelon.TimelineApi
         /// <param name="url">The URL to upload the string to,</param>
         /// <param name="body">The body of the request as JSON</param>
         /// <returns>The response as a string.</returns>
-        string DownloadString(string url, NameValueCollection headers);
+        Task<string> DownloadStringAsync(string url, NameValueCollection headers);
 
         /// <summary>
         /// Gets an HttpStatusCode from a WebResponse.

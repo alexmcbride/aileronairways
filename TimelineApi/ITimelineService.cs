@@ -1,11 +1,12 @@
 ﻿using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
     public interface ITimelineService
     {
-        string GetJson(string resource);
-        string GetJson(string resource, NameValueCollection headers);
-        string PutJson(string resource, object request);
+        Task<string> GetJsonAsync(string resource);
+        Task<string> GetJsonAsync(string resource, NameValueCollection headers);
+        Task<string> PutJsonAsync(string resource, object request);
     }
 }

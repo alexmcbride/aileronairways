@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.TestConsole
 {
@@ -12,30 +13,27 @@ namespace Echelon.TimelineApi.TestConsole
 
         static void Main(string[] args)
         {
-            // Time how long operation takes.
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             // Create new API object and pass in our parameters.
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
             // Test methods.
-            TestGetTimelines(api);
-            TestTimelineActions(api);
-
-            // Output elapsed time.
-            stopwatch.Stop();
-            Console.WriteLine($"Elapsed Time: {stopwatch.ElapsedMilliseconds} ms");
+            RunTestsAsync(api);
 
             // Stop program from exiting.
             Console.WriteLine("Press any key to continue...");
             Console.ReadKey(true);
         }
 
-        private static void TestGetTimelines(ITimelineService api)
+        private static async void RunTestsAsync(ITimelineService api)
+        {
+            await TestGetTimelinesAsync(api);
+            await TestTimelineActionsAsync(api);
+        }
+
+        private static async Task TestGetTimelinesAsync(ITimelineService api)
         {
             // Get the timelines associated with this API object.
-            IList<Timeline> timelines = Timeline.GetTimelines(api);
+            IList<Timeline> timelines = await Timeline.GetTimelinesAsync(api);
 
             // Display timelines.
             Console.WriteLine("Display list of all timelines");
@@ -46,24 +44,24 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine();
         }
 
-        private static void TestTimelineActions(ITimelineService api)
+        private static async Task TestTimelineActionsAsync(ITimelineService api)
         {
             Console.WriteLine("Create timeline");
-            Timeline timeline = Timeline.Create(api, "Test Timeline");
+            Timeline timeline = await Timeline.CreateAsync(api, "Test Timeline");
             DisplayTimeline(timeline);
             string id = timeline.Id; // Store ID
 
             Console.WriteLine("Edit timeline");
             timeline.Title = "Edited Title";
-            timeline.EditTitle(api);
+            await timeline.EditTitleAsync(api);
 
             // Get and display timeline again.
-            timeline = Timeline.GetTimeline(api, id);
+            timeline = await Timeline.GetTimelineAsync(api, id);
             DisplayTimeline(timeline);
 
             // Remove timeline.
             Console.WriteLine("Delete timeline");
-            timeline.Delete(api);
+            await timeline.DeleteAsync(api);
         }
 
         private static void DisplayTimeline(Timeline timeline)

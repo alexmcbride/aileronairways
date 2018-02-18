@@ -2,6 +2,7 @@
 using Moq;
 using Newtonsoft.Json;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.Tests
 {
@@ -13,11 +14,11 @@ namespace Echelon.TimelineApi.Tests
             "{\"Id\": \"ID2\", \"Title\": \"Test Title 2\", \"CreationTimeStamp\": \"636544632350000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}]";
 
         [TestMethod]
-        public void TestCreate()
+        public async Task TestCreate()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.PutJson("Timeline/Create", It.IsAny<object>())).Returns(TimelineJson);
-            var timeline = Timeline.Create(mock.Object, "Test Title");
+            mock.Setup(m => m.PutJsonAsync("Timeline/Create", It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
+            var timeline = await Timeline.CreateAsync(mock.Object, "Test Title");
 
             Assert.AreEqual(timeline.Id, "ID1");
             Assert.AreEqual(timeline.Title, "Test Title");
@@ -27,12 +28,12 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public void TestGetTimeline()
+        public async Task TestGetTimeline()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.GetJson("Timeline/GetTimeline", It.IsAny<NameValueCollection>())).Returns(TimelineJson);
+            mock.Setup(m => m.GetJsonAsync("Timeline/GetTimeline", It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
 
-            var timeline = Timeline.GetTimeline(mock.Object, "ID1");
+            var timeline = await Timeline.GetTimelineAsync(mock.Object, "ID1");
 
             Assert.AreEqual(timeline.Id, "ID1");
             Assert.AreEqual(timeline.Title, "Test Title");
@@ -42,12 +43,12 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public void TestGetTimelines()
+        public async Task TestGetTimelines()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.GetJson("Timeline/GetTimelines")).Returns(TimelinesJson);
+            mock.Setup(m => m.GetJsonAsync("Timeline/GetTimelines")).Returns(TestUtils.GetCompletedTask(TimelinesJson));
 
-            var timelines = Timeline.GetTimelines(mock.Object);
+            var timelines = await Timeline.GetTimelinesAsync(mock.Object);
 
             Assert.AreEqual(timelines.Count, 2);
             Assert.AreEqual(timelines[0].Id, "ID1");
@@ -55,7 +56,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public void TestEditTitle()
+        public async Task TestEditTitle()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -64,13 +65,13 @@ namespace Echelon.TimelineApi.Tests
                 Id = "ID1",
                 Title = "Test Title 2"
             };
-            timeline.EditTitle(mock.Object);
+            await timeline.EditTitleAsync(mock.Object);
 
-            mock.Verify(m => m.PutJson("Timeline/EditTitle", It.Is<object>(t => VerifyObject(t, "TimelineId", "ID1") && VerifyObject(t, "Title", "Test Title 2"))));
+            mock.Verify(m => m.PutJsonAsync("Timeline/EditTitle", It.Is<object>(t => TestUtils.VerifyObject(t, "TimelineId", "ID1") && TestUtils.VerifyObject(t, "Title", "Test Title 2"))));
         }
 
         [TestMethod]
-        public void TestDelete()
+        public async Task TestDelete()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -78,23 +79,9 @@ namespace Echelon.TimelineApi.Tests
             {
                 Id = "ID1",
             };
-            timeline.Delete(mock.Object);
+            await timeline.DeleteAsync(mock.Object);
 
-            mock.Verify(m => m.PutJson("Timeline/Delete", It.Is<object>(t => VerifyObject(t, "TimelineId", "ID1"))));
-        }
-
-        // Verifies that a particular property is present in an object.
-        private static bool VerifyObject(object obj, string key, object value)
-        {
-            var properties = obj.GetType().GetProperties();
-            foreach (var prop in properties)
-            {
-                if (prop.Name == key)
-                {
-                    return prop.GetValue(obj) == value;
-                }
-            }
-            return false;
+            mock.Verify(m => m.PutJsonAsync("Timeline/Delete", It.Is<object>(t => TestUtils.VerifyObject(t, "TimelineId", "ID1"))));
         }
     }
 }

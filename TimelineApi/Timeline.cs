@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
@@ -42,9 +43,9 @@ namespace Echelon.TimelineApi
         /// <param name="api">The API to create the timeline on.</param>
         /// <param name="title">The title for the new timeline</param>
         /// <returns>A populated timeline object.</returns>
-        public static Timeline Create(ITimelineService api, string title)
+        public static async Task<Timeline> CreateAsync(ITimelineService api, string title)
         {
-            string json = api.PutJson("Timeline/Create", new
+            string json = await api.PutJsonAsync("Timeline/Create", new
             {
                 TimelineId = Guid.NewGuid().ToString(),
                 Title = title
@@ -56,9 +57,9 @@ namespace Echelon.TimelineApi
         /// Saves an edited title to the API.
         /// </summary>
         /// <param name="api">The API to save the edited title to.</param>
-        public void EditTitle(ITimelineService api)
+        public Task EditTitleAsync(ITimelineService api)
         {
-            api.PutJson("Timeline/EditTitle", new
+            return api.PutJsonAsync("Timeline/EditTitle", new
             {
                 TimelineId = Id,
                 Title
@@ -69,9 +70,9 @@ namespace Echelon.TimelineApi
         /// Deletes the timeline.
         /// </summary>
         /// <param name="api">The API to delete the timeline from.</param>
-        public void Delete(ITimelineService api)
+        public Task DeleteAsync(ITimelineService api)
         {
-            api.PutJson("Timeline/Delete", new
+            return api.PutJsonAsync("Timeline/Delete", new
             {
                 TimelineId = Id,
             });
@@ -83,9 +84,9 @@ namespace Echelon.TimelineApi
         /// <param name="api">The API to fetch the timeline from.</param>
         /// <param name="timelineId">The ID of the timeline to fetch.</param>
         /// <returns>The timeline object.</returns>
-        public static Timeline GetTimeline(ITimelineService api, string timelineId)
+        public static async Task<Timeline> GetTimelineAsync(ITimelineService api, string timelineId)
         {
-            string json = api.GetJson("Timeline/GetTimeline", new NameValueCollection
+            string json = await api.GetJsonAsync("Timeline/GetTimeline", new NameValueCollection
             {
                 { "TimelineId", timelineId }
             });
@@ -97,9 +98,9 @@ namespace Echelon.TimelineApi
         /// </summary>
         /// <param name="api">The API to fetch timelines from.</param>
         /// <returns>A list of timeline objects.</returns>
-        public static IList<Timeline> GetTimelines(ITimelineService api)
+        public static async Task<IList<Timeline>> GetTimelinesAsync(ITimelineService api)
         {
-            string json = api.GetJson("Timeline/GetTimelines");
+            string json = await api.GetJsonAsync("Timeline/GetTimelines");
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
     }

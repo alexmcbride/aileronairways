@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
 using System.Net;
+using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
@@ -57,7 +57,7 @@ namespace Echelon.TimelineApi
         /// <param name="resource">The resource to use .e.g. Timeline/Create</param>
         /// <param name="request">An object contaning the body parameters to use for the request</param>
         /// <returns>The response as JSON.</returns>
-        public string PutJson(string resource, object request)
+        public async Task<string> PutJsonAsync(string resource, object request)
         {
             // Turn request into JSON and add auth stuff.
             JObject body = JObject.FromObject(request);
@@ -66,7 +66,7 @@ namespace Echelon.TimelineApi
 
             // Make request and get JSON response.
             string url = GetUrl(resource);
-            string response = _client.UploadString(url, body.ToString());
+            string response = await _client.UploadStringAsync(url, body.ToString());
             return CleanupResponse(response);
         }
 
@@ -75,9 +75,9 @@ namespace Echelon.TimelineApi
         /// </summary>
         /// <param name="resource">The resource to use .e.g. Timeline/GetTimelines</param>
         /// <returns>The response as JSON.</returns>
-        public string GetJson(string resource)
+        public Task<string> GetJsonAsync(string resource)
         {
-            return GetJson(resource, new NameValueCollection());
+            return GetJsonAsync(resource, new NameValueCollection());
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Echelon.TimelineApi
         /// <param name="resource">The resource to use .e.g. Timeline/GetTimelines</param>
         /// <param name="headers">A collection of header parameters to add to the request.</param>
         /// <returns>The response as JSON.</returns>
-        public string GetJson(string resource, NameValueCollection headers)
+        public async Task<string> GetJsonAsync(string resource, NameValueCollection headers)
         {
             // Add auth stuff to headers.
             headers.Add("AuthToken", _authToken);
@@ -96,7 +96,7 @@ namespace Echelon.TimelineApi
             {            
                 // Get JSON response.
                 string url = GetUrl(resource);
-                string response = _client.DownloadString(url, headers);
+                string response = await _client.DownloadStringAsync(url, headers);
                 return CleanupResponse(response);
             }
             catch (WebException ex)
