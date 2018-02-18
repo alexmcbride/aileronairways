@@ -44,13 +44,42 @@ namespace Echelon.TimelineApi.TestConsole
             string id = evt.Id;
             DisplayTimelineEvent(evt);
 
+            // Fetch event.
             Console.WriteLine();
             Console.WriteLine("Getting event");
             evt = await TimelineEvent.GetTimelineEventAsync(api, evt.Id);
             DisplayTimelineEvent(evt);
 
+            // Link 
             Console.WriteLine();
-            Console.WriteLine("Deleteing...");
+            Console.WriteLine("Link event");
+            Timeline timeline = await Timeline.GetTimelineAsync(api, "255c6ab0-79bc-4d2d-8793-bd508c7c39f9");
+            await timeline.LinkEventAsync(api, evt);
+            Console.WriteLine("Done");
+
+            // Get linked events
+            Console.WriteLine();
+            Console.WriteLine("Get linked events");
+            IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
+            Console.WriteLine("Done");
+
+            Console.WriteLine();
+            Console.WriteLine("Getting events");
+            foreach (var link in linkedEvents)
+            {
+                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, link);
+                DisplayTimelineEvent(timelineEvent);
+            }
+
+            // Unlink
+            Console.WriteLine();
+            Console.WriteLine("Unlink event");
+            await timeline.UnlinkEventAsync(api, evt);
+            Console.WriteLine("Done");
+
+            // Delete event.
+            Console.WriteLine();
+            Console.WriteLine("Deleteing event...");
             await evt.DeleteAsync(api);
             Console.WriteLine("Done");
         }

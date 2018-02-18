@@ -1,8 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
@@ -81,6 +79,11 @@ namespace Echelon.TimelineApi
             {
                 TimelineEventId = Id
             });
+        }
+
+        public static Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, LinkedEvent linkedEvent)
+        {
+            return GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
         }
 
         public static async Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, string timelineEventId)
