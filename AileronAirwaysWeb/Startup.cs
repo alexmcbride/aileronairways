@@ -11,11 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using AileronAirwaysWeb.Data;
 using AileronAirwaysWeb.Models;
 using AileronAirwaysWeb.Services;
+using Echelon.TimelineApi;
 
 namespace AileronAirwaysWeb
 {
     public class Startup
     {
+        // This will be in config file at some point.
+        const string BaseUrl = "https://gcu.ideagen-development.com/";
+        const string AuthToken = "5e906627-a997-4ab1-94c5-07fcb6c9383d";
+        const string TenantId = "Team3";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -37,6 +43,9 @@ namespace AileronAirwaysWeb
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();
+
+            // Add timeline service.
+            services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(BaseUrl, AuthToken, TenantId));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
