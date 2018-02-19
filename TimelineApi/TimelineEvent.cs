@@ -17,23 +17,22 @@ namespace Echelon.TimelineApi
         public DateTime EventDateTime { get; set; }
         public string Location { get; set; }
 
-        public async Task<TimelineEvent> CreateAsync(ITimelineService api)
+        public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, DateTime eventDateTime)
+        {
+            return CreateAsync(api, title, string.Empty, eventDateTime, string.Empty);
+        }
+
+        public static async Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
         {
             string json = await api.PutJsonAsync("TimelineEvent/Create", new
             {
                 TimelineEventId = Guid.NewGuid().ToString(),
-                Title,
-                Description,
-                EventDateTime,
-                Location
+                Title = title,
+                Description = description,
+                EventDateTime = eventDateTime,
+                Location = location
             });
-            var result = JsonConvert.DeserializeObject<TimelineEvent>(json);
-
-            // Set stuff we got back from the API.
-            Id = result.Id;
-            IsDeleted = result.IsDeleted;
-            TenantId = result.TenantId;
-            return result;
+            return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
 
         public Task EditTitleAsync(ITimelineService api)

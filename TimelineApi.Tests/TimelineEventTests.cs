@@ -18,23 +18,13 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(json));
 
-            var evt = new TimelineEvent()
-            {
-                Title = "Test Title",
-                Description = "Test Description",
-                EventDateTime = dt,
-                Location = "-1.1234,1.1234",
-            };
-            var result = await evt.CreateAsync(mock.Object);
+            var result = await TimelineEvent.CreateAsync(mock.Object, "Test Title", "Test Description", dt, "-1.1234,1.1234");
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyIsGuid("TimelineEventId") &&
                 o.VerifyObject("Title", "Test Title") &&
                 o.VerifyObject("Description", "Test Description") &&
                 o.VerifyObject("EventDateTime", dt) &&
                 o.VerifyObject("Location", "-1.1234,1.1234"))));
-            Assert.AreEqual(evt.TenantId, "123");
-            Assert.AreEqual(evt.Id, "ID1");
-            Assert.IsTrue(evt.IsDeleted);
             Assert.AreEqual(result.Id, "ID1");
             Assert.AreEqual(result.TenantId, "123");
             Assert.AreEqual(result.Title, "Test Title");

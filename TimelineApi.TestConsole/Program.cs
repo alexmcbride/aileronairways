@@ -24,23 +24,25 @@ namespace Echelon.TimelineApi.TestConsole
         {
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
+            // Get timeline with this ID.
             Timeline timeline = await Timeline.GetTimelineAsync(api, "255c6ab0-79bc-4d2d-8793-bd508c7c39f9");
             DisplayTimeline(timeline);
 
-            TimelineEvent evt = new TimelineEvent();
-            evt.Title = "New Event Title";
-            evt.Description = "jcdhhd";
-            evt.EventDateTime = DateTime.Now;
-            evt.Location = "sdsds"; 
-            await evt.CreateAsync(api);
+            // Create new event.
+            TimelineEvent evt = await TimelineEvent.CreateAsync(api, "Another New Event", "Event description", DateTime.Now, "-1.1234,1.1234");
             DisplayTimelineEvent(evt);
 
+            // Link timeline and event together.
             await timeline.LinkEventAsync(api, evt);
 
+            // Get list of linked events.
             IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
-            foreach (var item in linkedEvents)
+
+            // Loop through each linked events.
+            foreach (var linkedEvent in linkedEvents)
             {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, item);
+                // Get the event associated with this link event.
+                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent);
                 DisplayTimelineEvent(timelineEvent);
             }
         }
@@ -54,6 +56,7 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine($"Location: {evt.Location}");
             Console.WriteLine($"IsDeleted: {evt.IsDeleted}");
             Console.WriteLine($"TenantId: {evt.TenantId}");
+            Console.WriteLine();
         }
 
         private static void DisplayTimeline(Timeline timeline)
@@ -64,7 +67,6 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine($"Creation: {timeline.CreationTimeStamp}");
             Console.WriteLine($"Is Deleted: {timeline.IsDeleted}");
             Console.WriteLine($"Tenant ID: {timeline.TenantId}");
-            Console.Write("----");
             Console.WriteLine();
         }
     }
