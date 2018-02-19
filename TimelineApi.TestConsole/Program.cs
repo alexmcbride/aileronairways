@@ -26,28 +26,24 @@ namespace Echelon.TimelineApi.TestConsole
 
             string id = "255c6ab0-79bc-4d2d-8793-bd508c7c39f9";
 
-            //Console.WriteLine("Waiting on GetTimeline");
-            //Timeline timeline = await Timeline.GetTimelineAsync(api, id);
-            //Console.WriteLine("Done");
+            Console.WriteLine("Waiting on GetTimeline");
+            Timeline timeline = await Timeline.GetTimelineAsync(api, id);
+            Console.WriteLine("Done");
 
-            //TimelineEvent evt = new TimelineEvent();
-            //evt.Title = "Test Event Title 3";
-            //evt.Description = "Description...";
-            //evt.EventDateTime = DateTime.Now;
-            //evt.Location = "-1.1234,1.1234";
+            TimelineEvent evt = new TimelineEvent();
+            evt.Title = "Test Event Title 3";
+            evt.Description = "Description...";
+            evt.EventDateTime = DateTime.Now;
+            evt.Location = "-1.1234,1.1234";
 
-            //Console.WriteLine("Waiting on CreateEvent");
-            //await evt.CreateAsync(api);
-            //Console.WriteLine("Done");
+            Console.WriteLine("Waiting on CreateEvent");
+            await evt.CreateAsync(api);
+            Console.WriteLine("Done");
 
-            //Console.WriteLine("Waiting on LinkEvent");
-            //await timeline.LinkEventAsync(api, evt);
-            //Console.WriteLine("Done");
+            Console.WriteLine("Waiting on LinkEvent");
+            await timeline.LinkEventAsync(api, evt);
+            Console.WriteLine("Done");
 
-
-
-
-            Console.WriteLine("Waiting on events.");
             var sw = new Stopwatch();
             sw.Start();
 
