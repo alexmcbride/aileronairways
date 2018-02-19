@@ -70,7 +70,7 @@ namespace AileronAirwaysWeb
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Timelines}/{action=Index}/{id?}");
             });
         }
     }
