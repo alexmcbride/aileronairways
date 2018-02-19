@@ -22,7 +22,6 @@
     </tr>
     </thead>
     <tbody>
-<<<<<<< HEAD
         @foreach (var item in Model)
         {
             <tr>
@@ -38,22 +37,5 @@
                 </td>
             </tr>
         }
-=======
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreationTimeStamp)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-            </td>
-        </tr>
-}
->>>>>>> ada45146d5c0250d407cfceb64a2402b79046577
     </tbody>
 </table>
