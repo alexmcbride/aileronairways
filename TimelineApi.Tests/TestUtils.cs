@@ -15,7 +15,13 @@ namespace Echelon.TimelineApi.Tests
             {
                 if (prop.Name == name)
                 {
-                    return prop.GetValue(obj) == value;
+                    object o = prop.GetValue(obj);
+                    // Need to handle strings differently, or they don't match.
+                    if (o is string str)
+                    {
+                        return str == (string)value;
+                    }
+                    return o == value;
                 }
             }
             return false;
@@ -29,19 +35,6 @@ namespace Echelon.TimelineApi.Tests
                 if (prop.Name == name && prop.GetValue(obj) is bool eh)
                 {
                     return eh == value;
-                }
-            }
-            return false;
-        }
-
-        public static bool VerifyObject(this object obj, string name, DateTime value)
-        {
-            var properties = obj.GetType().GetProperties();
-            foreach (var prop in properties)
-            {
-                if (prop.Name == name && prop.GetValue(obj) is DateTime dt)
-                {
-                    return dt == value;
                 }
             }
             return false;

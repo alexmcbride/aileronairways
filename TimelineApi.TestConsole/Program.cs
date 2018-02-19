@@ -29,7 +29,7 @@ namespace Echelon.TimelineApi.TestConsole
             DisplayTimeline(timeline);
 
             // Create new event.
-            TimelineEvent evt = await TimelineEvent.CreateAsync(api, "Another New Event", "Event description", DateTime.Now, "-1.1234,1.1234");
+            TimelineEvent evt = await TimelineEvent.CreateAsync(api, "New Event 18", "Event description", DateTime.Now, "-1.1234,1.1234");
             DisplayTimelineEvent(evt);
 
             // Link timeline and event together.
@@ -38,12 +38,15 @@ namespace Echelon.TimelineApi.TestConsole
             // Get list of linked events.
             IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
 
-            // Loop through each linked events.
-            foreach (var linkedEvent in linkedEvents)
+            // Wait for all TimelineEvent objects to download.
+            List<Task<TimelineEvent>> tasks = linkedEvents.Select(l => TimelineEvent.GetTimelineEventAsync(api, l)).ToList();
+            TimelineEvent[] timelineEvents = await Task.WhenAll(tasks);
+
+            // Order them and print them out.
+            var orderedEvents = timelineEvents.OrderByDescending(e => e.EventDateTime);
+            foreach (var evt2 in orderedEvents)
             {
-                // Get the event associated with this link event.
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent);
-                DisplayTimelineEvent(timelineEvent);
+                DisplayTimelineEvent(evt2);
             }
         }
 
