@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.TestConsole
@@ -12,76 +14,62 @@ namespace Echelon.TimelineApi.TestConsole
 
         static void Main(string[] args)
         {
-            // Create new API object and pass in our parameters.
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
-
-            // Test methods.
-            RunTestsAsync(api);
+            RunTestsAsync();
 
             // Stop program from exiting.
             Console.ReadKey(true);
         }
 
-        private static async void RunTestsAsync(ITimelineService api)
+        private static async void RunTestsAsync()
         {
-            //await TestGetTimelinesAsync(api);
-            //await TestTimelineActionsAsync(api);
-            await TestCreateEventsAsync(api);
-        }
+            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
-        private static async Task TestCreateEventsAsync(ITimelineService api)
-        {
-            // Create event.
-            Console.WriteLine("Creating event");
-            TimelineEvent evt = new TimelineEvent
+            string id = "255c6ab0-79bc-4d2d-8793-bd508c7c39f9";
+
+            //Console.WriteLine("Waiting on GetTimeline");
+            //Timeline timeline = await Timeline.GetTimelineAsync(api, id);
+            //Console.WriteLine("Done");
+
+            //TimelineEvent evt = new TimelineEvent();
+            //evt.Title = "Test Event Title 3";
+            //evt.Description = "Description...";
+            //evt.EventDateTime = DateTime.Now;
+            //evt.Location = "-1.1234,1.1234";
+
+            //Console.WriteLine("Waiting on CreateEvent");
+            //await evt.CreateAsync(api);
+            //Console.WriteLine("Done");
+
+            //Console.WriteLine("Waiting on LinkEvent");
+            //await timeline.LinkEventAsync(api, evt);
+            //Console.WriteLine("Done");
+
+
+
+
+            Console.WriteLine("Waiting on events.");
+            var sw = new Stopwatch();
+            sw.Start();
+
+            Console.WriteLine("Waiting for linked events");
+            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(api, id);
+            Console.WriteLine("Done ({0})", linkedEvents.Count);
+
+            IEnumerable<Task<TimelineEvent>> eventTasks = linkedEvents.Select(l => TimelineEvent.GetTimelineEventAsync(api, l));
+
+            // Wait for all events to download.
+            Console.WriteLine("Waiting for events");
+            var timelineEvents = await Task.WhenAll(eventTasks);
+
+            sw.Stop();
+
+            foreach (var timelineEvent in timelineEvents)
             {
-                Title = "Test Event Title",
-                Description = "Test description",
-                EventDateTime = DateTime.Now,
-                Location = "-1.1234,1.1234",
-            };
-            evt = await evt.CreateAsync(api);
-            string id = evt.Id;
-            DisplayTimelineEvent(evt);
-
-            // Fetch event.
-            Console.WriteLine();
-            Console.WriteLine("Getting event");
-            evt = await TimelineEvent.GetTimelineEventAsync(api, evt.Id);
-            DisplayTimelineEvent(evt);
-
-            // Link 
-            Console.WriteLine();
-            Console.WriteLine("Link event");
-            Timeline timeline = await Timeline.GetTimelineAsync(api, "255c6ab0-79bc-4d2d-8793-bd508c7c39f9");
-            await timeline.LinkEventAsync(api, evt);
-            Console.WriteLine("Done");
-
-            // Get linked events
-            Console.WriteLine();
-            Console.WriteLine("Get linked events");
-            IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
-            Console.WriteLine("Done");
-
-            Console.WriteLine();
-            Console.WriteLine("Getting events");
-            foreach (var link in linkedEvents)
-            {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, link);
                 DisplayTimelineEvent(timelineEvent);
             }
 
-            // Unlink
-            Console.WriteLine();
-            Console.WriteLine("Unlink event");
-            await timeline.UnlinkEventAsync(api, evt);
             Console.WriteLine("Done");
-
-            // Delete event.
-            Console.WriteLine();
-            Console.WriteLine("Deleteing event...");
-            await evt.DeleteAsync(api);
-            Console.WriteLine("Done");
+            Console.WriteLine("Elapsed: {0} ms", sw.ElapsedMilliseconds);
         }
 
         private static void DisplayTimelineEvent(TimelineEvent evt)
@@ -93,41 +81,6 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine($"Location: {evt.Location}");
             Console.WriteLine($"IsDeleted: {evt.IsDeleted}");
             Console.WriteLine($"TenantId: {evt.TenantId}");
-        }
-
-        private static async Task TestGetTimelinesAsync(ITimelineService api)
-        {
-            // Get the timelines associated with this API object.
-            IList<Timeline> timelines = await Timeline.GetTimelinesAsync(api);
-
-            // Display timelines.
-            Console.WriteLine("Display list of all timelines");
-            foreach (Timeline timeline in timelines)
-            {
-                DisplayTimeline(timeline);
-            }
-            Console.WriteLine();
-        }
-
-        private static async Task TestTimelineActionsAsync(ITimelineService api)
-        {
-            Console.WriteLine("Create timeline");
-            Timeline timeline = await Timeline.CreateAsync(api, "Test Timeline");
-            DisplayTimeline(timeline);
-            string id = timeline.Id; // Store ID
-
-            Console.WriteLine("Edit timeline");
-            timeline.Title = "Edited Title";
-            await timeline.EditTitleAsync(api);
-
-            // Get and display timeline again.
-            timeline = await Timeline.GetTimelineAsync(api, id);
-            DisplayTimeline(timeline);
-
-            // Remove timeline.
-            Console.WriteLine("Delete timeline");
-            await timeline.DeleteAsync(api);
-            Console.WriteLine("Done");
         }
 
         private static void DisplayTimeline(Timeline timeline)

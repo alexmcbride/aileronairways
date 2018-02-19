@@ -13,7 +13,7 @@ namespace Echelon.TimelineApi.Tests
         public async Task TestEventCreate()
         {
             var dt = DateTime.Now;
-            string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"" + dt.Ticks + "\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\"}";
+            string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"" + dt.Ticks + "\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
 
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(json));
@@ -33,6 +33,8 @@ namespace Echelon.TimelineApi.Tests
                 o.VerifyObject("EventDateTime", dt) &&
                 o.VerifyObject("Location", "-1.1234,1.1234"))));
             Assert.AreEqual(evt.TenantId, "123");
+            Assert.AreEqual(evt.Id, "ID1");
+            Assert.IsTrue(evt.IsDeleted);
             Assert.AreEqual(result.Id, "ID1");
             Assert.AreEqual(result.TenantId, "123");
             Assert.AreEqual(result.Title, "Test Title");
