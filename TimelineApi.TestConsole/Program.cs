@@ -24,48 +24,25 @@ namespace Echelon.TimelineApi.TestConsole
         {
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
-            string id = "255c6ab0-79bc-4d2d-8793-bd508c7c39f9";
-
-            Console.WriteLine("Waiting on GetTimeline");
-            Timeline timeline = await Timeline.GetTimelineAsync(api, id);
-            Console.WriteLine("Done");
+            Timeline timeline = await Timeline.GetTimelineAsync(api, "255c6ab0-79bc-4d2d-8793-bd508c7c39f9");
+            DisplayTimeline(timeline);
 
             TimelineEvent evt = new TimelineEvent();
-            evt.Title = "Test Event Title 3";
-            evt.Description = "Description...";
+            evt.Title = "New Event Title";
+            evt.Description = "jcdhhd";
             evt.EventDateTime = DateTime.Now;
-            evt.Location = "-1.1234,1.1234";
-
-            Console.WriteLine("Waiting on CreateEvent");
+            evt.Location = "sdsds"; 
             await evt.CreateAsync(api);
-            Console.WriteLine("Done");
+            DisplayTimelineEvent(evt);
 
-            Console.WriteLine("Waiting on LinkEvent");
             await timeline.LinkEventAsync(api, evt);
-            Console.WriteLine("Done");
 
-            var sw = new Stopwatch();
-            sw.Start();
-
-            Console.WriteLine("Waiting for linked events");
-            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(api, id);
-            Console.WriteLine("Done ({0})", linkedEvents.Count);
-
-            IEnumerable<Task<TimelineEvent>> eventTasks = linkedEvents.Select(l => TimelineEvent.GetTimelineEventAsync(api, l));
-
-            // Wait for all events to download.
-            Console.WriteLine("Waiting for events");
-            var timelineEvents = await Task.WhenAll(eventTasks);
-
-            sw.Stop();
-
-            foreach (var timelineEvent in timelineEvents)
+            IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
+            foreach (var item in linkedEvents)
             {
+                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(api, item);
                 DisplayTimelineEvent(timelineEvent);
             }
-
-            Console.WriteLine("Done");
-            Console.WriteLine("Elapsed: {0} ms", sw.ElapsedMilliseconds);
         }
 
         private static void DisplayTimelineEvent(TimelineEvent evt)

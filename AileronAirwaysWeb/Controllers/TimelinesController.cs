@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Echelon.TimelineApi;
+﻿using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -26,9 +24,11 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         // GET: Timelines/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View();
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+
+            return View(timeline);
         }
 
         // GET: Timelines/Create
