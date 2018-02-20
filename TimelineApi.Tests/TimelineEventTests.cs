@@ -138,7 +138,7 @@ namespace Echelon.TimelineApi.Tests
             TimelineEvent b = new TimelineEvent();
             b.Id = "ID2";
 
-            await a.LinkEventsAsync(mock.Object, b);
+            await a.LinkTimelineEventsAsync(mock.Object, b);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/LinkEvents",
                 It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") && o.VerifyObject("LinkedToTimelineEventId", "ID2"))));
@@ -153,7 +153,7 @@ namespace Echelon.TimelineApi.Tests
             TimelineEvent b = new TimelineEvent();
             b.Id = "ID2";
 
-            await a.UnlinkEventsAsync(mock.Object, b);
+            await a.UnlinkTimelineEventsAsync(mock.Object, b);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/UnlinkEvents",
                 It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") && o.VerifyObject("UnlinkedToTimelineEventId", "ID2"))));

@@ -115,7 +115,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task LinkEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
+        public Task LinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
         {
             return api.PutJsonAsync("TimelineEvent/LinkEvents", new
             {
@@ -124,7 +124,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task UnlinkEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
+        public Task UnlinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
         {
             return api.PutJsonAsync("TimelineEvent/UnlinkEvents", new
             {
