@@ -45,10 +45,17 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            string TimelineId = (TempData["TimelineId"]).ToString();
+            string TimelineId;
+            if (TempData.ContainsKey("TimelineId")){ 
+            TimelineId = TempData["TimelineId"].ToString();
             TempData["TimelineId"] = TimelineId;
-
-            return View();
+                return View();
+            }
+            else { 
+ 
+                return RedirectToAction("Index");
+            }
+            
         }
 
         // POST: Timelines/Create
@@ -60,14 +67,18 @@ namespace AileronAirwaysWeb.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             try
             {
+                string timelineId = (TempData["TimelineId"]).ToString();
+
                 TimelineEvent evt = new TimelineEvent();
                 evt.Title = Request.Form["Title"];
                 evt.Description = Request.Form["Description"];
                 evt.EventDateTime = Convert.ToDateTime(Request.Form["EvetDateTime"]);
-                evt.Location = Request.Form["Location"]; ;
-                await evt.CreateAsync(_api);
+                evt.Location = (Request.Form["Location"]).ToString();
 
-                string timelineId = (TempData["TimelineId"]).ToString();
+                await TimelineEvent.CreateAsync(_api, Request.Form["Title"], Request.Form["Description"], Convert.ToDateTime(Request.Form["EvetDateTime"]), Request.Form["Location"]);
+
+                
+
                 Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
                 await timeline.LinkEventAsync(_api, evt);
 

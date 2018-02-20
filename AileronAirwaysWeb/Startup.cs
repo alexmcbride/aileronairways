@@ -42,7 +42,10 @@ namespace AileronAirwaysWeb
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            services.AddMvc();
+            //allows temp data use
+            services.AddMvc().AddSessionStateTempDataProvider();
+
+            services.AddSession();
 
             // Add timeline service.
             services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(BaseUrl, AuthToken, TenantId));
@@ -65,6 +68,9 @@ namespace AileronAirwaysWeb
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            //allows temp data use
+            app.UseSession();
 
             app.UseMvc(routes =>
             {
