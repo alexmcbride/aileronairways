@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Echelon.TimelineApi.TimelineEvent>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<div class="row">
+    <div>
+
+        @foreach(var item in Model) {
+
+        <dl class="dl-horizontal">
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.Id)
+            </dt>
+            <dd>
+                @Html.ActionLink(item.Title, "Details", new { id = item.Id })
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.TenantId)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.TenantId)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.Title)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.Title)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.Description)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.IsDeleted)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.IsDeleted)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.EventDateTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.EventDateTime)
+            </dd>
+
+            <dt>
+                @Html.DisplayNameFor(modelitem => item.Location)
+            </dt>
+            <dd>
+                @Html.DisplayFor(modelitem => item.Location)
+            </dd>
+            @Html.ActionLink("Detail", "Detail", new { id = item.Id }) |
+            @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </dl>
+}
+    </div>
+</div>
+

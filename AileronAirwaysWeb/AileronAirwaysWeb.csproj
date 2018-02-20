@@ -22,4 +22,10 @@
     <ProjectReference Include="..\TimelineApi\TimelineApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Views\TimelineEvent\Index.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

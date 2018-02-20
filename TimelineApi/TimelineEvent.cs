@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Echelon.TimelineApi
 {
     public class TimelineEvent
-    {
+    {   
         public string Id { get; set; }
         public string TenantId { get; set; }
         public string Title { get; set; }
