@@ -13,27 +13,28 @@ namespace Echelon.TimelineApi
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
+
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
+
         public string Location { get; set; }
 
-        public async Task<TimelineEvent> CreateAsync(ITimelineService api)
+        public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, DateTime eventDateTime)
+        {
+            return CreateAsync(api, title, string.Empty, eventDateTime, string.Empty);
+        }
+
+        public static async Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
         {
             string json = await api.PutJsonAsync("TimelineEvent/Create", new
             {
                 TimelineEventId = Guid.NewGuid().ToString(),
-                Title,
-                Description,
-                EventDateTime,
-                Location
+                Title = title,
+                Description = description,
+                EventDateTime = eventDateTime.Ticks.ToString(),
+                Location = location
             });
-            var result = JsonConvert.DeserializeObject<TimelineEvent>(json);
-
-            // Set stuff we got back from the API.
-            Id = result.Id;
-            IsDeleted = result.IsDeleted;
-            TenantId = result.TenantId;
-            return result;
+            return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
 
         public Task EditTitleAsync(ITimelineService api)
@@ -68,7 +69,7 @@ namespace Echelon.TimelineApi
             return api.PutJsonAsync("TimelineEvent/EditEventDateTime", new
             {
                 TimelineEventId = Id,
-                EventDateTime
+                EventDateTime = EventDateTime.Ticks.ToString()
             });
         }
 

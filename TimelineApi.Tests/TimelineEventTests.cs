@@ -12,34 +12,24 @@ namespace Echelon.TimelineApi.Tests
         [TestMethod]
         public async Task TestEventCreate()
         {
-            var dt = DateTime.Now;
-            string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"" + dt.Ticks + "\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
+            string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
 
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(json));
 
-            var evt = new TimelineEvent()
-            {
-                Title = "Test Title",
-                Description = "Test Description",
-                EventDateTime = dt,
-                Location = "-1.1234,1.1234",
-            };
-            var result = await evt.CreateAsync(mock.Object);
+            var dateTime = new DateTime(636546626588300000);
+            var result = await TimelineEvent.CreateAsync(mock.Object, "Test Title", "Test Description", dateTime, "-1.1234,1.1234");
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyIsGuid("TimelineEventId") &&
                 o.VerifyObject("Title", "Test Title") &&
                 o.VerifyObject("Description", "Test Description") &&
-                o.VerifyObject("EventDateTime", dt) &&
+                o.VerifyObject("EventDateTime", "636546626588300000") &&
                 o.VerifyObject("Location", "-1.1234,1.1234"))));
-            Assert.AreEqual(evt.TenantId, "123");
-            Assert.AreEqual(evt.Id, "ID1");
-            Assert.IsTrue(evt.IsDeleted);
             Assert.AreEqual(result.Id, "ID1");
             Assert.AreEqual(result.TenantId, "123");
             Assert.AreEqual(result.Title, "Test Title");
             Assert.AreEqual(result.Description, "Test Description");
-            Assert.AreEqual(result.EventDateTime, dt);
+            Assert.AreEqual(result.EventDateTime, dateTime);
             Assert.AreEqual(result.Location, "-1.1234,1.1234");
         }
 
@@ -101,7 +91,7 @@ namespace Echelon.TimelineApi.Tests
             }.EditEventDateTimeAsync(mock.Object);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/EditEventDateTime", It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") &&
-                o.VerifyObject("EventDateTime", now))));
+                o.VerifyObject("EventDateTime", now.Ticks.ToString()))));
         }
 
         [TestMethod]
