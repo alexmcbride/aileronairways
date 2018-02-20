@@ -39,13 +39,9 @@ namespace Echelon.TimelineApi.TestConsole
             IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
 
             // Wait for all TimelineEvent objects to download.
-            List<Task<TimelineEvent>> tasks = linkedEvents.Select(l => TimelineEvent.GetTimelineEventAsync(api, l)).ToList();
-            TimelineEvent[] timelineEvents = await Task.WhenAll(tasks);
-
-            // Order them and print them out.
-            var orderedEvents = timelineEvents.OrderByDescending(e => e.EventDateTime);
-            foreach (var evt2 in orderedEvents)
+            foreach (LinkedEvent linkedEvent in linkedEvents)
             {
+                TimelineEvent evt2 = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
                 DisplayTimelineEvent(evt2);
             }
         }
