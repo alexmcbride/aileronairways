@@ -36,6 +36,19 @@ namespace Echelon.TimelineApi
             });
             return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
+        //Mie added this to generate id from controller to save data, if no id on controller it did not save the link to database
+        public static async Task<TimelineEvent> CreateAsync(ITimelineService api, string id,string title, string description, DateTime eventDateTime, string location)
+        {
+            string json = await api.PutJsonAsync("TimelineEvent/Create", new
+            {
+                TimelineEventId = id,
+                Title = title,
+                Description = description,
+                EventDateTime = eventDateTime.Ticks.ToString(),
+                Location = location
+            });
+            return JsonConvert.DeserializeObject<TimelineEvent>(json);
+        }
 
         public Task EditTitleAsync(ITimelineService api)
         {

@@ -57,14 +57,11 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
 
-        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt)
+        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt) => api.PutJsonAsync("Timeline/LinkEvent", new
         {
-            return api.PutJsonAsync("Timeline/LinkEvent", new
-            {
-                TimelineId = Id,
-                EventId = evt.Id
-            });
-        }
+            TimelineId = Id,
+            EventId = evt.Id
+        });
 
         public Task UnlinkEventAsync(ITimelineService api, TimelineEvent evt)
         {

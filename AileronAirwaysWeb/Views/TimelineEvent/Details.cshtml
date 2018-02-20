@@ -1,15 +1,15 @@
 ﻿@model Echelon.TimelineApi.TimelineEvent
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Event Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <h2>Details</h2>
 <div class="row">
     <div>
+        @Html.ActionLink("back to timeline event", "Index", new { id = @ViewBag.timelineId })
 
-       
-        {
+        @Html.ActionLink("EditTitleDateDescription", "EditTitleDateDescription", new { id = Model.Id }) |
 
         <dl class="dl-horizontal">
 
@@ -17,7 +17,7 @@
                 @Html.DisplayNameFor(item => item.Id)
             </dt>
             <dd>
-                @Html.ActionLink(item.Title, "Details", new { id = item.Id })
+                @Html.DisplayFor(item => item.Id)
             </dd>
 
             <dt>
@@ -62,9 +62,10 @@
                 @Html.DisplayFor(model => model.Location)
             </dd>
             @Html.ActionLink("Previous Event", "Details", "TimelineEvent" /*,new { id = previousEvnet's.Id }*/) |
-            @Html.ActionLink("Delete", "Delete" ) |
-            @Html.ActionLink("Next Event", "Details","TimelineEvent" /*,new { id = previousEvnet's.Id}*/)
+            @Html.ActionLink("Delete", "Delete", new { id = Model.Id },
+           new { onclick = "return confirm('Are you sure you wish to delete this blog?');" }) |
+            @Html.ActionLink("Next Event", "Details", "TimelineEvent" /*,new { id = previousEvnet's.Id}*/)
         </dl>
-        }
+
     </div>
 </div>
