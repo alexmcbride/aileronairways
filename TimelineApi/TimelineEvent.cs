@@ -17,11 +17,6 @@ namespace Echelon.TimelineApi
         public DateTime EventDateTime { get; set; }
         public string Location { get; set; }
 
-        public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, DateTime eventDateTime)
-        {
-            return CreateAsync(api, title, string.Empty, eventDateTime, string.Empty);
-        }
-
         public static async Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
         {
             string json = await api.PutJsonAsync("TimelineEvent/Create", new

@@ -13,9 +13,9 @@ namespace Echelon.TimelineApi
         private readonly string _tenantId;
 
         public TimelineService(string baseUrl, string authToken, string tenantId)
-            : this(new WebClientHelper(), baseUrl, authToken, tenantId) { }
+            : this(baseUrl, authToken, tenantId, new WebClientHelper()) { }
 
-        public TimelineService(IWebClientHelper client, string baseUrl, string authToken, string tenantId)
+        public TimelineService(string baseUrl, string authToken, string tenantId, IWebClientHelper client)
         {
             _client = client;
             _baseUrl = baseUrl;
