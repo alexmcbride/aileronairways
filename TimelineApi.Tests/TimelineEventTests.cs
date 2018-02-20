@@ -156,7 +156,7 @@ namespace Echelon.TimelineApi.Tests
             await a.UnlinkTimelineEventsAsync(mock.Object, b);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEvent/UnlinkEvents",
-                It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") && o.VerifyObject("UnlinkedToTimelineEventId", "ID2"))));
+                It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1") && o.VerifyObject("UnlinkedFromTimelineEventId", "ID2"))));
         }
 
         [TestMethod]

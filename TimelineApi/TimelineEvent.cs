@@ -124,7 +124,7 @@ namespace Echelon.TimelineApi
             return api.PutJsonAsync("TimelineEvent/UnlinkEvents", new
             {
                 TimelineEventId = Id,
-                UnlinkedToTimelineEventId = timelineEvent.Id
+                UnlinkedFromTimelineEventId = timelineEvent.Id
             });
         }
 
