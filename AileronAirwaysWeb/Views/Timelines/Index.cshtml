@@ -1,39 +1,39 @@
 ﻿@model IEnumerable<Echelon.TimelineApi.Timeline>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Timeline Register";
 }
 
-<h2>Timeline Register</h2>
+<h2>@ViewData["Title"]</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create New Timeline</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-    <th>
-        @Html.DisplayNameFor(model => model.Title)
-    </th>
-    <th>
-        @Html.DisplayNameFor(model => model.CreationTimeStamp)
-    </th>
-    <th></th>
-    </tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreationTimeStamp)
+            </th>
+            <th></th>
+        </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    @Html.ActionLink(item.Title, "Index","TimelineEvent", new { id = item.Id })
+                    @Html.ActionLink(item.Title, "Index", "TimelineEvent", new { id = item.Id })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationTimeStamp)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
                 </td>
             </tr>
         }

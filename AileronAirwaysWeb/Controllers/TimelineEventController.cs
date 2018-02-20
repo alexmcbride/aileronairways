@@ -29,13 +29,13 @@ namespace AileronAirwaysWeb.Controllers
             List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
             foreach (var item in linkedEvents)
             {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item);
-                if (timelineEvent.IsDeleted == false)
-                {
+                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item.TimelineEventId);
+                if(timelineEvent.IsDeleted == false){
                 timelineEvents.Add(timelineEvent);
                 }
             }
             TempData["TimelineId"] = id;
+
             return View(timelineEvents);
         }
 

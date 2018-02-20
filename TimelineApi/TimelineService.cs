@@ -13,9 +13,9 @@ namespace Echelon.TimelineApi
         private readonly string _tenantId;
 
         public TimelineService(string baseUrl, string authToken, string tenantId)
-            : this(new WebClientHelper(), baseUrl, authToken, tenantId) { }
+            : this(baseUrl, authToken, tenantId, new WebClientHelper()) { }
 
-        public TimelineService(IWebClientHelper client, string baseUrl, string authToken, string tenantId)
+        public TimelineService(string baseUrl, string authToken, string tenantId, IWebClientHelper client)
         {
             _client = client;
             _baseUrl = baseUrl;
@@ -28,13 +28,6 @@ namespace Echelon.TimelineApi
             return $"{_baseUrl}{resource}";
         }
 
-        private static string CleanupResponse(string value)
-        {
-            // Need to remove these characters from response or JSON does not deserialize correctly. Not sure if this 
-            // is an issue with IdeaGen's API, or something on our end. Anyway, this works.
-            return value.Replace("\\", string.Empty).Trim('"');
-        }
-
         private void HandleError(WebException ex)
         {
             // Check if this was a 400 or 500 message.
@@ -43,8 +36,7 @@ namespace Echelon.TimelineApi
             {
                 // Get response message and throw new exception.
                 string message = _client.GetResponseMessage(ex.Response);
-                string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
-                throw new TimelineException($"{type} Error: {message}", ex);
+                throw new TimelineException(message, ex);
             }
         }
 
@@ -59,8 +51,7 @@ namespace Echelon.TimelineApi
             {
                 // Make request and get JSON response.
                 string url = GetUrl(resource);
-                string response = await _client.UploadStringAsync(url, body.ToString());
-                return CleanupResponse(response);
+                return await _client.UploadStringAsync(url, body.ToString());
             }
             catch (WebException ex)
             {
@@ -85,8 +76,7 @@ namespace Echelon.TimelineApi
             {
                 // Get JSON response.
                 string url = GetUrl(resource);
-                string response = await _client.DownloadStringAsync(url, headers);
-                return CleanupResponse(response);
+                return await _client.DownloadStringAsync(url, headers);
             }
             catch (WebException ex)
             {

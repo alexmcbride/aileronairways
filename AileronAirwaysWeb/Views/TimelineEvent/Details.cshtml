@@ -4,10 +4,10 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Details</h2>
+<h2>Event Detail</h2>
 <div class="row">
     <div>
-        @Html.ActionLink("back to timeline event", "Index", new { id = @ViewBag.timelineId })
+        @Html.ActionLink("back to timeline event", "Index", new { id = @ViewBag.timelineId }) | 
 
         @Html.ActionLink("EditTitleDateDescription", "EditTitleDateDescription", new { id = Model.Id }) |
 

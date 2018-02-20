@@ -30,7 +30,7 @@ namespace Echelon.TimelineApi
             {
                 return http.StatusCode;
             }
-            return HttpStatusCode.OK;
+            return 0;
         }
 
         public string GetResponseMessage(WebResponse response)

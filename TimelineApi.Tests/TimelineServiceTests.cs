@@ -18,7 +18,7 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(json));
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.GetJsonAsync("Test/Get");
 
             mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.VerifyContains("AuthToken", "ABC"))));
@@ -33,7 +33,7 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(json));
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -52,7 +52,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Bad request error");
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             await api.GetJsonAsync("Test/Get");
         }
 
@@ -64,7 +64,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Internal server error");
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             await api.GetJsonAsync("Test/Get");
         }
 
@@ -77,7 +77,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Bad request error");
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -92,7 +92,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Internal server error");
 
-            ITimelineService api = new TimelineService(mock.Object, BaseUrl, "ABC", "123");
+            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
