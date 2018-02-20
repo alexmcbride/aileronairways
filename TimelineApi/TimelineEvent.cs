@@ -103,5 +103,23 @@ namespace Echelon.TimelineApi
             });
             return JsonConvert.DeserializeObject<List<LinkedEvent>>(json);
         }
+
+        public Task LinkEventAsync(ITimelineService api, string timelineId)
+        {
+            return api.PutJsonAsync("Timeline/LinkEvent", new
+            {
+                TimelineId = timelineId,
+                EventId = Id
+            });
+        }
+
+        public Task UnlinkEventAsync(ITimelineService api, string timelineId)
+        {
+            return api.PutJsonAsync("Timeline/UnlinkEvent", new
+            {
+                TimelineId = timelineId,
+                EventId = Id
+            });
+        }
     }
 }
