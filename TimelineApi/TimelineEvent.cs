@@ -7,16 +7,14 @@ using System.Threading.Tasks;
 namespace Echelon.TimelineApi
 {
     public class TimelineEvent
-    {   
+    {
         public string Id { get; set; }
         public string TenantId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
-
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
-
         public string Location { get; set; }
 
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, DateTime eventDateTime)
@@ -81,11 +79,6 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public static Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, LinkedEvent linkedEvent)
-        {
-            return GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
-        }
-
         public static async Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, string timelineEventId)
         {
             string json = await api.GetJsonAsync("TimelineEvent/GetTimelineEvent", new NameValueCollection
@@ -120,6 +113,33 @@ namespace Echelon.TimelineApi
                 TimelineId = timelineId,
                 EventId = Id
             });
+        }
+
+        public Task LinkEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
+        {
+            return api.PutJsonAsync("TimelineEvent/LinkEvents", new
+            {
+                TimelineEventId = Id,
+                LinkedToTimelineEventId = timelineEvent.Id
+            });
+        }
+
+        public Task UnlinkEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
+        {
+            return api.PutJsonAsync("TimelineEvent/UnlinkEvents", new
+            {
+                TimelineEventId = Id,
+                UnlinkedToTimelineEventId = timelineEvent.Id
+            });
+        }
+
+        public async Task<IList<TimelineEventLink>> GetLinkedTimelineEventsAsync(ITimelineService api)
+        {
+            string json = await api.GetJsonAsync("TimelineEvent/GetLinkedTimelineEvents", new NameValueCollection
+            {
+                { "TimelineEventId", Id }
+            });
+            return JsonConvert.DeserializeObject<List<TimelineEventLink>>(json);
         }
     }
 }

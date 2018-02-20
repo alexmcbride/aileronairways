@@ -26,7 +26,7 @@ namespace AileronAirwaysWeb.Controllers
             List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
             foreach (var item in linkedEvents)
             {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item);
+                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item.TimelineEventId);
                 timelineEvents.Add(timelineEvent);
             }
 
