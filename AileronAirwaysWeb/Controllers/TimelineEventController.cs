@@ -66,8 +66,7 @@ namespace AileronAirwaysWeb.Controllers
                     Request.Form["Location"]);
 
                 string timelineId = (TempData["TimelineId"]).ToString();
-                Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
-                await timeline.LinkEventAsync(_api, evt);
+                await evt.LinkEventAsync(_api, timelineId);
 
                 return RedirectToAction(returnUrl/*nameof(Index)*/);
             }
