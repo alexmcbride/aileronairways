@@ -24,12 +24,12 @@ namespace AileronAirwaysWeb.Controllers
             Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
             IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(_api);
             List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-           foreach (var item in linkedEvents)
+            foreach (var item in linkedEvents)
             {
                 TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item);
                 timelineEvents.Add(timelineEvent);
             }
-           
+
             return View(timelineEvents);
         }
 
@@ -56,16 +56,14 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection, string returnUrl = null)
         {
-            
             ViewData["ReturnUrl"] = returnUrl;
             try
             {
-                TimelineEvent evt = new TimelineEvent();
-                evt.Title = Request.Form["Title"];
-                evt.Description = Request.Form["Description"];
-                evt.EventDateTime = Convert.ToDateTime(Request.Form["EvetDateTime"]);
-                evt.Location = Request.Form["Location"]; ;
-                await evt.CreateAsync(_api);
+                TimelineEvent evt = await TimelineEvent.CreateAsync(_api, 
+                    Request.Form["Title"], 
+                    Request.Form["Description"], 
+                    Convert.ToDateTime(Request.Form["EvetDateTime"]), 
+                    Request.Form["Location"]);
 
                 string timelineId = (TempData["TimelineId"]).ToString();
                 Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
