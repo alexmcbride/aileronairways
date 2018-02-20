@@ -43,8 +43,7 @@ namespace Echelon.TimelineApi
             {
                 // Get response message and throw new exception.
                 string message = _client.GetResponseMessage(ex.Response);
-                string type = status == HttpStatusCode.BadRequest ? "Validation" : "Server";
-                throw new TimelineException($"{type} Error: {message}", ex);
+                throw new TimelineException(message, ex);
             }
         }
 
