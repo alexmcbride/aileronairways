@@ -11,13 +11,14 @@ namespace Echelon.TimelineApi.Tests
     [TestClass]
     public class TimelineEventTests
     {
+        const string TimelineEventJson = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
+
         [TestMethod]
         public async Task TestEventCreate()
         {
-            string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
 
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(json));
+            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineEventJson));
 
             var dateTime = new DateTime(636546626588300000);
             var result = await TimelineEvent.CreateAsync(mock.Object, "Test Title", "Test Description", dateTime, "-1.1234,1.1234");
@@ -182,6 +183,30 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(links[1].LinkedToTimelineEventId, "ID5");
             Assert.AreEqual(links[1].Id, "ID6");
             Assert.AreEqual(links[1].TenantId, "Team3");
+        }
+
+        [TestMethod]
+        public async Task TestEditEvent()
+        {
+            var now = DateTime.Now;
+
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineEventJson));
+
+            TimelineEvent timelineEvent = new TimelineEvent();
+            timelineEvent.Id = "ID1";
+            timelineEvent.Title = "Edited Title";
+            timelineEvent.Description = "Edited description";
+            timelineEvent.EventDateTime = now;
+            timelineEvent.Location = "-1.1234,1.1234";
+            await timelineEvent.EditAsync(mock.Object);
+
+            // We reuse Event/Create to do a full on edit of all attributes at once.
+            mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyObject("TimelineEventId", "ID1"))));
+            mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyObject("Title", "Edited Title"))));
+            mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyObject("Description", "Edited description"))));
+            mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyObject("EventDateTime", now.Ticks.ToString()))));
+            mock.Verify(m => m.PutJsonAsync("TimelineEvent/Create", It.Is<object>(o => o.VerifyObject("Location", "-1.1234,1.1234"))));
         }
     }
 }

@@ -17,11 +17,16 @@ namespace Echelon.TimelineApi
         public DateTime EventDateTime { get; set; }
         public string Location { get; set; }
 
-        public static async Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
+        public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
+        {
+            return CreateAsync(api, Guid.NewGuid().ToString(), title, description, eventDateTime, location);
+        }
+
+        private static async Task<TimelineEvent> CreateAsync(ITimelineService api, string id, string title, string description, DateTime eventDateTime, string location)
         {
             string json = await api.PutJsonAsync("TimelineEvent/Create", new
             {
-                TimelineEventId = Guid.NewGuid().ToString(),
+                TimelineEventId = id,
                 Title = title,
                 Description = description,
                 EventDateTime = eventDateTime.Ticks.ToString(),
@@ -135,6 +140,12 @@ namespace Echelon.TimelineApi
                 { "TimelineEventId", Id }
             });
             return JsonConvert.DeserializeObject<List<TimelineEventLink>>(json);
+        }
+
+        public async Task EditAsync(ITimelineService api)
+        {
+            // If you perform a create and keep the ID the same then it overwrites the exsting event.
+            await CreateAsync(api, Id, Title, Description, EventDateTime, Location);
         }
     }
 }
