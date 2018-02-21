@@ -61,10 +61,10 @@
             <dd>
                 @Html.DisplayFor(model => model.Location)
             </dd>
-            @Html.ActionLink("Previous Event", "Details", "TimelineEvent" /*,new { id = previousEvnet's.Id }*/) |
+            @Html.ActionLink("Previous Event", "Details", "TimelineEvents" /*,new { id = previousEvnet's.Id }*/) |
             @Html.ActionLink("Delete", "Delete", new { id = Model.Id },
            new { onclick = "return confirm('Are you sure you wish to delete this blog?');" }) |
-            @Html.ActionLink("Next Event", "Details", "TimelineEvent" /*,new { id = previousEvnet's.Id}*/)
+            @Html.ActionLink("Next Event", "Details", "TimelineEvents" /*,new { id = previousEvnet's.Id}*/)
         </dl>
 
     </div>

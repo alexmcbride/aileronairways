@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AileronAirwaysWeb.Controllers
 {
-    public class TimelineEventController : Controller
+    public class TimelineEventsController : Controller
     {
 
         private readonly ITimelineService _api;
 
-        public TimelineEventController(ITimelineService api)
+        public TimelineEventsController(ITimelineService api)
         {
             _api = api;
         }
@@ -67,7 +67,7 @@ namespace AileronAirwaysWeb.Controllers
             else
             {
 
-                return RedirectToAction("Index", "Timeline");
+                return RedirectToAction("Index", "Timelines");
             }
 
         }
@@ -105,7 +105,7 @@ namespace AileronAirwaysWeb.Controllers
             }
             else
             {
-                return RedirectToAction("Details", "TimelineEvent");
+                return RedirectToAction("Details", "TimelineEvents");
             }
         }
 
@@ -130,7 +130,7 @@ namespace AileronAirwaysWeb.Controllers
                 string timelineId;
                 timelineId = (TempData["TimelineId"]).ToString();
                 TempData["TimelineId"] = timelineId;
-                return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
+                return RedirectToAction("Details", "TimelineEvents", new { id = evt.Id });
             }
             else
             {
@@ -147,7 +147,7 @@ namespace AileronAirwaysWeb.Controllers
             TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
             await evt.DeleteAsync(_api);
             TempData["TimelineId"] = timelineId;
-            return RedirectToAction("Index", "TimelineEvent", new { id = timelineId });
+            return RedirectToAction("Index", "TimelineEvents", new { id = timelineId });
         }
 
         //// POST: Timelines/Delete/5
