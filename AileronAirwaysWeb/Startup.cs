@@ -52,6 +52,7 @@ namespace AileronAirwaysWeb
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
+                app.UseDebugExceptionMiddleware();
                 app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage();
             }
