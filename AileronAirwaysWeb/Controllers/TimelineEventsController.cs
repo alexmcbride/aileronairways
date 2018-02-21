@@ -121,9 +121,7 @@ namespace AileronAirwaysWeb.Controllers
             evt.Description = Request.Form["Description"];
             evt.EventDateTime = date;
 
-            await evt.EditTitleAsync(_api);
-            await evt.EditEventDateTimeAsync(_api);
-            await evt.EditDescriptionAsync(_api);
+            await evt.EditAsync(_api);
 
             if (TempData.ContainsKey("TimelineId"))
             {
