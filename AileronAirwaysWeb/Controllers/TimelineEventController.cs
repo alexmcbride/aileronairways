@@ -30,8 +30,9 @@ namespace AileronAirwaysWeb.Controllers
             foreach (var item in linkedEvents)
             {
                 TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item.TimelineEventId);
-                if(timelineEvent.IsDeleted == false){
-                timelineEvents.Add(timelineEvent);
+                if (timelineEvent.IsDeleted == false)
+                {
+                    timelineEvents.Add(timelineEvent);
                 }
             }
             TempData["TimelineId"] = id;
@@ -54,12 +55,14 @@ namespace AileronAirwaysWeb.Controllers
         public ActionResult Create()
         {
             string TimelineId;
-            if (TempData.ContainsKey("TimelineId")) {
+            if (TempData.ContainsKey("TimelineId"))
+            {
                 TimelineId = TempData["TimelineId"].ToString();
                 TempData["TimelineId"] = TimelineId;
                 return View();
             }
-            else {
+            else
+            {
 
                 return RedirectToAction("Index", "Timeline");
             }
@@ -70,30 +73,20 @@ namespace AileronAirwaysWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection/*, string returnUrl = null*/)
-        { //ViewData["ReturnUrl"] = returnUrl;
-            try
-            {
-                string timelineId = (TempData["TimelineId"]).ToString();
+        { 
+            string timelineId = (TempData["TimelineId"]).ToString();
+            DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-                string someDate = Request.Form["EventDateTime"];
-                string[] formats = { "yyyy-MM-ddThh:mm", "dd/MM/yyyy hh:mm:ss" };
-                DateTime date = DateTime.ParseExact(someDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
-                String.Format("{0:dd/mm/yyyy}", date);
+            TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
+                Request.Form["Title"],
+                Request.Form["Description"],
+                date,
+                Request.Form["Location"]);
 
-                TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
-                    Guid.NewGuid().ToString(),
-                    Request.Form["Title"],
-                    Request.Form["Description"],
-                    date,
-                    Request.Form["Location"]);
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
+            await timeline.LinkEventAsync(_api, evt);
 
-                Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
-                await timeline.LinkEventAsync(_api, evt);
-
-                return RedirectToAction(/*returnUrl*/nameof(Index), new { id = timelineId });
-            }
-            catch
-            {return View();}
+            return RedirectToAction(/*returnUrl*/nameof(Index), new { id = timelineId });
         }
 
         //GET: Timelines/Edit/5
@@ -108,7 +101,9 @@ namespace AileronAirwaysWeb.Controllers
                 return View(timelineEvent);
             }
             else
-            { return RedirectToAction("Details", "TimelineEvent"); }
+            {
+                return RedirectToAction("Details", "TimelineEvent");
+            }
         }
 
         //POST: Timelines/Edit/5
@@ -116,45 +111,27 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditTitleDateDescription(string id, IFormCollection collection)
         {
-            try
+            var date = DateTime.Parse(Request.Form["EventDateTime"]);
+
+            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
+            evt.Title = Request.Form["Title"];
+            evt.Description = Request.Form["Description"];
+            evt.EventDateTime = date;
+
+            await evt.EditTitleAsync(_api);
+            await evt.EditEventDateTimeAsync(_api);
+            await evt.EditDescriptionAsync(_api);
+
+            if (TempData.ContainsKey("TimelineId"))
             {
-                string someDate = Request.Form["EventDateTime"];
-                string[] formats = { "yyyy-MM-ddThh:mm", "dd/MM/yyyy hh:mm:ss" };
-                DateTime date = DateTime.ParseExact(someDate, formats, new CultureInfo("en-US"), DateTimeStyles.None);
-                String.Format("{0:dd/mm/yyyy HH:mm:ss}", date);
-
-                TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
-                evt.Title = Request.Form["Title"];
-                evt.Description = Request.Form["Description"];
-                evt.EventDateTime = date;
-
-                await evt.EditTitleAsync(_api);
-                await evt.EditEventDateTimeAsync(_api);
-                await evt.EditDescriptionAsync(_api);
-
-                //await evt.EditTitleDateDescription(_api);
-
-                if (TempData.ContainsKey("TimelineId"))
-                {
-                    string timelineId;
-                    timelineId = (TempData["TimelineId"]).ToString();
-                    TempData["TimelineId"] = timelineId;
-                    return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
-                }
-                else { return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
-                }
+                string timelineId;
+                timelineId = (TempData["TimelineId"]).ToString();
+                TempData["TimelineId"] = timelineId;
+                return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
             }
-            catch
+            else
             {
-                if (TempData.ContainsKey("TimelineId"))
-                {
-                    string timelineId;
-                    timelineId = (TempData["TimelineId"]).ToString();
-                    TempData["TimelineId"] = timelineId;
-                    return RedirectToAction("Index", "TimelineEvent", new { id = timelineId });
-                }
-                else { return RedirectToAction("Index", "Timeline");
-                }
+                return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
             }
         }
 
@@ -163,11 +140,11 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Delete(string id)
         {
             string timelineId = (TempData["TimelineId"]).ToString();
-            
+
             TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
             await evt.DeleteAsync(_api);
             TempData["TimelineId"] = timelineId;
-            return RedirectToAction("Index", "TimelineEvent",new { id = timelineId });
+            return RedirectToAction("Index", "TimelineEvent", new { id = timelineId });
         }
 
         //// POST: Timelines/Delete/5

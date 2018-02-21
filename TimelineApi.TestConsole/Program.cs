@@ -27,11 +27,11 @@ namespace Echelon.TimelineApi.TestConsole
             DisplayTimeline(timeline);
 
             // Create new event.
-            TimelineEvent evt = await TimelineEvent.CreateAsync(api, "New Event 18", "Event description", DateTime.Now, "-1.1234,1.1234");
-            DisplayTimelineEvent(evt);
+            //TimelineEvent evt = await TimelineEvent.CreateAsync(api, "New Event 18", "Event description", DateTime.Now, "-1.1234,1.1234");
+            //DisplayTimelineEvent(evt);
 
             // Link timeline and event together.
-            await timeline.LinkEventAsync(api, evt);
+            //await timeline.LinkEventAsync(api, evt);
 
             // Get list of linked events.
             IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
