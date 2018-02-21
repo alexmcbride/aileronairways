@@ -37,6 +37,9 @@ namespace AileronAirwaysWeb.Controllers
             }
             TempData["TimelineId"] = id;
 
+            // Sort events 
+            timelineEvents = timelineEvents.OrderByDescending(e => e.EventDateTime).ToList();
+
             return View(timelineEvents);
         }
 
