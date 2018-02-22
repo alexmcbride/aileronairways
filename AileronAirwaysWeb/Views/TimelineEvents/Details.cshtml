@@ -8,14 +8,14 @@
     <div class="col-sm-12">
         <h2>Event Detail</h2>
 
-        @Html.ActionLink("Back to timeline", "Index", new { id = @ViewBag.timelineId })
+        <p><a asp-action="Index" asp-route-id="@ViewBag.TimelineId">Back to timeline</a></p>
 
         <h3>@Model.Title</h3>
         <p>Date: @Model.EventDateTime</p>
         <p>Location: @Model.Location</p>
         <p>Description: @Model.Description</p>
 
-        @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { onclick = "return confirm('Are you sure you wish to delete this event?');" })
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+        <a asp-action="Delete" asp-route-id="@Model.Id" onclick = "return confirm('Are you sure you wish to delete this event?');">Delete</a>
     </div>
 </div>
