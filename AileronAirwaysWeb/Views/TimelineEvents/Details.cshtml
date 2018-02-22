@@ -4,68 +4,18 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Event Detail</h2>
 <div class="row">
-    <div>
-        @Html.ActionLink("back to timeline event", "Index", new { id = @ViewBag.timelineId }) | 
+    <div class="col-sm-12">
+        <h2>Event Detail</h2>
+
+        @Html.ActionLink("Back to timeline", "Index", new { id = @ViewBag.timelineId })
+
+        <h3>@Model.Title</h3>
+        <p>Date: @Model.EventDateTime</p>
+        <p>Location: @Model.Location</p>
+        <p>Description: @Model.Description</p>
 
         @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-
-        <dl class="dl-horizontal">
-
-            <dt>
-                @Html.DisplayNameFor(item => item.Id)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.Id)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.TenantId)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.TenantId)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.Title)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.Title)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.Description)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.Description)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.IsDeleted)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.IsDeleted)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.EventDateTime)
-            </dt>
-            <dd>
-                @Html.DisplayFor(item => item.EventDateTime)
-            </dd>
-
-            <dt>
-                @Html.DisplayNameFor(item => item.Location)
-            </dt>
-            <dd>
-                @Html.DisplayFor(model => model.Location)
-            </dd>
-            @Html.ActionLink("Previous Event", "Details", "TimelineEvents" /*,new { id = previousEvnet's.Id }*/) |
-            @Html.ActionLink("Delete", "Delete", new { id = Model.Id },
-           new { onclick = "return confirm('Are you sure you wish to delete this blog?');" }) |
-            @Html.ActionLink("Next Event", "Details", "TimelineEvents" /*,new { id = previousEvnet's.Id}*/)
-        </dl>
-
+        @Html.ActionLink("Delete", "Delete", new { id = Model.Id }, new { onclick = "return confirm('Are you sure you wish to delete this event?');" })
     </div>
 </div>

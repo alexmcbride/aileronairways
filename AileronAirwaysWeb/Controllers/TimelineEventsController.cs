@@ -57,12 +57,18 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            string TimelineId;
+            string timelineId;
             if (TempData.ContainsKey("TimelineId"))
             {
-                TimelineId = TempData["TimelineId"].ToString();
-                TempData["TimelineId"] = TimelineId;
-                return View();
+                timelineId = TempData["TimelineId"].ToString();
+                TempData["TimelineId"] = timelineId;
+                ViewBag.TimelineId = timelineId;
+
+                // Create new blank timeline and set default values
+                TimelineEvent timelineEvent = new TimelineEvent();
+                timelineEvent.EventDateTime = DateTime.Now;
+
+                return View(timelineEvent);
             }
             else
             {

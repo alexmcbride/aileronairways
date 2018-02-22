@@ -33,3 +33,17 @@
         display: none;
     }
 }
+
+/* Custom Bootstrap colours */
+.navbar-custom {
+    background-color: #734EA6;
+    
+}
+
+.navbar-custom .navbar-nav > li > a {
+    color: #fff;
+}
+
+.navbar-custom .navbar-brand {
+    color: #fff;
+}

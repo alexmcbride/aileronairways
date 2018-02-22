@@ -1,10 +1,10 @@
 ﻿@model Echelon.TimelineApi.TimelineEvent
 @{
-    ViewData["Title"] = "EditTitleDateDescription";
+    ViewData["Title"] = "Edit Event";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>EditTitleDateDescription</h2>
+<h2>Edit Event</h2>
 
 <div class="row">
     <div class="col-md-4">
@@ -30,7 +30,8 @@
                 <span asp-validation-for="EventDateTime" class="text-danger"></span>
             </div>
 
-            <button type="submit" class="btn btn-default">Save</button>
+            <button type="submit" class="btn btn-default">Save</button> | 
+            <a asp-controller="TimelineEvents" asp-action="Details" asp-route-id="@Model.Id">Go back</a>
         </form>
     </div>
 </div>

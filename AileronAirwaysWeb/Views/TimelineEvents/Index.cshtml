@@ -1,71 +1,53 @@
 ﻿@model IEnumerable<Echelon.TimelineApi.TimelineEvent>
 @{
-    ViewData["Title"] = "TimelineEvents";
+    ViewData["Title"] = "Timeline Events";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>TimelineEvents</h2>
-@Html.ActionLink("Create", "Create")
-<div class="row">
-    <div>
+<h2>Timeline Events</h2>
+@Html.ActionLink("Create New Event", "Create")
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EventDateTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Location)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
         @foreach (var item in Model)
         {
-
-            <dl class="dl-horizontal">
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.Id)
-                </dt>
-                <dd>
-                    @Html.ActionLink(item.Title, "Details", new { id = item.Id })
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.TenantId)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.TenantId)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.Title)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.Title)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.Description)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.Description)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.IsDeleted)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.IsDeleted)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.EventDateTime)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.EventDateTime)
-                </dd>
-
-                <dt>
-                    @Html.DisplayNameFor(modelitem => item.Location)
-                </dt>
-                <dd>
-                    @Html.DisplayFor(modelitem => item.Location)
-                </dd>
-                @Html.ActionLink("Detail", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this blog?');" })
-            </dl>
+        <tr>
+            <td>
+                @Html.ActionLink(item.Title, "Details", "TimelineEvents", new { id = item.Id })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EventDateTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this event?');" })
+            </td>
+        </tr>
         }
-    </div>
-</div>
+    </tbody>
+</table>
+
 
