@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
-    public class TimelineEvent
+    public class TimelineEvent : ModelBase
     {
-        public string Id { get; set; }
-        public string TenantId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
@@ -142,10 +140,10 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<List<TimelineEventLink>>(json);
         }
 
-        public async Task EditAsync(ITimelineService api)
+        public Task EditAsync(ITimelineService api)
         {
             // If you perform a create and keep the ID the same then it overwrites the exsting event.
-            await CreateAsync(api, Id, Title, Description, EventDateTime, Location);
+            return CreateAsync(api, Id, Title, Description, EventDateTime, Location);
         }
     }
 }

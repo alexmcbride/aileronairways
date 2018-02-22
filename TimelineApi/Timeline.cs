@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
-    public class Timeline
+    public class Timeline : ModelBase
     {
-        public string Id { get; set; }
         public string Title { get; set; }
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime CreationTimeStamp { get; set; }
         public bool IsDeleted { get; set; }
-        public string TenantId { get; set; }
 
         public static async Task<Timeline> CreateAsync(ITimelineService api, string title)
         {
@@ -57,12 +55,10 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
 
-        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt) 
+        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt)
         {
-
             return evt.LinkEventAsync(api, Id);
         }
-
 
         public Task UnlinkEventAsync(ITimelineService api, TimelineEvent evt)
         {
