@@ -93,7 +93,7 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         //GET: Timelines/Edit/5
-        public async Task<ActionResult> EditTitleDateDescription(string id)
+        public async Task<ActionResult> Edit(string id)
         {
             string TimelineId;
             if (TempData.ContainsKey("TimelineId"))
@@ -112,7 +112,7 @@ namespace AileronAirwaysWeb.Controllers
         //POST: Timelines/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> EditTitleDateDescription(string id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, IFormCollection collection)
         {
             var date = DateTime.Parse(Request.Form["EventDateTime"]);
 
