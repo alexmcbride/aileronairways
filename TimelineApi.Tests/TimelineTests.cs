@@ -14,7 +14,7 @@ namespace Echelon.TimelineApi.Tests
             "{\"Id\": \"ID2\", \"Title\": \"Test Title 2\", \"CreationTimeStamp\": \"636544632350000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}]";
 
         [TestMethod]
-        public async Task TestTimelineCreate()
+        public async Task TimelineCreate()
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
@@ -31,7 +31,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestGetTimeline()
+        public async Task GetTimeline()
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(TimelineJson));
@@ -47,7 +47,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestGetTimelines()
+        public async Task GetTimelines()
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync("Timeline/GetTimelines")).Returns(TestUtils.GetCompletedTask(TimelinesJson));
@@ -60,7 +60,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestTimelineEditTitle()
+        public async Task TimelineEditTitle()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -76,7 +76,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestTimelineDelete()
+        public async Task TimelineDelete()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -90,7 +90,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestTimelineLinkEvent()
+        public async Task TimelineLinkEvent()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -106,7 +106,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestTimelineUnlinkEvent()
+        public async Task TimelineUnlinkEvent()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -122,7 +122,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestTimelineGetLinkedEvents()
+        public async Task TimelineGetLinkedEvents()
         {
             string json = "[{\"TimelineEventId\":\"ID1\",\"TimelineId\":\"ID2\",\"IsDeleted\":true,\"Id\":\"ID3\",\"TenantId\":\"123\"}," +
                 "{\"TimelineEventId\":\"ID4\",\"TimelineId\":\"ID5\",\"IsDeleted\":true,\"Id\":\"ID6\",\"TenantId\":\"123\"}]";

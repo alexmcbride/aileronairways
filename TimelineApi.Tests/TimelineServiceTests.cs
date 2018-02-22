@@ -12,7 +12,7 @@ namespace Echelon.TimelineApi.Tests
         private const string BaseUrl = "http://baseurl.com/";
 
         [TestMethod]
-        public async Task TestGetJson()
+        public async Task GetJson()
         {
             string json = "{\"Test\": \"Result\"}";
             var mock = new Mock<IWebClientHelper>();
@@ -27,7 +27,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestPutJson()
+        public async Task PutJson()
         {
             string json = "{\"Test\": \"Result\"}";
             var mock = new Mock<IWebClientHelper>();
@@ -45,7 +45,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task HandlesGetJson400Error()
+        public async Task GetJson400Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
@@ -57,7 +57,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task HandlesGetJson500Error()
+        public async Task GetJson500Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
@@ -70,7 +70,7 @@ namespace Echelon.TimelineApi.Tests
 
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task HandlesPutJson400Error()
+        public async Task PutJson400Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));
@@ -85,7 +85,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task HandlesPutJson500Error()
+        public async Task PutJson500Error()
         {
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetExceptionTask<string>(new WebException()));

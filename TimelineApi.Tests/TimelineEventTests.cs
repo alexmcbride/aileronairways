@@ -14,7 +14,7 @@ namespace Echelon.TimelineApi.Tests
         const string TimelineEventJson = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
 
         [TestMethod]
-        public async Task TestEventCreate()
+        public async Task EventCreate()
         {
 
             var mock = new Mock<ITimelineService>();
@@ -37,7 +37,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventEditTitle()
+        public async Task EventEditTitle()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -52,7 +52,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventEditDescription()
+        public async Task EventEditDescription()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -67,7 +67,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventEditLocation()
+        public async Task EventEditLocation()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -82,7 +82,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventEditEventDateTime()
+        public async Task EventEditEventDateTime()
         {
             var now = DateTime.Now;
             var mock = new Mock<ITimelineService>();
@@ -98,7 +98,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventDelete()
+        public async Task EventDelete()
         {
             var mock = new Mock<ITimelineService>();
 
@@ -111,7 +111,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventGetTimelineEvent()
+        public async Task EventGetTimelineEvent()
         {
             var dt = DateTime.Now;
             string json = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"" + dt.Ticks + "\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
@@ -131,7 +131,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventLinkTimelineEvents()
+        public async Task EventLinkTimelineEvents()
         {
             var mock = new Mock<ITimelineService>();
             TimelineEvent a = new TimelineEvent();
@@ -146,7 +146,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventUnlinkTimelineEvents()
+        public async Task EventUnlinkTimelineEvents()
         {
             var mock = new Mock<ITimelineService>();
             TimelineEvent a = new TimelineEvent();
@@ -161,7 +161,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEventGetLinkedTimelineEvents()
+        public async Task EventGetLinkedTimelineEvents()
         {
             string json = "[{\"TimelineEventId\":\"ID1\",\"LinkedToTimelineEventId\":\"ID2\",\"Id\":\"ID3\",\"TenantId\":\"Team3\"}," +
                 "{\"TimelineEventId\":\"ID4\",\"LinkedToTimelineEventId\":\"ID5\",\"Id\":\"ID6\",\"TenantId\":\"Team3\"}]";
@@ -186,7 +186,7 @@ namespace Echelon.TimelineApi.Tests
         }
 
         [TestMethod]
-        public async Task TestEditEvent()
+        public async Task EditEvent()
         {
             var now = DateTime.Now;
 
