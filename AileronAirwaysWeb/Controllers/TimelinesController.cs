@@ -40,11 +40,15 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Timelines/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(IFormCollection collection)
         {
             try
             {
                 // TODO: Add insert logic here
+
+                Timeline tLine = await Timeline.CreateAsync(_api,
+                    Request.Form["Title"]);
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -63,12 +67,16 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Timelines/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, IFormCollection collection)
         {
             try
             {
                 // TODO: Add update logic here
 
+                Timeline tline = await Timeline.GetTimelineAsync(_api, id);
+                tline.Title = Request.Form["Title"];
+
+                await tline.EditTitleAsync(_api);
                 return RedirectToAction(nameof(Index));
             }
             catch
