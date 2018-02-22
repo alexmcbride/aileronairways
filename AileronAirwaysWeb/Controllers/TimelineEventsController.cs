@@ -22,23 +22,23 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines
         public async Task<ActionResult> Index(string id)
         {
-            if (id.Equals(null))
+            if (string.IsNullOrEmpty(id))
             { id = (RouteData.Values["id"]).ToString(); }
 
-            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(_api, id);
-            List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-            foreach (var item in linkedEvents)
-            {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item.TimelineEventId);
-                if (timelineEvent.IsDeleted == false)
-                {
-                    timelineEvents.Add(timelineEvent);
-                }
-            }
             TempData["TimelineId"] = id;
 
-            // Sort events 
-            timelineEvents = timelineEvents.OrderByDescending(e => e.EventDateTime).ToList();
+            // Get the timeline.
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            ViewBag.TimelineTitle = timeline.Title;
+
+            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(_api, id);
+
+            // Execute list of tasks in one go, which is faster.
+            var tasks = linkedEvents.Select(e => TimelineEvent.GetTimelineEventAsync(_api, e.TimelineEventId));
+            var timelineEvents = (await Task.WhenAll(tasks))
+                .Where(e => !e.IsDeleted)
+                .OrderByDescending(e => e.EventDateTime)
+                .ToList();
 
             return View(timelineEvents);
         }
@@ -46,7 +46,6 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Details/5
         public async Task<ActionResult> Details(string id)
         {
-
             TimelineEvent Event = await TimelineEvent.GetTimelineEventAsync(_api, id);
             string timelineId = (TempData["TimelineId"]).ToString();
             TempData["TimelineId"] = timelineId;
@@ -82,7 +81,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(IFormCollection collection/*, string returnUrl = null*/)
-        { 
+        {
             string timelineId = (TempData["TimelineId"]).ToString();
             DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
@@ -101,11 +100,12 @@ namespace AileronAirwaysWeb.Controllers
         //GET: Timelines/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            string TimelineId;
+            string timelineId;
             if (TempData.ContainsKey("TimelineId"))
             {
-                TimelineId = (TempData["TimelineId"]).ToString();
-                TempData["TimelineId"] = TimelineId;
+                timelineId = (TempData["TimelineId"]).ToString();
+                TempData["TimelineId"] = timelineId;
+
                 TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, id);
                 return View(timelineEvent);
             }
@@ -126,6 +126,7 @@ namespace AileronAirwaysWeb.Controllers
             evt.Title = Request.Form["Title"];
             evt.Description = Request.Form["Description"];
             evt.EventDateTime = date;
+            evt.Location = Request.Form["Location"];
 
             await evt.EditAsync(_api);
 

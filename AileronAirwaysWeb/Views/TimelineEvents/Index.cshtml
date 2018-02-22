@@ -4,8 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Timeline Events</h2>
-@Html.ActionLink("Create New Event", "Create")
+<h2>`@ViewBag.TimelineTitle` Timeline</h2>
+
+<p class="text-right">
+    <a asp-action="Create">Create New Event</a>
+</p>
 
 <table class="table">
     <thead>
@@ -28,24 +31,24 @@
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.ActionLink(item.Title, "Details", "TimelineEvents", new { id = item.Id })
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EventDateTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id }, new { onclick = "return confirm('Are you sure you wish to delete this event?');" })
-            </td>
-        </tr>
+            <tr>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EventDateTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                </td>
+            </tr>
         }
     </tbody>
 </table>
