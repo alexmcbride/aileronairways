@@ -56,13 +56,22 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public static async Task<Attachment> GetAttachment(ITimelineService api, string attachmentId)
+        public static async Task<Attachment> GetAttachmentAsync(ITimelineService api, string attachmentId)
         {
             string json = await api.GetJsonAsync("TimelineEventAttachment/GetAttachment", new NameValueCollection
             {
                 { "AttachmentId", attachmentId }
             });
             return JsonConvert.DeserializeObject<Attachment>(json);
+        }
+
+        public static async Task<IList<Attachment>> GetAttachmentsAsync(ITimelineService api, string timelineEventId)
+        {
+            string json = await api.GetJsonAsync("TimelineEventAttachment/GetAttachments", new NameValueCollection
+            {
+                { "TimelineEventId", timelineEventId }
+            });
+            return JsonConvert.DeserializeObject<List<Attachment>>(json);
         }
     }
 }

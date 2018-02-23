@@ -96,13 +96,34 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(AttachmentJson));
 
-            Attachment attachment = await Attachment.GetAttachment(mock.Object, "ID1");
+            Attachment attachment = await Attachment.GetAttachmentAsync(mock.Object, "ID1");
 
             mock.Verify(m => m.GetJsonAsync("TimelineEventAttachment/GetAttachment", It.Is<NameValueCollection>(c => c.VerifyContains("AttachmentId", "ID1"))));
             Assert.AreEqual(attachment.Id, "ID1");
             Assert.AreEqual(attachment.Title, "Test Title");
             Assert.AreEqual(attachment.TimelineEventId, "ID2");
             Assert.AreEqual(attachment.TenantId, "Team3");
+        }
+
+        [TestMethod]
+        public async Task GetTimelineEventAttachments()
+        {
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(AttachmentJsonList));
+
+            var attachments = await Attachment.GetAttachmentsAsync(mock.Object, "ID1");
+
+            Assert.AreEqual(attachments.Count, 2);
+            Assert.AreEqual(attachments[0].Id, "ID1");
+            Assert.AreEqual(attachments[0].Title, "Test Title");
+            Assert.IsTrue(attachments[0].IsDeleted);
+            Assert.AreEqual(attachments[0].TimelineEventId, "ID2");
+            Assert.AreEqual(attachments[0].TenantId, "Team3");
+            Assert.AreEqual(attachments[1].Id, "ID3");
+            Assert.AreEqual(attachments[1].Title, "Test Title 2");
+            Assert.IsTrue(attachments[1].IsDeleted);
+            Assert.AreEqual(attachments[1].TimelineEventId, "ID4");
+            Assert.AreEqual(attachments[1].TenantId, "Team3");
         }
     }
 }
