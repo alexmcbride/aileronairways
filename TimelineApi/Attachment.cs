@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
@@ -72,6 +74,32 @@ namespace Echelon.TimelineApi
                 { "TimelineEventId", timelineEventId }
             });
             return JsonConvert.DeserializeObject<List<Attachment>>(json);
+        }
+
+        public async Task UploadAsync(ITimelineService api, Stream fileUpload)
+        {
+            var url = await GenerateUploadPresignedUrl(api);
+
+            var request = (HttpWebRequest)WebRequest.Create(url);
+            using (Stream stream = await request.GetRequestStreamAsync())
+            {
+                byte[] buffer = new byte[18000];
+                int read = 0;
+                while ((read = await fileUpload.ReadAsync(buffer, 0, buffer.Length)) > 0)
+                {
+                    await stream.WriteAsync(buffer, 0, read);
+                }
+            }
+        }
+
+        public async Task DownloadAsync(ITimelineService api, string filename)
+        {
+            var url = await GenerateGetPresignedUrl(api);
+
+            using (var client = new WebClient())
+            {
+                await client.DownloadFileTaskAsync(url, filename);
+            }
         }
     }
 }
