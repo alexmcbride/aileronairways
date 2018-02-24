@@ -27,19 +27,11 @@ namespace Echelon.TimelineApi.TestConsole
             //Console.WriteLine("Getting event");
             //TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(api, "ID2");
             //Console.WriteLine("Done");
-
             //DisplayTimelineEvent(evt);
 
             //Console.WriteLine("Creating attachment");
-            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "test");
+            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test.txt");
             //Console.WriteLine("Done");
-
-
-            Attachment attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
-            DisplayAttachment(attachment);
-
-            //attachment.Title = "Test.txt";
-            //await attachment.EditTitleAsync(api);
 
             //Console.WriteLine("Uploading file");
             //using (Stream stream = File.OpenRead("Test.txt"))
@@ -48,13 +40,23 @@ namespace Echelon.TimelineApi.TestConsole
             //}
             //Console.WriteLine("Done");
 
-            await attachment.DownloadAsync(api, "C:\\Users\\alexm\\Desktop");
-
+            ////await attachment.DownloadAsync(api, "C:\\Users\\alexm\\Desktop");
+            //Console.WriteLine("Getting attachments");
             //var attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
             //foreach (var item in attachments)
             //{
             //    DisplayAttachment(item);
             //}
+            //Console.WriteLine("Done");
+
+
+            Attachment attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
+
+            DisplayAttachment(attachment);
+
+            Console.WriteLine("Downloading file");
+            await attachment.DownloadAsync(api, "C:\\Users\\alexm\\Desktop");
+            Console.WriteLine("Done");
         }
 
         private static void DisplayAttachment(Attachment attachment)
