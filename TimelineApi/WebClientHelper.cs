@@ -46,23 +46,19 @@ namespace Echelon.TimelineApi
             return null;
         }
 
-        public Task<Stream> GetRequestStreamAsync(string url)
-        {
-            var request = ((HttpWebRequest)WebRequest.Create(url));
-            request.Method = "PUT";
-            return request.GetRequestStreamAsync();
-        }
-
-        public void DisposeRequestStream(Stream stream)
-        {
-            stream.Dispose();
-        }
-
         public Task DownloadFileAsync(string url, string filename)
         {
             using (var client = new WebClient())
             {
                 return client.DownloadFileTaskAsync(url, filename);
+            }
+        }
+
+        public Task UploadFileAsync(string url, string filename)
+        {
+            using (var client = new WebClient())
+            {
+                return client.UploadFileTaskAsync(url, "PUT", filename);
             }
         }
     }

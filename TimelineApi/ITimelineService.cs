@@ -9,7 +9,7 @@ namespace Echelon.TimelineApi
         Task<string> GetJsonAsync(string resource);
         Task<string> GetJsonAsync(string resource, NameValueCollection headers);
         Task<string> PutJsonAsync(string resource, object request);
-        Task UploadFileAsync(string url, Stream fileStream);
+        Task UploadFileAsync(string url, string filename);
         Task DownloadFileAsync(string url, string filename);
     }
 }

@@ -132,15 +132,16 @@ namespace Echelon.TimelineApi.Tests
         public async Task UploadAttachment()
         {
             string presignedUrl = "http://www.test.com/presignedurl";
-            var stream = new MemoryStream();
+            string filename = "test.txt";
+
             var attachment = new Attachment();
             attachment.Id = "ID1";
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
 
-            await attachment.UploadAsync(mock.Object, stream);
+            await attachment.UploadAsync(mock.Object, filename);
 
-            mock.Verify(m => m.UploadFileAsync(presignedUrl, stream));
+            mock.Verify(m => m.UploadFileAsync(presignedUrl, filename));
         }
 
         [TestMethod]

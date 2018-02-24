@@ -77,22 +77,17 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<List<Attachment>>(json);
         }
 
-        public async Task UploadAsync(ITimelineService api, Stream fileUpload)
+        public async Task UploadAsync(ITimelineService api, string filename)
         {
             string url = await GenerateUploadPresignedUrlAsync(api);
 
-            await api.UploadFileAsync(url, fileUpload);
+            await api.UploadFileAsync(url, filename);
         }
 
         public async Task DownloadAsync(ITimelineService api, string directory)
         {
-            var url = await GenerateGetPresignedUrlAsync(api);
-
-            Debug.WriteLine($"PRESIGNED URL: {url}");
-
-            var file = Path.Combine(directory, Title);
-
-            Debug.WriteLine($"LOCAL PATH: {file}");
+            string url = await GenerateGetPresignedUrlAsync(api);
+            string file = Path.Combine(directory, Title);
 
             await api.DownloadFileAsync(url, file);
         }

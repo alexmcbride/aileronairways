@@ -87,32 +87,9 @@ namespace Echelon.TimelineApi
             }
         }
 
-        public async Task UploadFileAsync(string url, Stream fileStream)
+        public Task UploadFileAsync(string url, string filename)
         {
-            const int BufferSize = 18000;
-            Stream requestStream = null;
-
-            try
-            {
-                requestStream = await _helper.GetRequestStreamAsync(url);
-
-                // Read and write stream.
-                var buffer = new byte[BufferSize];
-                int read = 0;
-                while ((read = await fileStream.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                {
-                    await requestStream.WriteAsync(buffer, 0, read);
-                }
-            }
-            finally
-            {
-                if (requestStream != null)
-                {
-                    // We cannot dispose stream directly as it breaks the tests, so instead we 
-                    // use our helper.
-                    _helper.DisposeRequestStream(requestStream);
-                }
-            }
+            return _helper.UploadFileAsync(url, filename);
         }
 
         public Task DownloadFileAsync(string url, string filename)

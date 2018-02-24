@@ -30,22 +30,41 @@ namespace Echelon.TimelineApi.TestConsole
             DisplayTimelineEvent(evt);
 
             //Console.WriteLine("Creating attachment");
-            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test.txt");
+            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test2.txt");
             //DisplayAttachment(attachment);
             //Console.WriteLine("Done");
 
             //Console.WriteLine("Uploading attachment");
-            //using (Stream file = File.OpenRead("Test.txt"))
-            //{
-            //    await attachment.UploadAsync(api, file);
-            //}
+            //await attachment.UploadAsync(api, "Test2.txt");
             //Console.WriteLine("Done");
 
-            Attachment attachment = await Attachment.GetAttachmentAsync(api, "f09d4d74-eaa6-4774-b7b6-26ce7a7aca28");
 
-            Console.WriteLine("Downloading attachment");
-            await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
-            Console.WriteLine("Done");
+            var attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
+
+            foreach (var a in attachments)
+            {
+                DisplayAttachment(a);
+            }
+
+
+            //var attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
+
+            //await attachment.DeleteAsync(api);
+
+            //Console.WriteLine("-----");
+
+
+            //attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
+
+            //foreach (var a in attachments)
+            //{
+            //    DisplayAttachment(a);
+            //}
+
+
+            //Console.WriteLine("Downloading attachment");
+            //await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
+            //Console.WriteLine("Done");
         }
 
         private static void DisplayAttachment(Attachment attachment)
