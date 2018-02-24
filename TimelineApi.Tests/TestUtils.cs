@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -85,6 +86,14 @@ namespace Echelon.TimelineApi.Tests
             for (int i = 0; i < size; i++)
             {
                 yield return (byte)random.Next(byte.MaxValue);
+            }
+        }
+
+        public static void AssertAreEqual(byte[] a, byte[] b)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                Assert.AreEqual(a[i], b[i]);
             }
         }
     }

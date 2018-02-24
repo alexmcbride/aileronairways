@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.Tests
@@ -17,7 +17,7 @@ namespace Echelon.TimelineApi.Tests
         public async Task AttachmentCreate()
         {
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask<string>(AttachmentJson));
+            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(AttachmentJson));
 
             Attachment attachment = await Attachment.CreateAsync(mock.Object, "ID1", "Test Title");
 
@@ -62,12 +62,12 @@ namespace Echelon.TimelineApi.Tests
             string presignedUrl = "http://www.test.com/presignedurl";
 
             var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask<string>(presignedUrl));
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
 
-            string result = await attachment.GenerateUploadPresignedUrl(mock.Object);
+            string result = await attachment.GenerateUploadPresignedUrlAsync(mock.Object);
 
             Assert.AreEqual(presignedUrl, result);
             mock.Verify(m => m.GetJsonAsync("TimelineEventAttachment/GenerateUploadPresignedUrl", It.Is<NameValueCollection>(c => c.VerifyContains("AttachmentId", "ID1"))));
@@ -84,7 +84,7 @@ namespace Echelon.TimelineApi.Tests
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
 
-            string result = await attachment.GenerateGetPresignedUrl(mock.Object);
+            string result = await attachment.GenerateGetPresignedUrlAsync(mock.Object);
 
             Assert.AreEqual(presignedUrl, result);
             mock.Verify(m => m.GetJsonAsync("TimelineEventAttachment/GenerateGetPresignedUrl", It.Is<NameValueCollection>(c => c.VerifyContains("AttachmentId", "ID1"))));
@@ -124,6 +124,21 @@ namespace Echelon.TimelineApi.Tests
             Assert.IsTrue(attachments[1].IsDeleted);
             Assert.AreEqual(attachments[1].TimelineEventId, "ID4");
             Assert.AreEqual(attachments[1].TenantId, "Team3");
+        }
+
+        [TestMethod]
+        public async Task UploadAttachment()
+        {
+            string presignedUrl = "http://www.test.com/presignedurl";
+            var stream = new MemoryStream();
+            Attachment attachment = new Attachment();
+            attachment.Id = "ID1";
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
+
+            await attachment.UploadAsync(mock.Object, stream);
+
+            mock.Verify(m => m.UploadFileAsync(presignedUrl, stream));
         }
     }
 }

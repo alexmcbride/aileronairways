@@ -113,7 +113,6 @@ namespace Echelon.TimelineApi
                     _helper.DisposeRequestStream(requestStream);
                 }
             }
-
         }
     }
 }

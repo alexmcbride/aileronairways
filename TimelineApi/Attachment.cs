@@ -42,7 +42,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task<string> GenerateUploadPresignedUrl(ITimelineService api)
+        public Task<string> GenerateUploadPresignedUrlAsync(ITimelineService api)
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateUploadPresignedUrl", new NameValueCollection
             {
@@ -50,7 +50,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task<string> GenerateGetPresignedUrl(ITimelineService api)
+        public Task<string> GenerateGetPresignedUrlAsync(ITimelineService api)
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateGetPresignedUrl", new NameValueCollection
             {
@@ -78,23 +78,14 @@ namespace Echelon.TimelineApi
 
         public async Task UploadAsync(ITimelineService api, Stream fileUpload)
         {
-            var url = await GenerateUploadPresignedUrl(api);
+            string url = await GenerateUploadPresignedUrlAsync(api);
 
-            var request = (HttpWebRequest)WebRequest.Create(url);
-            using (Stream stream = await request.GetRequestStreamAsync())
-            {
-                byte[] buffer = new byte[18000];
-                int read = 0;
-                while ((read = await fileUpload.ReadAsync(buffer, 0, buffer.Length)) > 0)
-                {
-                    await stream.WriteAsync(buffer, 0, read);
-                }
-            }
+            await api.UploadFileAsync(url, fileUpload);
         }
 
         public async Task DownloadAsync(ITimelineService api, string filename)
         {
-            var url = await GenerateGetPresignedUrl(api);
+            var url = await GenerateGetPresignedUrlAsync(api);
 
             using (var client = new WebClient())
             {

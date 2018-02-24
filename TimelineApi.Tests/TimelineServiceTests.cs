@@ -1,7 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Linq;
@@ -22,7 +20,7 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(json));
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.GetJsonAsync("Test/Get");
 
             mock.Verify(m => m.DownloadStringAsync($"{BaseUrl}Test/Get", It.Is<NameValueCollection>(c => c.VerifyContains("AuthToken", "ABC"))));
@@ -37,7 +35,7 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<IWebClientHelper>();
             mock.Setup(m => m.UploadStringAsync(It.IsAny<string>(), It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(json));
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -56,7 +54,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Bad request error");
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             await api.GetJsonAsync("Test/Get");
         }
 
@@ -68,7 +66,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Internal server error");
             mock.Setup(m => m.DownloadStringAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetExceptionTask<string>(new WebException("Hello")));
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             await api.GetJsonAsync("Test/Get");
         }
 
@@ -81,7 +79,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.BadRequest);
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Bad request error");
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -96,7 +94,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetStatusCode(It.IsAny<WebResponse>())).Returns(HttpStatusCode.InternalServerError);
             mock.Setup(m => m.GetResponseMessage(It.IsAny<WebResponse>())).Returns("Internal server error");
 
-            ITimelineService api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+            var api = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
             string result = await api.PutJsonAsync("Test/Put", new
             {
                 Test = "Result"
@@ -121,16 +119,8 @@ namespace Echelon.TimelineApi.Tests
             requestStream.Seek(0, SeekOrigin.Begin);
 
             int result = requestStream.Read(requestBuffer, 0, fileBuffer.Length);
-            AssertAreEqual(fileBuffer, requestBuffer);
+            TestUtils.AssertAreEqual(fileBuffer, requestBuffer);
             mock.Verify(m => m.DisposeRequestStream(requestStream));
-        }
-
-        private void AssertAreEqual(byte[] a, byte[] b)
-        {
-            for (int i = 0; i < a.Length; i++)
-            {
-                Assert.AreEqual(a[i], b[i]);
-            }
         }
     }
 }
