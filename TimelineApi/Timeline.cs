@@ -54,20 +54,5 @@ namespace Echelon.TimelineApi
             string json = await api.GetJsonAsync("Timeline/GetTimelines");
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
-
-        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt)
-        {
-            return evt.LinkEventAsync(api, Id);
-        }
-
-        public Task UnlinkEventAsync(ITimelineService api, TimelineEvent evt)
-        {
-            return evt.UnlinkEventAsync(api, Id);
-        }
-
-        public Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api)
-        {
-            return TimelineEvent.GetLinkedEventsAsync(api, Id);
-        }
     }
 }

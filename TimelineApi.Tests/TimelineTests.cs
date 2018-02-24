@@ -88,59 +88,5 @@ namespace Echelon.TimelineApi.Tests
 
             mock.Verify(m => m.PutJsonAsync("Timeline/Delete", It.Is<object>(t => t.VerifyObject("TimelineId", "ID1"))));
         }
-
-        [TestMethod]
-        public async Task TimelineLinkEvent()
-        {
-            var mock = new Mock<ITimelineService>();
-
-            Timeline timeline = new Timeline();
-            timeline.Id = "ID1";
-
-            TimelineEvent timelineEvent = new TimelineEvent();
-            timelineEvent.Id = "IDE1";
-
-            await timeline.LinkEventAsync(mock.Object, timelineEvent);
-
-            mock.Verify(m => m.PutJsonAsync("Timeline/LinkEvent", It.Is<object>(o => o.VerifyObject("TimelineId", "ID1") && o.VerifyObject("EventId", "IDE1"))));
-        }
-
-        [TestMethod]
-        public async Task TimelineUnlinkEvent()
-        {
-            var mock = new Mock<ITimelineService>();
-
-            Timeline timeline = new Timeline();
-            timeline.Id = "ID1";
-
-            TimelineEvent timelineEvent = new TimelineEvent();
-            timelineEvent.Id = "IDE1";
-
-            await timeline.UnlinkEventAsync(mock.Object, timelineEvent);
-
-            mock.Verify(m => m.PutJsonAsync("Timeline/UnlinkEvent", It.Is<object>(o => o.VerifyObject("TimelineId", "ID1") && o.VerifyObject("EventId", "IDE1"))));
-        }
-
-        [TestMethod]
-        public async Task TimelineGetLinkedEvents()
-        {
-            string json = "[{\"TimelineEventId\":\"ID1\",\"TimelineId\":\"ID2\",\"IsDeleted\":true,\"Id\":\"ID3\",\"TenantId\":\"123\"}," +
-                "{\"TimelineEventId\":\"ID4\",\"TimelineId\":\"ID5\",\"IsDeleted\":true,\"Id\":\"ID6\",\"TenantId\":\"123\"}]";
-            var mock = new Mock<ITimelineService>();
-            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(json));
-
-            var timeline = new Timeline();
-            timeline.Id = "ID1";
-            var linkedEvents = await timeline.GetEventsAsync(mock.Object);
-
-            mock.Verify(m => m.GetJsonAsync("Timeline/GetEvents", It.Is<NameValueCollection>(c => c.VerifyContains("TimelineId", "ID1"))));
-            Assert.AreEqual(2, linkedEvents.Count);
-            Assert.AreEqual(linkedEvents[0].TimelineEventId, "ID1");
-            Assert.AreEqual(linkedEvents[0].TimelineId, "ID2");
-            Assert.IsTrue(linkedEvents[0].IsDeleted);
-            Assert.AreEqual(linkedEvents[0].Id, "ID3");
-            Assert.AreEqual(linkedEvents[0].TenantId, "123");
-            Assert.AreEqual(linkedEvents[1].TimelineEventId, "ID4");
-        }
     }
 }

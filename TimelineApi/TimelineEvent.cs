@@ -115,37 +115,15 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task LinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
-        {
-            return api.PutJsonAsync("TimelineEvent/LinkEvents", new
-            {
-                TimelineEventId = Id,
-                LinkedToTimelineEventId = timelineEvent.Id
-            });
-        }
-
-        public Task UnlinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
-        {
-            return api.PutJsonAsync("TimelineEvent/UnlinkEvents", new
-            {
-                TimelineEventId = Id,
-                UnlinkedFromTimelineEventId = timelineEvent.Id
-            });
-        }
-
-        public async Task<IList<TimelineEventLink>> GetLinkedTimelineEventsAsync(ITimelineService api)
-        {
-            string json = await api.GetJsonAsync("TimelineEvent/GetLinkedTimelineEvents", new NameValueCollection
-            {
-                { "TimelineEventId", Id }
-            });
-            return JsonConvert.DeserializeObject<List<TimelineEventLink>>(json);
-        }
-
         public Task EditAsync(ITimelineService api)
         {
             // If you perform a create and keep the ID the same then it overwrites the exsting event.
             return CreateAsync(api, Id, Title, Description, EventDateTime, Location);
+        }
+
+        public static Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api, string timelineId)
+        {
+            return TimelineEvent.GetLinkedEventsAsync(api, timelineId);
         }
     }
 }

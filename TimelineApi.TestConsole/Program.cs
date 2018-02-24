@@ -13,7 +13,6 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             //RunTestsAsync();
-            //RunTestsLinkyStuffAsync();
             RunAttachmentTestsAsync();
 
             // Stop program from exiting.
@@ -70,7 +69,7 @@ namespace Echelon.TimelineApi.TestConsole
             //await timeline.LinkEventAsync(api, evt);
 
             // Get list of linked events.
-            IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
+            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(api, timeline.Id);
 
             // Wait for all TimelineEvent objects to download.
             foreach (LinkedEvent linkedEvent in linkedEvents)
@@ -78,36 +77,6 @@ namespace Echelon.TimelineApi.TestConsole
                 TimelineEvent evt2 = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
                 DisplayTimelineEvent(evt2);
             }
-        }
-
-        private async static void RunTestsLinkyStuffAsync()
-        {
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
-
-            Console.WriteLine("Fetch timelines");
-            TimelineEvent a = await TimelineEvent.GetTimelineEventAsync(api, "8e8a526a-db39-4b41-a00c-e55308d3ef6f");
-            TimelineEvent b = await TimelineEvent.GetTimelineEventAsync(api, "e97f9f95-7147-4782-8fbc-f445f343dd20");
-            Console.WriteLine("Done");
-
-            //Console.WriteLine("Link events");
-            //await a.LinkTimelineEventsAsync(api, b);
-            //Console.WriteLine("Done");
-
-            //Console.WriteLine("Link events");
-            //await a.UnlinkTimelineEventsAsync(api, b);
-            //Console.WriteLine("Done");
-
-            Console.WriteLine("Get linked events");
-            var linkedEvents = await a.GetLinkedTimelineEventsAsync(api);
-            Console.WriteLine("Done");
-
-            Console.WriteLine("Fetching event for each link.");
-            foreach (var linkedEvent in linkedEvents)
-            {
-                var evt = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.LinkedToTimelineEventId);
-                DisplayTimelineEvent(evt);
-            }
-            Console.WriteLine("Done");
         }
 
         private static void DisplayTimelineEvent(TimelineEvent evt)
