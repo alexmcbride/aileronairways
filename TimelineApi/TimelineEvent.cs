@@ -79,7 +79,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public static async Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, string timelineEventId)
+        public static async Task<TimelineEvent> GetEventAsync(ITimelineService api, string timelineEventId)
         {
             string json = await api.GetJsonAsync("TimelineEvent/GetTimelineEvent", new NameValueCollection
             {
@@ -88,7 +88,7 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
 
-        public static async Task<IList<LinkedEvent>> GetLinkedEventsAsync(ITimelineService api, string timelineId)
+        public static async Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api, string timelineId)
         {
             string json = await api.GetJsonAsync("Timeline/GetEvents", new NameValueCollection
             {
@@ -119,11 +119,6 @@ namespace Echelon.TimelineApi
         {
             // If you perform a create and keep the ID the same then it overwrites the exsting event.
             return CreateAsync(api, Id, Title, Description, EventDateTime, Location);
-        }
-
-        public static Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api, string timelineId)
-        {
-            return TimelineEvent.GetLinkedEventsAsync(api, timelineId);
         }
     }
 }

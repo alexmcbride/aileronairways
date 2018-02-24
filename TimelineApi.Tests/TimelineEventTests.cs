@@ -117,7 +117,7 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask<string>(json));
 
-            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(mock.Object, "ID1");
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(mock.Object, "ID1");
 
             mock.Verify(m => m.GetJsonAsync("TimelineEvent/GetTimelineEvent", It.Is<NameValueCollection>(c => c.VerifyContains("TimelineEventId", "ID1"))));
             Assert.AreEqual(evt.Id, "ID1");

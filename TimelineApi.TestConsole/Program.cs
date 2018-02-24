@@ -24,7 +24,7 @@ namespace Echelon.TimelineApi.TestConsole
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
             Console.WriteLine("Getting event");
-            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(api, "ID2");
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(api, "ID2");
             Console.WriteLine("Done");
             DisplayTimelineEvent(evt);
 
@@ -74,7 +74,7 @@ namespace Echelon.TimelineApi.TestConsole
             // Wait for all TimelineEvent objects to download.
             foreach (LinkedEvent linkedEvent in linkedEvents)
             {
-                TimelineEvent evt2 = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
+                TimelineEvent evt2 = await TimelineEvent.GetEventAsync(api, linkedEvent.TimelineEventId);
                 DisplayTimelineEvent(evt2);
             }
         }
