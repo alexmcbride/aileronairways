@@ -122,5 +122,17 @@ namespace Echelon.TimelineApi.Tests
             TestUtils.AssertAreEqual(fileBuffer, requestBuffer);
             mock.Verify(m => m.DisposeRequestStream(requestStream));
         }
+
+        [TestMethod]
+        public async Task DownloadFile()
+        {
+            var mock = new Mock<IWebClientHelper>();
+
+            var timeline = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+
+            await timeline.DownloadFileAsync("http://www.upload.com/url", "testfilename.docx");
+
+            mock.Verify(m => m.DownloadFileAsync("http://www.upload.com/url", "testfilename.docx"));
+        }
     }
 }

@@ -55,5 +55,13 @@ namespace Echelon.TimelineApi
         {
             stream.Dispose();
         }
+
+        public Task DownloadFileAsync(string url, string filename)
+        {
+            using (var client = new WebClient())
+            {
+                return client.DownloadFileTaskAsync(url, filename);
+            }
+        }
     }
 }

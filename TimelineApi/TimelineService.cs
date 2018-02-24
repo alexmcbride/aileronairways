@@ -114,5 +114,10 @@ namespace Echelon.TimelineApi
                 }
             }
         }
+
+        public Task DownloadFileAsync(string url, string filename)
+        {
+            return _helper.DownloadFileAsync(url, filename);
+        }
     }
 }

@@ -83,14 +83,11 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, fileUpload);
         }
 
-        public async Task DownloadAsync(ITimelineService api, string filename)
+        public async Task DownloadAsync(ITimelineService api)
         {
             var url = await GenerateGetPresignedUrlAsync(api);
 
-            using (var client = new WebClient())
-            {
-                await client.DownloadFileTaskAsync(url, filename);
-            }
+            await api.DownloadFileAsync(url, Title);
         }
     }
 }

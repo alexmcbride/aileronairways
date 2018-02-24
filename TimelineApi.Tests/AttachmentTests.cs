@@ -131,7 +131,7 @@ namespace Echelon.TimelineApi.Tests
         {
             string presignedUrl = "http://www.test.com/presignedurl";
             var stream = new MemoryStream();
-            Attachment attachment = new Attachment();
+            var attachment = new Attachment();
             attachment.Id = "ID1";
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
@@ -139,6 +139,22 @@ namespace Echelon.TimelineApi.Tests
             await attachment.UploadAsync(mock.Object, stream);
 
             mock.Verify(m => m.UploadFileAsync(presignedUrl, stream));
+        }
+
+        [TestMethod]
+        public async Task DownloadAttachment()
+        {
+            string presignedUrl = "http://www.test.com/presignedurl";
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
+
+            Attachment attachment = new Attachment();
+            attachment.Id = "ID1";
+            attachment.Title = "filename.docx";
+
+            await attachment.DownloadAsync(mock.Object);
+
+            mock.Verify(m => m.DownloadFileAsync(presignedUrl, attachment.Title));
         }
     }
 }

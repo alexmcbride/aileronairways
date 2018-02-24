@@ -13,5 +13,6 @@ namespace Echelon.TimelineApi
         string GetResponseMessage(WebResponse response);
         Task<Stream> GetRequestStreamAsync(string url);
         void DisposeRequestStream(Stream stream);
+        Task DownloadFileAsync(string url, string filename);
     }
 }
