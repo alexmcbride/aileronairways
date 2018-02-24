@@ -29,42 +29,19 @@ namespace Echelon.TimelineApi.TestConsole
             Console.WriteLine("Done");
             DisplayTimelineEvent(evt);
 
-            //Console.WriteLine("Creating attachment");
-            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test2.txt");
-            //DisplayAttachment(attachment);
-            //Console.WriteLine("Done");
+            Console.WriteLine("Creating attachment");
+            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test3.txt");
+            DisplayAttachment(attachment);
+            Console.WriteLine("Done");
 
-            //Console.WriteLine("Uploading attachment");
-            //await attachment.UploadAsync(api, "Test2.txt");
-            //Console.WriteLine("Done");
+            Console.WriteLine("Uploading attachment");
+            File.Copy("Test3.txt", attachment.Id);
+            await attachment.UploadAsync(api, attachment.Id);
+            Console.WriteLine("Done");
 
-
-            var attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
-
-            foreach (var a in attachments)
-            {
-                DisplayAttachment(a);
-            }
-
-
-            //var attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
-
-            //await attachment.DeleteAsync(api);
-
-            //Console.WriteLine("-----");
-
-
-            //attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
-
-            //foreach (var a in attachments)
-            //{
-            //    DisplayAttachment(a);
-            //}
-
-
-            //Console.WriteLine("Downloading attachment");
-            //await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
-            //Console.WriteLine("Done");
+            Console.WriteLine("Downloading attachment");
+            await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
+            Console.WriteLine("Done");
         }
 
         private static void DisplayAttachment(Attachment attachment)
