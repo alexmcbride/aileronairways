@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
-using Echelon.TimelineApi;
+﻿using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
     public class TimelineEventsController : Controller
     {
-
         private readonly ITimelineService _api;
 
         public TimelineEventsController(ITimelineService api)

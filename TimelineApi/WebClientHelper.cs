@@ -45,5 +45,15 @@ namespace Echelon.TimelineApi
             }
             return null;
         }
+
+        public Task<Stream> GetRequestStreamAsync(string url)
+        {
+            return ((HttpWebRequest)WebRequest.Create(url)).GetRequestStreamAsync();
+        }
+
+        public void DisposeRequestStream(Stream stream)
+        {
+            stream.Dispose();
+        }
     }
 }

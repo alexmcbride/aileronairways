@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
@@ -76,6 +77,15 @@ namespace Echelon.TimelineApi.Tests
             var tcs = new TaskCompletionSource<TResult>();
             tcs.SetException(exception);
             return tcs.Task;
+        }
+
+        public static IEnumerable<byte> CreateRandomByteRange(int size)
+        {
+            Random random = new Random();
+            for (int i = 0; i < size; i++)
+            {
+                yield return (byte)random.Next(byte.MaxValue);
+            }
         }
     }
 }

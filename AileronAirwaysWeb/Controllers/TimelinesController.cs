@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
@@ -18,7 +19,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines
         public async Task<ActionResult> Index()
         {
-            IList<Timeline> timelines = await Timeline.GetTimelinesAsync(_api);
+            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api)).Where(t => !t.IsDeleted).ToList();
 
             return View(timelines);
         }

@@ -1,6 +1,10 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -97,6 +101,36 @@ namespace Echelon.TimelineApi.Tests
             {
                 Test = "Result"
             });
+        }
+
+        [TestMethod]
+        public async Task UploadFile()
+        {
+            var fileBuffer = TestUtils.CreateRandomByteRange(40000).ToArray();
+
+            var requestBuffer = new byte[fileBuffer.Length];
+            var fileStream = new MemoryStream(fileBuffer);
+            var requestStream = new MemoryStream();
+            var mock = new Mock<IWebClientHelper>();
+            mock.Setup(m => m.GetRequestStreamAsync(It.IsAny<string>())).Returns(TestUtils.GetCompletedTask<Stream>(requestStream));
+            var ts = new TimelineService(BaseUrl, "ABC", "123", mock.Object);
+
+            await ts.UploadFileAsync("http://www.upload.com/url", fileStream);
+
+            // Move stream back to start.
+            requestStream.Seek(0, SeekOrigin.Begin);
+
+            int result = requestStream.Read(requestBuffer, 0, fileBuffer.Length);
+            AssertAreEqual(fileBuffer, requestBuffer);
+            mock.Verify(m => m.DisposeRequestStream(requestStream));
+        }
+
+        private void AssertAreEqual(byte[] a, byte[] b)
+        {
+            for (int i = 0; i < a.Length; i++)
+            {
+                Assert.AreEqual(a[i], b[i]);
+            }
         }
     }
 }
