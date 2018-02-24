@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Echelon.TimelineApi.TestConsole
 {
@@ -12,10 +13,58 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             //RunTestsAsync();
-            RunTestsLinkyStuffAsync();
+            //RunTestsLinkyStuffAsync();
+            RunAttachmentTestsAsync();
 
             // Stop program from exiting.
             Console.ReadKey(true);
+        }
+
+        private static async void RunAttachmentTestsAsync()
+        {
+            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
+
+            //Console.WriteLine("Getting event");
+            //TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(api, "ID2");
+            //Console.WriteLine("Done");
+
+            //DisplayTimelineEvent(evt);
+
+            //Console.WriteLine("Creating attachment");
+            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "test");
+            //Console.WriteLine("Done");
+
+
+            Attachment attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
+            DisplayAttachment(attachment);
+
+            //attachment.Title = "Test.txt";
+            //await attachment.EditTitleAsync(api);
+
+            //Console.WriteLine("Uploading file");
+            //using (Stream stream = File.OpenRead("Test.txt"))
+            //{
+            //    await attachment.UploadAsync(api, stream);
+            //}
+            //Console.WriteLine("Done");
+
+            await attachment.DownloadAsync(api, "C:\\Users\\alexm\\Desktop");
+
+            //var attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
+            //foreach (var item in attachments)
+            //{
+            //    DisplayAttachment(item);
+            //}
+        }
+
+        private static void DisplayAttachment(Attachment attachment)
+        {
+            Console.WriteLine($"Id: {attachment.Id}");
+            Console.WriteLine($"Title: {attachment.Title}");
+            Console.WriteLine($"TimelineEventId: {attachment.TimelineEventId}");
+            Console.WriteLine($"IsDeleted: {attachment.IsDeleted}");
+            Console.WriteLine($"TenantId: {attachment.TenantId}");
+            Console.WriteLine();
         }
 
         private static async void RunTestsAsync()

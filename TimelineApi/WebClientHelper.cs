@@ -48,7 +48,9 @@ namespace Echelon.TimelineApi
 
         public Task<Stream> GetRequestStreamAsync(string url)
         {
-            return ((HttpWebRequest)WebRequest.Create(url)).GetRequestStreamAsync();
+            var request = ((HttpWebRequest)WebRequest.Create(url));
+            request.Method = "PUT";
+            return request.GetRequestStreamAsync();
         }
 
         public void DisposeRequestStream(Stream stream)

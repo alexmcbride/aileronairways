@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -83,11 +84,17 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, fileUpload);
         }
 
-        public async Task DownloadAsync(ITimelineService api)
+        public async Task DownloadAsync(ITimelineService api, string directory)
         {
             var url = await GenerateGetPresignedUrlAsync(api);
 
-            await api.DownloadFileAsync(url, Title);
+            Debug.WriteLine($"PRESIGNED URL: {url}");
+
+            var file = Path.Combine(directory, Title);
+
+            Debug.WriteLine($"LOCAL PATH: {file}");
+
+            await api.DownloadFileAsync(url, file);
         }
     }
 }

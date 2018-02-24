@@ -11,4 +11,10 @@
     <ProjectReference Include="..\TimelineApi\TimelineApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Test.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

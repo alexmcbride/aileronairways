@@ -152,9 +152,9 @@ namespace Echelon.TimelineApi.Tests
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object);
+            await attachment.DownloadAsync(mock.Object, "C:\\example");
 
-            mock.Verify(m => m.DownloadFileAsync(presignedUrl, attachment.Title));
+            mock.Verify(m => m.DownloadFileAsync(presignedUrl, "C:\\example\\" + attachment.Title));
         }
     }
 }
