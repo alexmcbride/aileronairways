@@ -47,7 +47,7 @@ namespace Echelon.TimelineApi
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateUploadPresignedUrl", new NameValueCollection
             {
-                { "AttachmentId", Id }
+                { "AttachmentId", Title }
             });
         }
 
@@ -55,7 +55,7 @@ namespace Echelon.TimelineApi
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateGetPresignedUrl", new NameValueCollection
             {
-                { "AttachmentId", Id }
+                { "AttachmentId", Title }
             });
         }
 
