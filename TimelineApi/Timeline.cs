@@ -65,5 +65,10 @@ namespace Echelon.TimelineApi
             }
             return null;
         }
+
+        private class TimelineCollection
+        {
+            public List<TimelineWithEvents> Timelines { get; set; }
+        }
     }
 }
