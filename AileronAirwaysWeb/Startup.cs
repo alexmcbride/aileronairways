@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace AileronAirwaysWeb
 {
@@ -36,14 +37,26 @@ namespace AileronAirwaysWeb
             //allows temp data use
             services.AddMvc().AddSessionStateTempDataProvider();
 
-            services.AddSession();
+            //services.AddSession();
 
             // Add timeline service.
             services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId")));
 
-            services.AddMvc();
+
+             // Adds a default in-memory implementation of IDistributedCache.
+            services.AddDistributedMemoryCache();
+
+            //allow session
+            services.AddSession(options =>
+            {
+                // Set session a short timeout for easy testing.
+                //options.IdleTimeout = TimeSpan.FromSeconds(10);
+
+                //prefent session's client side script manipulation to prevent a cross-site scripting (XSS) 
+                options.Cookie.HttpOnly = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,7 +78,7 @@ namespace AileronAirwaysWeb
 
             app.UseAuthentication();
 
-            //allows temp data use
+            //allows temp data and session
             app.UseSession();
 
             app.UseMvc(routes =>

@@ -77,7 +77,8 @@ namespace Echelon.TimelineApi
             {
                 // Get JSON response.
                 string url = GetUrl(resource);
-                return await _helper.DownloadStringAsync(url, headers);
+                var test = await _helper.DownloadStringAsync(url, headers);
+                return test;
             }
             catch (WebException ex)
             {

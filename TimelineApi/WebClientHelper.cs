@@ -12,7 +12,8 @@ namespace Echelon.TimelineApi
             using (WebClient client = new WebClient())
             {
                 client.Headers.Add(headers);
-                return client.DownloadStringTaskAsync(url);
+                var test = client.DownloadStringTaskAsync(url);
+                return test;
             }
         }
 
