@@ -54,5 +54,16 @@ namespace Echelon.TimelineApi
             string json = await api.GetJsonAsync("Timeline/GetTimelines");
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
+
+        public static async Task<List<TimelineWithEvents>> GetAllTimelinesAndEventsAsync(ITimelineService api)
+        {
+            string json = await api.GetJsonAsync("General/GetAllTimelinesAndEvent");
+            var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
+            if (timelines != null)
+            {
+                return timelines.Timelines;
+            }
+            return null;
+        }
     }
 }

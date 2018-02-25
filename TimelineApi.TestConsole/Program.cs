@@ -13,10 +13,28 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             //RunTestsAsync();
-            RunAttachmentTestsAsync();
+            //RunAttachmentTestsAsync();
+            RunTimelineCollectionTestsAsync();
 
             // Stop program from exiting.
             Console.ReadKey(true);
+        }
+
+        private static async void RunTimelineCollectionTestsAsync()
+        {
+            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
+
+            var timelines = await Timeline.GetAllTimelinesAndEventsAsync(api);
+
+            foreach (var timeline in timelines)
+            {
+                DisplayTimeline(timeline);
+
+                foreach (var evt in timeline.TimelineEvents)
+                {
+                    DisplayTimelineEvent(evt);
+                }
+            }
         }
 
         private static async void RunAttachmentTestsAsync()
