@@ -66,6 +66,7 @@ namespace Echelon.TimelineApi
             return null;
         }
 
+        // Needed to deserialize the timeline list.
         private class TimelineCollection
         {
             public List<TimelineWithEvents> Timelines { get; set; }

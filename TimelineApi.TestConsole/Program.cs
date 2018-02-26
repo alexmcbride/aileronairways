@@ -46,13 +46,12 @@ namespace Echelon.TimelineApi.TestConsole
             DisplayTimelineEvent(evt);
 
             Console.WriteLine("Creating attachment");
-            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title");
+            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title 2");
             DisplayAttachment(attachment);
             Console.WriteLine("Done");
 
             Console.WriteLine("Uploading attachment");
-            //File.Copy("Test3.txt", attachment.Id);
-            await attachment.UploadAsync(api, "Test3.txt");
+            await attachment.UploadAsync(api, "Test4.txt");
             Console.WriteLine("Done");
 
             Console.WriteLine("Downloading attachment");
