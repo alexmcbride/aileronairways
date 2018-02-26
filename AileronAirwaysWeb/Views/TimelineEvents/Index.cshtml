@@ -4,53 +4,163 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>`@ViewBag.TimelineTitle` Timeline</h2>
+<button id="addEventBtn" title="Add Event">&#43;</button>
 
-<p class="text-right">
-    <a asp-action="Create">Create New Event</a>
-</p>
+@*Side Panel - Will Display all Headings*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div id="mainSidePanel">
+
+
+    <div id="mySidenav" class="sidenav">
+        <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
+        -->
+        <div id="sideNavArrows">
+            <span onclick="openNav()" class="rightArrowVisibility"><i class="rightArrow"></i></span>
+            <span class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></span>
+        </div>
+
+
+        <hr class="displayHR" />
+
+
+
+        <div>
+            @foreach (var item in Model)
+            {
+                <a href="#">@item.Title</a>
+
+            }
+
+        </div>
+    </div>
+
+
+
+    @*-----------------------------------------------------------------------------*@
+
+
+    <div class="timeline">
+        <div class="containerTimeline left">
+            <div class="eventContent">
+                <h2>2017</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+        <div class="containerTimeline right">
+            <div class="eventContent">
+                <h2>2016</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+        <div class="containerTimeline left">
+            <div class="eventContent">
+                <h2>2015</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+        <div class="containerTimeline right">
+            <div class="eventContent">
+                <h2>2012</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+        <div class="containerTimeline left">
+            <div class="eventContent">
+                <h2>2011</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+        <div class="containerTimeline right">
+            <div class="eventContent">
+                <h2>2007</h2>
+                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function openNav() {
+
+        document.getElementById("mySidenav").style.width = "250px";
+        document.getElementById("mainSidePanel").style.marginLeft = "250px";
+        document.getElementById("rightArrowVisibility").style.display = 'none';
+
+    }
+
+    function closeNav() {
+
+        document.getElementById("mySidenav").style.width = "20px";
+        document.getElementById("mainSidePanel").style.marginLeft = "20px";
+        document.getElementById("rightArrowVisibility").style.display = "block";
+
+    }
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<p class="text-right">
+        <a asp-action="Create">Create New Event</a>
+    </p>
+
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.EventDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Location)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
 
 
