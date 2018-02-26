@@ -19,7 +19,10 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines
         public async Task<ActionResult> Index()
         {
-            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api)).Where(t => !t.IsDeleted).ToList();
+            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api))
+                .Where(t => !t.IsDeleted)
+                .OrderByDescending(t => t.CreationTimeStamp)
+                .ToList();
 
             return View(timelines);
         }
@@ -60,12 +63,12 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         // GET: Timelines/Edit/5
-         public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(string id)
         {
 
             Timeline t = await Timeline.GetTimelineAsync(_api, id);
             ViewData["EditTitle"] = t.Title;
-       
+
 
             return View();
         }
@@ -78,7 +81,7 @@ namespace AileronAirwaysWeb.Controllers
             try
             {
                 // TODO: Add update logic here
-                
+
                 Timeline tline = await Timeline.GetTimelineAsync(_api, id);
                 tline.Title = Request.Form["Title"];
 
@@ -95,7 +98,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
             await tline.DeleteAsync(_api);
-            
+
             return RedirectToAction(nameof(Index));
         }
 
