@@ -27,8 +27,8 @@ namespace AileronAirwaysWeb.Controllers
             HttpContext.Session.SetString("TimelineId",id);
 
             // Get the timeline.
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
-            ViewBag.TimelineTitle = timeline.Title;
+            //Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            ViewBag.TimelineTitle = id;
 
             //IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(_api, id);
 
@@ -54,7 +54,7 @@ namespace AileronAirwaysWeb.Controllers
                 }
             }
             //TempData["TimelineId"] = id;
-
+            timelineEvents.OrderBy(e => e.EventDateTime).ToList();
             return View(timelineEvents);
         }
 
@@ -140,27 +140,32 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(string id, IFormCollection collection)
         {
-            var date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
+            if (HttpContext.Session.Keys.Contains("TimelineId"))
+            {
+                var date = DateTime.Parse(Request.Form["EventDateTime"]);
+                string timelineId = HttpContext.Session.GetString("TimelineId");
+                TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
+            evt.Id = id;
             evt.Title = Request.Form["Title"];
             evt.Description = Request.Form["Description"];
             evt.EventDateTime = date;
             evt.Location = Request.Form["Location"];
 
             await evt.EditAsync(_api);
-            if (HttpContext.Session.Keys.Contains("TimelineId")) { 
+
+
             //if (TempData.ContainsKey("TimelineId"))
             //{
             //    string timelineId;
             //    timelineId = (TempData["TimelineId"]).ToString();
                 //TempData["TimelineId"] = timelineId;
-                string timelineId = HttpContext.Session.GetString("TimelineId");
-                return RedirectToAction("Details", "TimelineEvents", new { id = evt.Id });
+
+                return RedirectToAction("Details", "TimelineEvents", new { Id = id });
             }
             else
             {
-                return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
+                return RedirectToAction("Details", "TimelineEvent", new { Id = id });
             }
         }
 

@@ -89,7 +89,7 @@ namespace Echelon.TimelineApi
         }
 
         public static async Task<IList<LinkedEvent>> GetLinkedEventsAsync(ITimelineService api, string timelineId)
-        {
+        {   //changed GetEvents to GetLinkedEvents
             string json = await api.GetJsonAsync("Timeline/GetEvents", new NameValueCollection
             {
                 { "TimelineId", timelineId }
