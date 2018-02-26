@@ -28,6 +28,7 @@ namespace AileronAirwaysWeb.Controllers
             // Get the timeline.
             var timeline = await GetTimeline(id);
             ViewBag.TimelineTitle = timeline.Title;
+            ViewBag.TimelineCreationTimeStamp = timeline.CreationTimeStamp;
 
             //IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
 
