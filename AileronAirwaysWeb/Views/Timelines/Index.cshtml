@@ -26,14 +26,14 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { id = item.Id })
+                    <a asp-controller="TimelineEvents" asp-action="Index" asp-route-id="@item.Id">@item.Title</a>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.CreationTimeStamp)
                 </td>
                 <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
                 </td>
             </tr>
         }
