@@ -1,7 +1,9 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Models;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -117,6 +119,11 @@ namespace AileronAirwaysWeb.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

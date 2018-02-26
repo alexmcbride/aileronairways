@@ -58,7 +58,7 @@ namespace AileronAirwaysWeb
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Timelines/Error");
             }
 
             app.UseStaticFiles();
