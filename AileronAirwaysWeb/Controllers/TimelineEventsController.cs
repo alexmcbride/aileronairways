@@ -26,19 +26,32 @@ namespace AileronAirwaysWeb.Controllers
             TempData["TimelineId"] = id;
 
             // Get the timeline.
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            var timeline = await GetTimeline(id);
             ViewBag.TimelineTitle = timeline.Title;
 
-            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
+            //IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
 
             // Execute list of tasks in one go, which is faster.
-            var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
-            var timelineEvents = (await Task.WhenAll(tasks))
+            //var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
+            var timelineEvents = timeline.TimelineEvents
                 .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.EventDateTime)
                 .ToList();
 
+
+
             return View(timelineEvents);
+        }
+
+        private async Task<TimelineWithEvents> GetTimeline(string id)
+        {
+            var timeslines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
+            var timeline = timeslines.SingleOrDefault(t => t.Id == id);
+            foreach (var evt in timeline.TimelineEvents)
+            {
+                evt.Title = "Temp Title";
+            }
+            return timeline;
         }
 
         // GET: Timelines/Details/5

@@ -22,7 +22,7 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static async void RunTimelineCollectionTestsAsync()
         {
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
+            var api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
             var timelines = await Timeline.GetAllTimelinesAndEventsAsync(api);
 
@@ -63,6 +63,7 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static void DisplayAttachment(Attachment attachment)
         {
+            Console.WriteLine("Attachment");
             Console.WriteLine($"Id: {attachment.Id}");
             Console.WriteLine($"Title: {attachment.Title}");
             Console.WriteLine($"TimelineEventId: {attachment.TimelineEventId}");
@@ -99,6 +100,7 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static void DisplayTimelineEvent(TimelineEvent evt)
         {
+            Console.WriteLine("Event:");
             Console.WriteLine($"Id: {evt.Id}");
             Console.WriteLine($"Title: {evt.Title}");
             Console.WriteLine($"Description: {evt.Description}");
