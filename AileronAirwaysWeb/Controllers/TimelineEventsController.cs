@@ -121,32 +121,26 @@ namespace AileronAirwaysWeb.Controllers
         {
             TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
 
-            // Make sure to unlink from timeline first.
-            // TODO: IdeaGen API currently broken.
-            //await evt.UnlinkEventAsync(_api, timelineId);
+            ViewBag.TimelineId = timelineId;
+
+            return View(evt);
+        }
+
+        // POST: Timelines/Delete/5
+        [HttpPost("Timelines/{timelineId}/Events/{eventId}/Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Delete(int timelineId, string eventId, IFormCollection collection)
+        {
+            var evt = await TimelineEvent.GetEventAsync(_api, eventId);
 
             await evt.DeleteAsync(_api);
 
-            _flash.Message($"Event '{evt.Title}' deleted!");
+            // TODO: uncomment when IdeaGen API fixed.
+            //await evt.UnlinkEventAsync(_api, timelineId);
 
-            return RedirectToAction("Index", new { id = timelineId });
+            _flash.Message("Deleted timeline event");
+
+            return RedirectToAction(nameof(Index));
         }
-
-        //// POST: Timelines/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
-
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
     }
 }

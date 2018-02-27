@@ -46,7 +46,7 @@
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId">Edit</a> |
-                    <a asp-action="Delete" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                    <a asp-action="Delete" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId">Delete</a>
                 </td>
             </tr>
         }
