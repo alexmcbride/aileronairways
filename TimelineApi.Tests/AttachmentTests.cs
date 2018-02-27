@@ -129,7 +129,7 @@ namespace Echelon.TimelineApi.Tests
         public async Task UploadAttachment()
         {
             string presignedUrl = "http://www.test.com/presignedurl";
-            string filename = "ID1";
+            string filename = "filename.docx";
 
             var attachment = new Attachment();
             attachment.Id = "ID1";
@@ -138,16 +138,7 @@ namespace Echelon.TimelineApi.Tests
 
             await attachment.UploadAsync(mock.Object, filename);
 
-            mock.Verify(m => m.UploadFileAsync(presignedUrl, "ID1"));
-        }
-
-        [TestMethod, ExpectedException(typeof(TimelineException))]
-        public async Task UploadWithFilenameAndIdNotMatching()
-        {
-            var attachment = new Attachment();
-            attachment.Id = "ID1";
-
-            await attachment.UploadAsync(null, "wrong filename");
+            mock.Verify(m => m.UploadFileAsync(presignedUrl, filename));
         }
 
         [TestMethod]
@@ -159,10 +150,11 @@ namespace Echelon.TimelineApi.Tests
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
+            attachment.Title = "filename.docx";
 
             await attachment.DownloadAsync(mock.Object, "C:\\example");
 
-            mock.Verify(m => m.DownloadFileAsync(presignedUrl, "C:\\example\\" + attachment.Id));
+            mock.Verify(m => m.DownloadFileAsync(presignedUrl, "C:\\example\\" + attachment.Title));
         }
     }
 }

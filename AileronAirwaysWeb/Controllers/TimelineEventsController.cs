@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,20 +38,13 @@ namespace AileronAirwaysWeb.Controllers
                 .OrderByDescending(e => e.EventDateTime)
                 .ToList();
 
-
-
             return View(timelineEvents);
         }
 
         private async Task<TimelineWithEvents> GetTimeline(string id)
         {
             var timeslines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
-            var timeline = timeslines.SingleOrDefault(t => t.Id == id);
-            foreach (var evt in timeline.TimelineEvents)
-            {
-                evt.Title = "Temp Title";
-            }
-            return timeline;
+            return timeslines.SingleOrDefault(t => t.Id == id);
         }
 
         // GET: Timelines/Details/5

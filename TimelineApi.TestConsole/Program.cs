@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Echelon.TimelineApi.TestConsole
 {
@@ -13,8 +12,8 @@ namespace Echelon.TimelineApi.TestConsole
         static void Main(string[] args)
         {
             //RunTestsAsync();
-            //RunAttachmentTestsAsync();
-            RunTimelineCollectionTestsAsync();
+            RunAttachmentTestsAsync();
+            //RunTimelineCollectionTestsAsync();
 
             // Stop program from exiting.
             Console.ReadKey(true);
@@ -47,13 +46,12 @@ namespace Echelon.TimelineApi.TestConsole
             DisplayTimelineEvent(evt);
 
             Console.WriteLine("Creating attachment");
-            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test3.txt");
+            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title 2");
             DisplayAttachment(attachment);
             Console.WriteLine("Done");
 
             Console.WriteLine("Uploading attachment");
-            File.Copy("Test3.txt", attachment.Id);
-            await attachment.UploadAsync(api, attachment.Id);
+            await attachment.UploadAsync(api, "Test4.txt");
             Console.WriteLine("Done");
 
             Console.WriteLine("Downloading attachment");

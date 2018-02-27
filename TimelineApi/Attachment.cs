@@ -79,11 +79,6 @@ namespace Echelon.TimelineApi
 
         public async Task UploadAsync(ITimelineService api, string filename)
         {
-            if (Path.GetFileName(filename) != Id)
-            {
-                throw new TimelineException("'Filename' should match attachment ID");
-            }
-
             string url = await GenerateUploadPresignedUrlAsync(api);
 
             await api.UploadFileAsync(url, filename);
@@ -92,9 +87,12 @@ namespace Echelon.TimelineApi
         public async Task<string> DownloadAsync(ITimelineService api, string directory)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
-            string file = Path.Combine(directory, Id);
+            string file = Path.Combine(directory, Title);
 
             await api.DownloadFileAsync(url, file);
+
+            Debug.WriteLine("URL: " + url);
+            Debug.WriteLine("File: " + file);
 
             return file;
         }
