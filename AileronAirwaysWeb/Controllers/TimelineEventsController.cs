@@ -27,7 +27,7 @@ namespace AileronAirwaysWeb.Controllers
 
             // Download all TimelineEvent objects at the same time.
             var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
-            var timelineEvents = (await Task.WhenAll(tasks))
+            var events = (await Task.WhenAll(tasks))
                 .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.EventDateTime)
                 .ToList();
@@ -36,7 +36,7 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timelineId;
             ViewBag.TimelineTitle = timeline.Title;
 
-            return View(timelineEvents);
+            return View(events);
         }
 
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
@@ -57,10 +57,10 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timelineId;
 
             // Create new blank timeline and set default values
-            TimelineEvent timelineEvent = new TimelineEvent();
-            timelineEvent.EventDateTime = DateTime.Now;
+            TimelineEvent evt = new TimelineEvent();
+            evt.EventDateTime = DateTime.Now;
 
-            return View(timelineEvent);
+            return View(evt);
         }
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
