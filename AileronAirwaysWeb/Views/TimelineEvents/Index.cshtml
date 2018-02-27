@@ -8,27 +8,27 @@
 
 @*Side Panel - Will Display all Headings*@
 
-<div class="container body-content">
-   
-    <div class="headerSection">
-        <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
-        <hr class="hrMainHeader" />
-        <h4>@ViewBag.TimelineCreationTimeStamp </h4>
-    </div>
-
-
-    <hr />
-</div>
 
 
 <div id="mainSidePanel">
+    @*<div class="container body-content">
+    </div>*@
+        <div class="headerSection">
+            <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
+            <hr class="displayHR" />
+            <h4>@ViewBag.TimelineCreationTimeStamp </h4>
+        </div>
+
+
+        <hr />
+    
 
 
     <div id="mySidenav" class="sidenav">
         <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
         -->
         <div id="sideNavArrows">
-            <span onclick="openNav()" class="rightArrowVisibility"><i class="rightArrow"></i></span>
+            <span onclick="openNav()" id="rightArrowVisibility"><i class="rightArrow"></i></span>
             <span class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></span>
         </div>
 
@@ -37,7 +37,7 @@
 
 
 
-        <div>
+        <div id="eventNameList">
             @foreach (var item in Model)
             {
                 <a href="#">@item.Title</a>
@@ -53,12 +53,27 @@
 
 
     <div class="timeline">
+
+
         <div class="containerTimeline left">
             <div class="eventContent">
-                <h2>2017</h2>
-                <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                <div class="eventDateSection">
+                    <h3 class="eventDate">Nov 18</h3>
+                    <p>11:49:12</p>
+                    <div class="eventIconDisplay">
+                        <span>Ico</span><span>Ico</span><span>Ico</span>
+                    </div>
+                </div>
+
+                <div class="eventBodySection">
+
+                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                </div>
             </div>
         </div>
+
+
+
         <div class="containerTimeline right">
             <div class="eventContent">
                 <h2>2016</h2>
@@ -99,7 +114,7 @@
 
         document.getElementById("mySidenav").style.width = "250px";
         document.getElementById("mainSidePanel").style.marginLeft = "250px";
-        document.getElementById("rightArrowVisibility").style.display = 'none';
+        document.getElementById("rightArrowVisibility").style.visibility = 'hidden';
 
     }
 
@@ -107,7 +122,7 @@
 
         document.getElementById("mySidenav").style.width = "20px";
         document.getElementById("mainSidePanel").style.marginLeft = "20px";
-        document.getElementById("rightArrowVisibility").style.display = "block";
+        document.getElementById("rightArrowVisibility").style.visibility = 'visible';
 
     }
 
