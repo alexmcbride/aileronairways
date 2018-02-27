@@ -69,13 +69,12 @@ namespace AileronAirwaysWeb.Controllers
         {
             DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-            TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
+            TimelineEvent evt = await TimelineEvent.CreateAndLinkAsync(_api,
                 Request.Form["Title"],
                 Request.Form["Description"],
                 date,
-                Request.Form["Location"]);
-
-            await evt.LinkEventAsync(_api, timelineId);
+                Request.Form["Location"],
+                timelineId);
 
             _flash.Message($"Event '{evt.Title}' added!");
 
@@ -129,14 +128,9 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Timelines/Delete/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int timelineId, string eventId, IFormCollection collection)
+        public async Task<ActionResult> Delete(string timelineId, string eventId, IFormCollection collection)
         {
-            var evt = await TimelineEvent.GetEventAsync(_api, eventId);
-
-            await evt.DeleteAsync(_api);
-
-            // TODO: uncomment when IdeaGen API fixed.
-            //await evt.UnlinkEventAsync(_api, timelineId);
+            await TimelineEvent.UnlinkAndDeleteAsync(_api, timelineId, eventId);
 
             _flash.Message("Deleted timeline event");
 

@@ -33,6 +33,13 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
 
+        public static async Task<TimelineEvent> CreateAndLinkAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location, string timelineId)
+        {
+            var timelineEvent = await CreateAsync(api, title, description, eventDateTime, location);
+            await timelineEvent.LinkEventAsync(api, timelineId);
+            return timelineEvent;
+        }
+
         public Task EditTitleAsync(ITimelineService api)
         {
             return api.PutJsonAsync("TimelineEvent/EditTitle", new
@@ -71,9 +78,14 @@ namespace Echelon.TimelineApi
 
         public Task DeleteAsync(ITimelineService api)
         {
+            return DeleteAsync(api, Id);
+        }
+
+        public static Task DeleteAsync(ITimelineService api, string timelineEventId)
+        {
             return api.PutJsonAsync("TimelineEvent/Delete", new
             {
-                TimelineEventId = Id
+                TimelineEventId = timelineEventId
             });
         }
 
@@ -106,11 +118,22 @@ namespace Echelon.TimelineApi
 
         public Task UnlinkEventAsync(ITimelineService api, string timelineId)
         {
+            return UnlinkEventAsync(api, timelineId, Id);
+        }
+
+        public static Task UnlinkEventAsync(ITimelineService api, string timelineId, string timelineEventId)
+        {
             return api.PutJsonAsync("Timeline/UnlinkEvent", new
             {
                 TimelineId = timelineId,
-                EventId = Id
+                EventId = timelineEventId
             });
+        }
+
+        public static async Task UnlinkAndDeleteAsync(ITimelineService api, string timelineId, string timelineEventId)
+        {
+            await DeleteAsync(api, timelineEventId);
+            await UnlinkEventAsync(api, timelineId, timelineEventId);
         }
 
         public Task EditAsync(ITimelineService api)
