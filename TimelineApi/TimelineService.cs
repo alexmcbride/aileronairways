@@ -41,7 +41,7 @@ namespace Echelon.TimelineApi
             }
         }
 
-        public Task<string> PutJsonAsync(string resource, object request)
+        public async Task<string> PutJsonAsync(string resource, object request)
         {
             // Turn request into JSON and add auth stuff.
             JObject body = JObject.FromObject(request);
@@ -52,7 +52,7 @@ namespace Echelon.TimelineApi
             {
                 // Make request and get JSON response.
                 string url = GetUrl(resource);
-                return _helper.UploadStringAsync(url, body.ToString());
+                return await _helper.UploadStringAsync(url, body.ToString());
             }
             catch (WebException ex)
             {
@@ -67,7 +67,7 @@ namespace Echelon.TimelineApi
             return GetJsonAsync(resource, new NameValueCollection());
         }
 
-        public Task<string> GetJsonAsync(string resource, NameValueCollection headers)
+        public async Task<string> GetJsonAsync(string resource, NameValueCollection headers)
         {
             // Add auth stuff to headers.
             headers.Add("AuthToken", _authToken);
@@ -77,7 +77,7 @@ namespace Echelon.TimelineApi
             {
                 // Get JSON response.
                 string url = GetUrl(resource);
-                return _helper.DownloadStringAsync(url, headers);
+                return await _helper.DownloadStringAsync(url, headers);
             }
             catch (WebException ex)
             {
