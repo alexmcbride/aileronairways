@@ -118,5 +118,11 @@ namespace Echelon.TimelineApi
             // If you perform a create and keep the ID the same then it overwrites the exsting event.
             return CreateAsync(api, Id, Title, Description, EventDateTime, Location);
         }
+
+        public static async Task<IList<TimelineEvent>> GetAllEventsAsync(ITimelineService api)
+        {
+            string json = await api.GetJsonAsync("TimelineEvent/GetAllEvents");
+            return JsonConvert.DeserializeObject<List<TimelineEvent>>(json);
+        }
     }
 }

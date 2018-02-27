@@ -10,6 +10,9 @@ namespace Echelon.TimelineApi.Tests
     public class TimelineEventTests
     {
         const string TimelineEventJson = "{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"Description\":\"Test Description\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}";
+        const string TimelineEventsJson = "[{\"Id\":\"ID1\",\"Title\":\"Test Title 1\",\"Description\":\"Test Description 1\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}," +
+            "{\"Id\":\"ID2\",\"Title\":\"Test Title 2\",\"Description\":\"Test Description 2\",\"EventDateTime\":\"636546626588300000\", \"Location\":\"-1.1234,1.1234\",\"TenantId\" : \"123\",\"IsDeleted\":\"true\"}]";
+
 
         [TestMethod]
         public async Task EventCreate()
@@ -197,5 +200,33 @@ namespace Echelon.TimelineApi.Tests
             Assert.AreEqual(linkedEvents[0].TenantId, "123");
             Assert.AreEqual(linkedEvents[1].TimelineEventId, "ID4");
         }
+
+
+        [TestMethod]
+        public async Task TimelineEventGetAllEvents()
+        {
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>())).Returns(TestUtils.GetCompletedTask(TimelineEventsJson));
+
+            var events = await TimelineEvent.GetAllEventsAsync(mock.Object);
+
+            Assert.AreEqual(2, events.Count);
+            mock.Verify(m => m.GetJsonAsync("TimelineEvent/GetAllEvents"));
+            Assert.AreEqual(events[0].Id, "ID1");
+            Assert.AreEqual(events[0].Title, "Test Title 1");
+            Assert.AreEqual(events[0].Description, "Test Description 1");
+            Assert.AreEqual(events[0].EventDateTime.Ticks.ToString(), "636546626588300000");
+            Assert.AreEqual(events[0].Location, "-1.1234,1.1234");
+            Assert.AreEqual(events[0].TenantId, "123");
+            Assert.IsTrue(events[0].IsDeleted);
+            Assert.AreEqual(events[1].Id, "ID2");
+            Assert.AreEqual(events[1].Title, "Test Title 2");
+            Assert.AreEqual(events[1].Description, "Test Description 2");
+            Assert.AreEqual(events[1].EventDateTime.Ticks.ToString(), "636546626588300000");
+            Assert.AreEqual(events[1].Location, "-1.1234,1.1234");
+            Assert.AreEqual(events[1].TenantId, "123");
+            Assert.IsTrue(events[1].IsDeleted);
+        }
+
     }
 }
