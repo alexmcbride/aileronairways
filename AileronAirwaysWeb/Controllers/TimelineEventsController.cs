@@ -43,12 +43,7 @@ namespace AileronAirwaysWeb.Controllers
         private async Task<TimelineWithEvents> GetTimeline(string id)
         {
             var timeslines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
-            var timeline = timeslines.SingleOrDefault(t => t.Id == id);
-            foreach (var evt in timeline.TimelineEvents)
-            {
-                evt.Title = "Temp Title";
-            }
-            return timeline;
+            return timeslines.SingleOrDefault(t => t.Id == id);
         }
 
         // GET: Timelines/Details/5
