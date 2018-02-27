@@ -34,7 +34,8 @@ namespace AileronAirwaysWeb
             services.AddTransient<IEmailSender, EmailSender>();
 
             // Add MVC nand allow of temp data.
-            services.AddMvc().AddSessionStateTempDataProvider();
+            services.AddMvc()
+                .AddSessionStateTempDataProvider();
 
             services.AddSession();
 
@@ -43,6 +44,8 @@ namespace AileronAirwaysWeb
                 Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId")));
+
+            services.AddTransient<IFlashService, FlashService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

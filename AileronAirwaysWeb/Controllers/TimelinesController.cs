@@ -1,4 +1,5 @@
 ﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,12 @@ namespace AileronAirwaysWeb.Controllers
     public class TimelinesController : Controller
     {
         private readonly ITimelineService _api;
+        private readonly IFlashService _flashService;
 
-        public TimelinesController(ITimelineService api)
+        public TimelinesController(ITimelineService api, IFlashService flashService)
         {
             _api = api;
+            _flashService = flashService;
         }
 
         // GET: Timelines
@@ -55,6 +58,7 @@ namespace AileronAirwaysWeb.Controllers
                 Timeline tLine = await Timeline.CreateAsync(_api,
                     Request.Form["Title"]);
 
+                _flashService.Flash("success", "A new timeline has been created!");
 
                 return RedirectToAction(nameof(Index));
             }
