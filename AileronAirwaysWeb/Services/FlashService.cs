@@ -27,12 +27,13 @@ namespace AileronAirwaysWeb.Services
             var messages = _tempData.Get<Queue<Message>>("flash-queue");
             if (messages != null && messages.Any())
             {
-                output.Content.AppendHtml("<ul>");
                 foreach (var message in messages)
                 {
-                    output.Content.AppendHtml($"<li>{message.Text}</li>");
+                    // TODO: http://getbootstrap.com/docs/3.3/components/#alerts
+                    output.Content.AppendHtml($"<div class=\"alert alert-{message.Type}\">");
+                    output.Content.Append(message.Text);
+                    output.Content.AppendHtml("</div>");
                 }
-                output.Content.AppendHtml("</ul>");
             }
         }
     }

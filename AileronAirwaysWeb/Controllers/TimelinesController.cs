@@ -29,9 +29,6 @@ namespace AileronAirwaysWeb.Controllers
                 .OrderByDescending(t => t.CreationTimeStamp)
                 .ToList();
 
-            _flashService.Flash("success", "A new timeline has been created!");
-
-
             return View(timelines);
         }
 
@@ -60,6 +57,8 @@ namespace AileronAirwaysWeb.Controllers
 
                 Timeline tLine = await Timeline.CreateAsync(_api,
                     Request.Form["Title"]);
+
+                _flashService.Flash("success", "A new timeline has been created!");
 
                 return RedirectToAction(nameof(Index));
             }
