@@ -13,12 +13,12 @@ namespace AileronAirwaysWeb.Controllers
     public class TimelinesController : Controller
     {
         private readonly ITimelineService _api;
-        private readonly IFlashService _flashService;
+        private readonly IFlashService _flash;
 
-        public TimelinesController(ITimelineService api, IFlashService flashService)
+        public TimelinesController(ITimelineService api, IFlashService flash)
         {
             _api = api;
-            _flashService = flashService;
+            _flash = flash;
         }
 
         // GET: Timelines
@@ -58,7 +58,9 @@ namespace AileronAirwaysWeb.Controllers
                 Timeline tLine = await Timeline.CreateAsync(_api,
                     Request.Form["Title"]);
 
-                _flashService.Flash("success", "A new timeline has been created!");
+
+                _flash.Message($"Timeline '{tLine.Title}' has been created!");
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -71,10 +73,8 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-
             Timeline t = await Timeline.GetTimelineAsync(_api, id);
             ViewData["EditTitle"] = t.Title;
-
 
             return View();
         }
@@ -92,6 +92,9 @@ namespace AileronAirwaysWeb.Controllers
                 tline.Title = Request.Form["Title"];
 
                 await tline.EditTitleAsync(_api);
+
+                _flash.Message($"Timeline '{tline.Title}' has been edited!");
+
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -104,6 +107,8 @@ namespace AileronAirwaysWeb.Controllers
         {
             Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
             await tline.DeleteAsync(_api);
+
+            _flash.Message($"Timeline '{tline.Title}' has been deleted!");
 
             return RedirectToAction(nameof(Index));
         }

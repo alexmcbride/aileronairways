@@ -45,6 +45,7 @@ namespace AileronAirwaysWeb
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId")));
 
+            // Add service for handling flasg temp messages.
             services.AddTransient<IFlashService, FlashService>();
         }
 

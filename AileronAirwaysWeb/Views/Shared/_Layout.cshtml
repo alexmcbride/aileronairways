@@ -36,9 +36,11 @@
             </div>
         </div>
     </nav>
-    <div class="container body-content">
-        <div flash-messages></div>
 
+    <!-- Display temporary flash messages set by controllers. -->
+    <div flash-messages></div>
+
+    <div class="container body-content">
         @RenderBody()
         <hr />
         <footer class="small text-center text-muted">

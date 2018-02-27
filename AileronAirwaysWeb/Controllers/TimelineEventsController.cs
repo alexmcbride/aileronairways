@@ -1,4 +1,5 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Services;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -10,10 +11,12 @@ namespace AileronAirwaysWeb.Controllers
     public class TimelineEventsController : Controller
     {
         private readonly ITimelineService _api;
+        private readonly IFlashService _flash;
 
-        public TimelineEventsController(ITimelineService api)
+        public TimelineEventsController(ITimelineService api, IFlashService flash)
         {
             _api = api;
+            _flash = flash;
         }
 
         // GET: Timelines
@@ -98,6 +101,8 @@ namespace AileronAirwaysWeb.Controllers
 
             await evt.LinkEventAsync(_api, timelineId);
 
+            _flash.Message($"Event '{evt.Title}' added!");
+
             return RedirectToAction(/*returnUrl*/nameof(Index), new { id = timelineId });
         }
 
@@ -134,6 +139,8 @@ namespace AileronAirwaysWeb.Controllers
 
             await evt.EditAsync(_api);
 
+            _flash.Message($"Event '{evt.Title}' edited!");
+
             if (TempData.ContainsKey("TimelineId"))
             {
                 string timelineId;
@@ -159,6 +166,8 @@ namespace AileronAirwaysWeb.Controllers
             //await evt.UnlinkEventAsync(_api, timelineId);
 
             await evt.DeleteAsync(_api);
+
+            _flash.Message($"Event '{evt.Title}' deleted!");
 
             TempData["TimelineId"] = timelineId;
             return RedirectToAction("Index", "TimelineEvents", new { id = timelineId });

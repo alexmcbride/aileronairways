@@ -1,66 +1,12 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AileronAirwaysWeb.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace AileronAirwaysWeb.Services
 {
-    public interface IFlashService
-    {
-        void Flash(string type, string text);
-    }
-
-    [HtmlTargetElement("div", Attributes = "flash-messages")]
-    public class FlashTagHelper : TagHelper
-    {
-        private readonly ITempDataDictionary _tempData;
-
-        public FlashTagHelper(ITempDataDictionaryFactory factory, IHttpContextAccessor contextAccessor)
-        {
-            _tempData = factory.GetTempData(contextAccessor.HttpContext);
-        }
-
-        public override void Process(TagHelperContext context, TagHelperOutput output)
-        {
-            var messages = _tempData.Get<Queue<Message>>("flash-queue");
-            if (messages != null && messages.Any())
-            {
-                foreach (var message in messages)
-                {
-                    // TODO: http://getbootstrap.com/docs/3.3/components/#alerts
-                    output.Content.AppendHtml($"<div class=\"alert alert-{message.Type}\">");
-                    output.Content.Append(message.Text);
-                    output.Content.AppendHtml("</div>");
-                }
-            }
-        }
-    }
-
-    public static class TempDataExtensions
-    {
-        public static void Put<T>(this ITempDataDictionary tempData, string key, T value)
-        {
-            tempData[key] = JsonConvert.SerializeObject(value);
-        }
-
-        public static T Get<T>(this ITempDataDictionary tempData, string key)
-        {
-            if (tempData.TryGetValue(key, out object value))
-            {
-                return JsonConvert.DeserializeObject<T>(value.ToString());
-            }
-            return default(T);
-        }
-    }
-
-    public class Message
-    {
-        public string Type { get; set; }
-        public string Text { get; set; }
-    }
-
     public class FlashService : IFlashService
     {
         private readonly ITempDataDictionary _tempData;
@@ -70,19 +16,36 @@ namespace AileronAirwaysWeb.Services
             _tempData = factory.GetTempData(contextAccessor.HttpContext);
         }
 
-        public void Flash(string type, string text)
+        public void Message(string text)
         {
-            var messages = _tempData.Get<Queue<Message>>("flash-queue");
-            if (messages == null)
+            Message(text, FlashType.Success);
+        }
+
+        public Queue<FlashMessage> GetMessages()
+        {
+            if (_tempData.TryGetValue("flash-queue", out object data))
             {
-                messages = new Queue<Message>();
+                return JsonConvert.DeserializeObject<Queue<FlashMessage>>(data.ToString());
             }
-            messages.Enqueue(new Message
+            return new Queue<FlashMessage>();
+        }
+
+        public void PutMessages(Queue<FlashMessage> messages)
+        {
+            _tempData["flash-queue"] = JsonConvert.SerializeObject(messages);
+        }
+
+        public void Message(string text, FlashType type)
+        {
+            var messages = GetMessages();
+
+            messages.Enqueue(new FlashMessage
             {
                 Type = type,
                 Text = text
             });
-            _tempData.Put("flash-queue", messages);
+
+            PutMessages(messages);
         }
     }
 }
