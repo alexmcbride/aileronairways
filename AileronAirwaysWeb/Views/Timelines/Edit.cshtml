@@ -11,12 +11,11 @@
             <form asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
-                <h3>Edit Title:</h3>
-                <p>Enter New Title Bellow</p>
+                <p>Enter new title bellow</p>
               
 
                 <div class="form-group">
-                    <input asp-for="Title" class="form-control" placeholder=@ViewData["EditTitle"] />
+                    <input asp-for="Title" class="form-control" value=@ViewData["EditTitle"] />
                     <span asp-validation-for="Title" class="text-danger" ></span>
                 </div>
 

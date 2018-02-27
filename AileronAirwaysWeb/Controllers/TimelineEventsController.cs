@@ -20,19 +20,21 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Index(string id)
         {
             if (string.IsNullOrEmpty(id))
-            { id = (RouteData.Values["id"]).ToString(); }
+            {
+                id = (RouteData.Values["id"]).ToString();
+            }
 
             TempData["TimelineId"] = id;
 
             // Get the timeline.
-            var timeline = await GetTimeline(id);
+            var timeline = await Timeline.GetTimelineAsync(_api, id);
             ViewBag.TimelineTitle = timeline.Title;
 
-            //IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
+            var linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
 
-            // Execute list of tasks in one go, which is faster.
-            //var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
-            var timelineEvents = timeline.TimelineEvents
+            //Execute list of tasks in one go, which is faster.
+            var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
+            var timelineEvents = (await Task.WhenAll(tasks))
                 .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.EventDateTime)
                 .ToList();
@@ -152,26 +154,31 @@ namespace AileronAirwaysWeb.Controllers
             string timelineId = (TempData["TimelineId"]).ToString();
 
             TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, id);
+
+            // Make sure to unlink from timeline first.
+            //await evt.UnlinkEventAsync(_api, timelineId);
+
             await evt.DeleteAsync(_api);
+
             TempData["TimelineId"] = timelineId;
             return RedirectToAction("Index", "TimelineEvents", new { id = timelineId });
         }
 
-        //// POST: Timelines/Delete/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Delete(int id, IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add delete logic here
+        // POST: Timelines/Delete/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Delete(int id, IFormCollection collection)
+        {
+            try
+            {
+                // TODO: Add delete logic here
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+                return RedirectToAction(nameof(Index));
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

@@ -24,19 +24,16 @@ namespace AileronAirwaysWeb.Services
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
-            //var messages = _tempData.Get<Queue<Message>>("flash-queue");
-            //if (messages != null && messages.Any())
-            //{
-            //    output.Content.AppendHtml("<ul>");
-            //    foreach (var message in messages)
-            //    {
-            //        output.Content.AppendHtml($"<li>{message.Text}</li>");
-            //    }
-            //    output.Content.AppendHtml("</ul>");
-            //}
-
-            output.Content.AppendHtml("Hello!");
-
+            var messages = _tempData.Get<Queue<Message>>("flash-queue");
+            if (messages != null && messages.Any())
+            {
+                output.Content.AppendHtml("<ul>");
+                foreach (var message in messages)
+                {
+                    output.Content.AppendHtml($"<li>{message.Text}</li>");
+                }
+                output.Content.AppendHtml("</ul>");
+            }
         }
     }
 
@@ -51,7 +48,7 @@ namespace AileronAirwaysWeb.Services
         {
             if (tempData.TryGetValue(key, out object value))
             {
-                JsonConvert.DeserializeObject<T>(value.ToString());
+                return JsonConvert.DeserializeObject<T>(value.ToString());
             }
             return default(T);
         }
