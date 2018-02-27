@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Echelon.TimelineApi.TestConsole
 {
@@ -12,12 +11,42 @@ namespace Echelon.TimelineApi.TestConsole
 
         static void Main(string[] args)
         {
+            RunEventsTestsAsync();
             //RunTestsAsync();
-            //RunTestsLinkyStuffAsync();
-            RunAttachmentTestsAsync();
+            //RunAttachmentTestsAsync();
+            //RunTimelineCollectionTestsAsync();
 
             // Stop program from exiting.
             Console.ReadKey(true);
+        }
+
+        private static async void RunEventsTestsAsync()
+        {
+            var api = new TimelineService(BaseUrl, AuthToken, TenantId);
+
+            var events = await TimelineEvent.GetAllEventsAsync(api);
+
+            foreach (var item in events)
+            {
+                DisplayTimelineEvent(item);
+            }
+        }
+
+        private static async void RunTimelineCollectionTestsAsync()
+        {
+            var api = new TimelineService(BaseUrl, AuthToken, TenantId);
+
+            var timelines = await Timeline.GetAllTimelinesAndEventsAsync(api);
+
+            foreach (var timeline in timelines)
+            {
+                DisplayTimeline(timeline);
+
+                foreach (var evt in timeline.TimelineEvents)
+                {
+                    DisplayTimelineEvent(evt);
+                }
+            }
         }
 
         private static async void RunAttachmentTestsAsync()
@@ -25,50 +54,27 @@ namespace Echelon.TimelineApi.TestConsole
             ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
 
             Console.WriteLine("Getting event");
-            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(api, "ID2");
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(api, "ID2");
             Console.WriteLine("Done");
             DisplayTimelineEvent(evt);
 
-            //Console.WriteLine("Creating attachment");
-            //Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Test2.txt");
-            //DisplayAttachment(attachment);
-            //Console.WriteLine("Done");
+            Console.WriteLine("Creating attachment");
+            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title 2");
+            DisplayAttachment(attachment);
+            Console.WriteLine("Done");
 
-            //Console.WriteLine("Uploading attachment");
-            //await attachment.UploadAsync(api, "Test2.txt");
-            //Console.WriteLine("Done");
+            Console.WriteLine("Uploading attachment");
+            await attachment.UploadAsync(api, "Test4.txt");
+            Console.WriteLine("Done");
 
-
-            var attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
-
-            foreach (var a in attachments)
-            {
-                DisplayAttachment(a);
-            }
-
-
-            //var attachment = await Attachment.GetAttachmentAsync(api, "ba7fed22-29fe-4939-8c1a-3234c52f5da7");
-
-            //await attachment.DeleteAsync(api);
-
-            //Console.WriteLine("-----");
-
-
-            //attachments = await Attachment.GetAttachmentsAsync(api, evt.Id);
-
-            //foreach (var a in attachments)
-            //{
-            //    DisplayAttachment(a);
-            //}
-
-
-            //Console.WriteLine("Downloading attachment");
-            //await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
-            //Console.WriteLine("Done");
+            Console.WriteLine("Downloading attachment");
+            await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
+            Console.WriteLine("Done");
         }
 
         private static void DisplayAttachment(Attachment attachment)
         {
+            Console.WriteLine("Attachment");
             Console.WriteLine($"Id: {attachment.Id}");
             Console.WriteLine($"Title: {attachment.Title}");
             Console.WriteLine($"TimelineEventId: {attachment.TimelineEventId}");
@@ -93,48 +99,19 @@ namespace Echelon.TimelineApi.TestConsole
             //await timeline.LinkEventAsync(api, evt);
 
             // Get list of linked events.
-            IList<LinkedEvent> linkedEvents = await timeline.GetEventsAsync(api);
+            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetEventsAsync(api, timeline.Id);
 
             // Wait for all TimelineEvent objects to download.
             foreach (LinkedEvent linkedEvent in linkedEvents)
             {
-                TimelineEvent evt2 = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.TimelineEventId);
+                TimelineEvent evt2 = await TimelineEvent.GetEventAsync(api, linkedEvent.TimelineEventId);
                 DisplayTimelineEvent(evt2);
             }
         }
 
-        private async static void RunTestsLinkyStuffAsync()
-        {
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
-
-            Console.WriteLine("Fetch timelines");
-            TimelineEvent a = await TimelineEvent.GetTimelineEventAsync(api, "8e8a526a-db39-4b41-a00c-e55308d3ef6f");
-            TimelineEvent b = await TimelineEvent.GetTimelineEventAsync(api, "e97f9f95-7147-4782-8fbc-f445f343dd20");
-            Console.WriteLine("Done");
-
-            //Console.WriteLine("Link events");
-            //await a.LinkTimelineEventsAsync(api, b);
-            //Console.WriteLine("Done");
-
-            //Console.WriteLine("Link events");
-            //await a.UnlinkTimelineEventsAsync(api, b);
-            //Console.WriteLine("Done");
-
-            Console.WriteLine("Get linked events");
-            var linkedEvents = await a.GetLinkedTimelineEventsAsync(api);
-            Console.WriteLine("Done");
-
-            Console.WriteLine("Fetching event for each link.");
-            foreach (var linkedEvent in linkedEvents)
-            {
-                var evt = await TimelineEvent.GetTimelineEventAsync(api, linkedEvent.LinkedToTimelineEventId);
-                DisplayTimelineEvent(evt);
-            }
-            Console.WriteLine("Done");
-        }
-
         private static void DisplayTimelineEvent(TimelineEvent evt)
         {
+            Console.WriteLine("Event:");
             Console.WriteLine($"Id: {evt.Id}");
             Console.WriteLine($"Title: {evt.Title}");
             Console.WriteLine($"Description: {evt.Description}");

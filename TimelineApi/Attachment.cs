@@ -47,7 +47,7 @@ namespace Echelon.TimelineApi
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateUploadPresignedUrl", new NameValueCollection
             {
-                { "AttachmentId", Title }
+                { "AttachmentId", Id }
             });
         }
 
@@ -55,7 +55,7 @@ namespace Echelon.TimelineApi
         {
             return api.GetJsonAsync("TimelineEventAttachment/GenerateGetPresignedUrl", new NameValueCollection
             {
-                { "AttachmentId", Title }
+                { "AttachmentId", Id }
             });
         }
 
@@ -84,12 +84,17 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task DownloadAsync(ITimelineService api, string directory)
+        public async Task<string> DownloadAsync(ITimelineService api, string directory)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
             string file = Path.Combine(directory, Title);
 
             await api.DownloadFileAsync(url, file);
+
+            Debug.WriteLine("URL: " + url);
+            Debug.WriteLine("File: " + file);
+
+            return file;
         }
     }
 }

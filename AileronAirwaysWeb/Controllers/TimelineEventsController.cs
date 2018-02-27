@@ -20,51 +20,43 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines
         public async Task<ActionResult> Index(string id)
         {
-            if (string.IsNullOrEmpty(id))
-            { id = (RouteData.Values["id"]).ToString(); }
-
             //TempData["TimelineId"] = id;
             HttpContext.Session.SetString("TimelineId",id);
 
             // Get the timeline.
-            //Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
-            ViewBag.TimelineTitle = id;
-
-            //IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(_api, id);
-
-            //// Execute list of tasks in one go, which is faster.
-            //var tasks = linkedEvents.Select(e => TimelineEvent.GetTimelineEventAsync(_api, e.TimelineEventId));
-            //var timelineEvents = (await Task.WhenAll(tasks))
-            //    .Where(e => !e.IsDeleted)
-            //    .OrderByDescending(e => e.EventDateTime)
-            //    .ToList();
-
-            //return View(timelineEvents);
             if (id.Equals(null))
-            { id = (RouteData.Values["id"]).ToString(); }
-
-            IList<LinkedEvent> linkedEvents = await TimelineEvent.GetLinkedEventsAsync(_api, id);
-            List<TimelineEvent> timelineEvents = new List<TimelineEvent>();
-            foreach (var item in linkedEvents)
-            {
-                TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, item.TimelineEventId);
-                if (timelineEvent.IsDeleted == false)
-                {
-                    timelineEvents.Add(timelineEvent);
-                }
+            { id = (RouteData.Values["id"]).ToString();
             }
-            //TempData["TimelineId"] = id;
-            timelineEvents.OrderBy(e => e.EventDateTime).ToList();
+
+            var timeline = await GetTimeline(id);
+            
+            //get linked events first
+            IList<LinkedEvent> timelinelinkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
+            //based on the id get timeline linked events
+                var tasks = timelinelinkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
+            var timelineEvents = (await Task.WhenAll(tasks))
+                .Where(e => !e.IsDeleted)
+                .OrderByDescending(e => e.EventDateTime)
+                .ToList();
+
             return View(timelineEvents);
+        }
+
+        private async Task<TimelineWithEvents> GetTimeline(string id)
+        {
+            var timeslines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
+            return timeslines.SingleOrDefault(t => t.Id == id);
         }
 
         // GET: Timelines/Details/5
         public async Task<ActionResult> Details(string id)
         {
-            TimelineEvent Event = await TimelineEvent.GetTimelineEventAsync(_api, id);
+
+            TimelineEvent Event = await TimelineEvent.GetEventAsync(_api, id);
             //string timelineId = (TempData["TimelineId"]).ToString();
             //TempData["TimelineId"] = timelineId;
             var timelineId = HttpContext.Session.GetString("TimelineId");
+
             ViewBag.TimelineId = timelineId;
             return View(Event);
         }
@@ -73,27 +65,28 @@ namespace AileronAirwaysWeb.Controllers
         public ActionResult Create()
         {
 
-            
+
             //if (TempData.ContainsKey("TimelineId"))
- 
+
             //{string timelineId;
-             //timelineId = TempData["TimelineId"].ToString();
-             //TempData["TimelineId"] = timelineId;
-                string timelineId = HttpContext.Session.GetString("TimelineId");
-                ViewBag.TimelineId = timelineId;
+            //timelineId = TempData["TimelineId"].ToString();
+            //TempData["TimelineId"] = timelineId;
+            string timelineId = HttpContext.Session.GetString("TimelineId");
+            ViewBag.TimelineId = timelineId;
 
-                // Create new blank timeline and set default values
-                TimelineEvent timelineEvent = new TimelineEvent();
-                timelineEvent.EventDateTime = DateTime.Now;
+            // Create new blank timeline and set default values
+            TimelineEvent timelineEvent = new TimelineEvent
+            {
+                //EventDateTime = DateTime.Now
+            };
 
-                return View(timelineEvent);
+            return View(timelineEvent);
             //}
             //else
             //{
 
             //    return RedirectToAction("Index", "Timelines");
             //}
-
         }
 
         // POST: Timelines/Create
@@ -111,8 +104,7 @@ namespace AileronAirwaysWeb.Controllers
                 date,
                 Request.Form["Location"]);
 
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
-            await timeline.LinkEventAsync(_api, evt);
+            await evt.LinkEventAsync(_api, timelineId);
 
             return RedirectToAction(/*returnUrl*/nameof(Index), new { id = timelineId });
         }
@@ -121,12 +113,16 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Edit(string id)
         {
 
+
             //if (TempData.ContainsKey("TimelineId"))
             //{   string timelineId;
-                //timelineId = (TempData["TimelineId"]).ToString();
-                //TempData["TimelineId"] = timelineId;
+            //timelineId = (TempData["TimelineId"]).ToString();
+            //TempData["TimelineId"] = timelineId;
+            
 
-               TimelineEvent timelineEvent = await TimelineEvent.GetTimelineEventAsync(_api, id);
+               TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, id);
+
+
                 return View(timelineEvent);
             //}
             //else
@@ -145,8 +141,10 @@ namespace AileronAirwaysWeb.Controllers
             {
                 var date = DateTime.Parse(Request.Form["EventDateTime"]);
                 string timelineId = HttpContext.Session.GetString("TimelineId");
-                TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
+                TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, id);
             evt.Id = id;
+
+
             evt.Title = Request.Form["Title"];
             evt.Description = Request.Form["Description"];
             evt.EventDateTime = date;
@@ -175,7 +173,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             //string timelineId = (TempData["TimelineId"]).ToString();
 
-            TimelineEvent evt = await TimelineEvent.GetTimelineEventAsync(_api, id);
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, id);
             await evt.DeleteAsync(_api);
             if (HttpContext.Session.Keys.Contains("TimelineId"))
             {

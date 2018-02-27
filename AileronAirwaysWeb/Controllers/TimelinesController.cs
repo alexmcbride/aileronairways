@@ -91,9 +91,12 @@ namespace AileronAirwaysWeb.Controllers
             }
         }
         // GET: Timelines/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
+            Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
+            await tline.DeleteAsync(_api);
+            
+            return RedirectToAction(nameof(Index));
         }
 
         // POST: Timelines/Delete/5

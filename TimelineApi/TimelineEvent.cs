@@ -2,14 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
     public class TimelineEvent : ModelBase
-    {
+    {   
         public string Title { get; set; }
         public string Description { get; set; }
         public bool IsDeleted { get; set; }
@@ -79,7 +77,7 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public static async Task<TimelineEvent> GetTimelineEventAsync(ITimelineService api, string timelineEventId)
+        public static async Task<TimelineEvent> GetEventAsync(ITimelineService api, string timelineEventId)
         {
             string json = await api.GetJsonAsync("TimelineEvent/GetTimelineEvent", new NameValueCollection
             {
@@ -88,8 +86,10 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<TimelineEvent>(json);
         }
 
-        public static async Task<IList<LinkedEvent>> GetLinkedEventsAsync(ITimelineService api, string timelineId)
-        {   //changed GetEvents to GetLinkedEvents
+
+        public static async Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api, string timelineId)
+        {
+
             string json = await api.GetJsonAsync("Timeline/GetEvents", new NameValueCollection
             {
                 { "TimelineId", timelineId }
@@ -115,37 +115,16 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task LinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
-        {
-            return api.PutJsonAsync("TimelineEvent/LinkEvents", new
-            {
-                TimelineEventId = Id,
-                LinkedToTimelineEventId = timelineEvent.Id
-            });
-        }
-
-        public Task UnlinkTimelineEventsAsync(ITimelineService api, TimelineEvent timelineEvent)
-        {
-            return api.PutJsonAsync("TimelineEvent/UnlinkEvents", new
-            {
-                TimelineEventId = Id,
-                UnlinkedFromTimelineEventId = timelineEvent.Id
-            });
-        }
-
-        public async Task<IList<TimelineEventLink>> GetLinkedTimelineEventsAsync(ITimelineService api)
-        {
-            string json = await api.GetJsonAsync("TimelineEvent/GetLinkedTimelineEvents", new NameValueCollection
-            {
-                { "TimelineEventId", Id }
-            });
-            return JsonConvert.DeserializeObject<List<TimelineEventLink>>(json);
-        }
-
         public Task EditAsync(ITimelineService api)
         {
             // If you perform a create and keep the ID the same then it overwrites the exsting event.
             return CreateAsync(api, Id, Title, Description, EventDateTime, Location);
+        }
+
+        public static async Task<IList<TimelineEvent>> GetAllEventsAsync(ITimelineService api)
+        {
+            string json = await api.GetJsonAsync("TimelineEvent/GetAllEvents");
+            return JsonConvert.DeserializeObject<List<TimelineEvent>>(json);
         }
     }
 }

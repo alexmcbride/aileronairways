@@ -97,5 +97,11 @@ namespace Echelon.TimelineApi
         {
             return _helper.DownloadFileAsync(url, filename);
         }
+
+        public void RenameFile(string oldName, string newName)
+        {
+            File.Copy(oldName, newName, overwrite: true);
+            File.Delete(oldName);
+        }
     }
 }

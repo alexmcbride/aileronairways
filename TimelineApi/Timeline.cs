@@ -55,19 +55,21 @@ namespace Echelon.TimelineApi
             return JsonConvert.DeserializeObject<List<Timeline>>(json);
         }
 
-        public Task LinkEventAsync(ITimelineService api, TimelineEvent evt)
+        public static async Task<List<TimelineWithEvents>> GetAllTimelinesAndEventsAsync(ITimelineService api)
         {
-            return evt.LinkEventAsync(api, Id);
+            string json = await api.GetJsonAsync("Timeline/GetAllTimelinesAndEvent");
+            var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
+            if (timelines != null)
+            {
+                return timelines.Timelines;
+            }
+            return null;
         }
 
-        public Task UnlinkEventAsync(ITimelineService api, TimelineEvent evt)
+        // Needed to deserialize the timeline list.
+        private class TimelineCollection
         {
-            return evt.UnlinkEventAsync(api, Id);
-        }
-
-        public Task<IList<LinkedEvent>> GetEventsAsync(ITimelineService api)
-        {
-            return TimelineEvent.GetLinkedEventsAsync(api, Id);
+            public List<TimelineWithEvents> Timelines { get; set; }
         }
     }
 }
