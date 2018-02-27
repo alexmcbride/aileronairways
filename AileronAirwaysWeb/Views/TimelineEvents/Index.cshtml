@@ -7,7 +7,7 @@
 <h2>`@ViewBag.TimelineTitle` Timeline</h2>
 
 <p class="text-right">
-    <a asp-action="Create">Create New Event</a>
+    <a asp-action="Create" asp-route-timelineId="@ViewBag.TimelineId">Create New Event</a>
 </p>
 
 <table class="table">
@@ -29,24 +29,24 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @foreach (var evt in Model)
         {
             <tr>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    <a asp-action="Details" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId">@evt.Title</a>
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    @Html.DisplayFor(modelItem => evt.Description)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.EventDateTime)
+                    @Html.DisplayFor(modelItem => evt.EventDateTime)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Location)
+                    @Html.DisplayFor(modelItem => evt.Location)
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                    <a asp-action="Edit" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId">Edit</a> |
+                    <a asp-action="Delete" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
                 </td>
             </tr>
         }

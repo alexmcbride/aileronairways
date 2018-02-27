@@ -19,78 +19,54 @@ namespace AileronAirwaysWeb.Controllers
             _flash = flash;
         }
 
-        // GET: Timelines
-        public async Task<ActionResult> Index(string id)
+        [HttpGet("Timelines/{timelineId}/Events")]
+        public async Task<ActionResult> Index(string timelineId)
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                id = (RouteData.Values["id"]).ToString();
-            }
+            var timeline = await Timeline.GetTimelineAsync(_api, timelineId);
+            var linkedEvents = await TimelineEvent.GetEventsAsync(_api, timelineId);
 
-            TempData["TimelineId"] = id;
-
-            // Get the timeline.
-            var timeline = await Timeline.GetTimelineAsync(_api, id);
-            ViewBag.TimelineTitle = timeline.Title;
-
-            var linkedEvents = await TimelineEvent.GetEventsAsync(_api, id);
-
-            //Execute list of tasks in one go, which is faster.
+            // Download all TimelineEvent objects at the same time.
             var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
             var timelineEvents = (await Task.WhenAll(tasks))
                 .Where(e => !e.IsDeleted)
                 .OrderByDescending(e => e.EventDateTime)
                 .ToList();
 
+            // Extra data needed by view.
+            ViewBag.TimelineId = timelineId;
+            ViewBag.TimelineTitle = timeline.Title;
+
             return View(timelineEvents);
         }
 
-        private async Task<TimelineWithEvents> GetTimeline(string id)
+        [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
+        public async Task<ActionResult> Details(string timelineId, string eventId)
         {
-            var timeslines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
-            return timeslines.SingleOrDefault(t => t.Id == id);
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
+            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
+
+            ViewBag.TimelineId = timeline.Id;
+            ViewBag.TimelineTitle = timeline.Title;
+
+            return View(timelineEvent);
         }
 
-        // GET: Timelines/Details/5
-        public async Task<ActionResult> Details(string id)
+        [HttpGet("Timelines/{timelineId}/Events/Create")]
+        public ActionResult Create(string timelineId)
         {
-            TimelineEvent Event = await TimelineEvent.GetEventAsync(_api, id);
-            string timelineId = (TempData["TimelineId"]).ToString();
-            TempData["TimelineId"] = timelineId;
             ViewBag.TimelineId = timelineId;
-            return View(Event);
+
+            // Create new blank timeline and set default values
+            TimelineEvent timelineEvent = new TimelineEvent();
+            timelineEvent.EventDateTime = DateTime.Now;
+
+            return View(timelineEvent);
         }
 
-        // GET: Timelines/Create
-        public ActionResult Create()
-        {
-            string timelineId;
-            if (TempData.ContainsKey("TimelineId"))
-            {
-                timelineId = TempData["TimelineId"].ToString();
-                TempData["TimelineId"] = timelineId;
-                ViewBag.TimelineId = timelineId;
-
-                // Create new blank timeline and set default values
-                TimelineEvent timelineEvent = new TimelineEvent();
-                timelineEvent.EventDateTime = DateTime.Now;
-
-                return View(timelineEvent);
-            }
-            else
-            {
-
-                return RedirectToAction("Index", "Timelines");
-            }
-
-        }
-
-        // POST: Timelines/Create
-        [HttpPost]
+        [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection/*, string returnUrl = null*/)
+        public async Task<ActionResult> Create(string timelineId, IFormCollection collection)
         {
-            string timelineId = (TempData["TimelineId"]).ToString();
             DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
             TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
@@ -103,35 +79,30 @@ namespace AileronAirwaysWeb.Controllers
 
             _flash.Message($"Event '{evt.Title}' added!");
 
-            return RedirectToAction(/*returnUrl*/nameof(Index), new { id = timelineId });
+            ViewBag.TimelineId = timelineId;
+
+            return RedirectToAction(nameof(Index), new { timelineId });
         }
 
         //GET: Timelines/Edit/5
-        public async Task<ActionResult> Edit(string id)
+        [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
+        public async Task<ActionResult> Edit(string timelineId, string eventId)
         {
-            string timelineId;
-            if (TempData.ContainsKey("TimelineId"))
-            {
-                timelineId = (TempData["TimelineId"]).ToString();
-                TempData["TimelineId"] = timelineId;
+            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
 
-                TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, id);
-                return View(timelineEvent);
-            }
-            else
-            {
-                return RedirectToAction("Details", "TimelineEvents");
-            }
+            ViewBag.TimelineId = timelineId;
+
+            return View(timelineEvent);
         }
 
         //POST: Timelines/Edit/5
-        [HttpPost]
+        [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, IFormCollection collection)
         {
             var date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, id);
+            var evt = await TimelineEvent.GetEventAsync(_api, eventId);
             evt.Title = Request.Form["Title"];
             evt.Description = Request.Form["Description"];
             evt.EventDateTime = date;
@@ -141,53 +112,41 @@ namespace AileronAirwaysWeb.Controllers
 
             _flash.Message($"Event '{evt.Title}' edited!");
 
-            if (TempData.ContainsKey("TimelineId"))
-            {
-                string timelineId;
-                timelineId = (TempData["TimelineId"]).ToString();
-                TempData["TimelineId"] = timelineId;
-                return RedirectToAction("Details", "TimelineEvents", new { id = evt.Id });
-            }
-            else
-            {
-                return RedirectToAction("Details", "TimelineEvent", new { id = evt.Id });
-            }
+            return RedirectToAction("Details", "TimelineEvents", new { timelineId, eventId = evt.Id });
         }
 
-
         // GET: Timelines/Delete/5
-        public async Task<ActionResult> Delete(string id)
+        [HttpGet("Timelines/{timelineId}/Events/{eventId}/Delete")]
+        public async Task<ActionResult> Delete(string timelineId, string eventId)
         {
-            string timelineId = (TempData["TimelineId"]).ToString();
-
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, id);
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
 
             // Make sure to unlink from timeline first.
+            // TODO: IdeaGen API currently broken.
             //await evt.UnlinkEventAsync(_api, timelineId);
 
             await evt.DeleteAsync(_api);
 
             _flash.Message($"Event '{evt.Title}' deleted!");
 
-            TempData["TimelineId"] = timelineId;
-            return RedirectToAction("Index", "TimelineEvents", new { id = timelineId });
+            return RedirectToAction("Index", new { id = timelineId });
         }
 
-        // POST: Timelines/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
+        //// POST: Timelines/Delete/5
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

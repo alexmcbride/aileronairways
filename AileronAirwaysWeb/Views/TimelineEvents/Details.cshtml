@@ -6,9 +6,9 @@
 
 <div class="row">
     <div class="col-sm-12">
-        <h2>Event Detail</h2>
+        <h2>@ViewBag.Title &raquo; @Model.Title</h2>
 
-        <p><a asp-action="Index" asp-route-id="@ViewBag.TimelineId">Back to timeline</a></p>
+        <p><a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a></p>
 
         <h3>@Model.Title</h3>
         <p>Date: @Model.EventDateTime</p>

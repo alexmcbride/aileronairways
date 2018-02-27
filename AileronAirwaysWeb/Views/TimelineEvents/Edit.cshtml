@@ -37,7 +37,7 @@
             </div>
 
             <button type="submit" class="btn btn-default">Save</button> |
-            <a asp-action="Details" asp-route-id="@Model.Id">Go back</a>
+            <a asp-action="Details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Go back</a>
         </form>
     </div>
 </div>
