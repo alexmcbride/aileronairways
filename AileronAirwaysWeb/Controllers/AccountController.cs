@@ -243,7 +243,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(TimelinesController.Index), "Home");
+            return RedirectToAction(nameof(TimelinesController.Index), "Timelines");
         }
 
         [HttpPost]
