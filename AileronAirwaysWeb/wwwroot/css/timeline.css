@@ -51,6 +51,13 @@ li {
 }
 
 
+.mainHeader {
+    font-family: Verdana, Geneva, sans-serif;
+    font-weight: bold;
+}
+
+
+
 
 
 
@@ -71,7 +78,7 @@ li {
 /* The actual timeline (the vertical ruler) */
 .timeline {
     position: relative;
-    max-width: 90%;
+    max-width: 100%;
     margin: 0 auto;
 }
 
@@ -157,6 +164,9 @@ li {
 }
 
 
+
+
+
 /* The actual content */
 .eventContent {
     background-color: white;
@@ -170,6 +180,9 @@ li {
     flex-wrap: nowrap;
 }
 
+
+
+/* Subsection of eventContent thats hows date and time and icons */
 .eventDateSection {
     width: 25%;
     height: inherit;
@@ -180,15 +193,19 @@ li {
     border: medium solid #0D1B2E;
     border-width: 0 2px 0 0;
 }
+
+
 .eventBodySection {
     width: 75%;
     height: inherit;
     float: left;
 }
 
-
-
-
+.eventIconDisplay {
+    width: 100%;
+    border: medium solid #0D1B2E;
+    border-width: 2px 0 0 0;
+}
 
 
 
@@ -277,7 +294,7 @@ li {
     width: 20px;
     position: fixed;
     /* z-index: 1;*/
-    top: 80px;
+    top: 0px;
     left: 0;
     background-color: #f0e8eb;
     overflow-x: hidden;
