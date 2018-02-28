@@ -50,11 +50,11 @@ namespace AileronAirwaysWeb.Controllers
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            // Download attachment file and make ID its name.
+            // Download attachment if it doesn't exist in the cache.
             var file = GetCacheFile(attachment);
             if (!IOFile.Exists(file))
             {
-                await attachment.DownloadAsync(_api, Path.Combine(GetCacheFolder(), file));
+                await attachment.DownloadAsync(_api, file);
             }
 
             return Redirect($"~/{CacheFolder}/{attachment.FileName}");
@@ -85,7 +85,7 @@ namespace AileronAirwaysWeb.Controllers
                     }
                     finally
                     {
-                        // Cleanup temo file.
+                        // Cleanup temp file.
                         if (IOFile.Exists(temp))
                         {
                             IOFile.Delete(temp);
