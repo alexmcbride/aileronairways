@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Echelon.TimelineApi.Attachment>
+
+@{
+    ViewData["Title"] = "Attachments";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <a asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { eventId=ViewBag.EventId, attachmentId = item.Id })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+    <div class="form-group">
+        <div class="col-md-10">
+            <p>Upload one or more attachments:</p>
+            <input type="file" name="files" multiple />
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-10">
+            <input type="submit" value="Upload" />
+        </div>
+    </div>
+</form>
