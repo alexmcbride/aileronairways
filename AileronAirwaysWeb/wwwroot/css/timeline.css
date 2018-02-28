@@ -20,6 +20,9 @@ a:hover {
 
 
 
+
+
+
 /*Navigation ------------------------------------------------------------- */
 #navbar {
     width: 100%;
@@ -239,10 +242,15 @@ li {
     border-width: 2px 0 0 0;
 }
 
+.iconSection {
+    float: left;
+    width: 25%;
+}
+
 
 
 /* Media queries - Responsive timeline on screens less than 700px wide */
-@media all and (max-width: 700px) {
+@media all and (max-width: 900px) {
     /* Place the timelime to the left */
     .timeline::after {
         left: 31px;
@@ -365,7 +373,9 @@ li {
 
 
 #eventNameList {
+    width: 100%;
     padding: 5px 5px;
+    
 }
 
 h3.eventDate {
@@ -374,6 +384,18 @@ h3.eventDate {
 }
 
 
+.sidPanelHR {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #0D1B2E;
+    align-content: center;
+}
+
+#searchBox {
+    width: 100%;
+    padding: 10px 0;
+
+}
 
 
 @media screen and (max-height: 450px) {
@@ -385,6 +407,8 @@ h3.eventDate {
             font-size: 18px;
         }
 }
+
+
 
 
 
@@ -426,7 +450,31 @@ i {
 }
 
 
+.upArrow {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+}
 
+
+
+
+.backToTopContainer {
+    width: 100%;
+    padding: 40px 10px 10px 10px;
+    text-align: center;
+}
+
+
+
+
+.backToTop {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+    border: solid black;
+    border-width: 0 6px 6px 0;
+    display: inline-block;
+    padding: 10px;
+}
 
 
 
