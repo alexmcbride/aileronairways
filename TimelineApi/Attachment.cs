@@ -15,6 +15,12 @@ namespace Echelon.TimelineApi
         public string TimelineEventId { get; set; }
         public bool IsDeleted { get; set; }
 
+        [JsonIgnore]
+        public string FileName
+        {
+            get { return Id + Path.GetExtension(Title); }
+        }
+
         public static async Task<Attachment> CreateAsync(ITimelineService api, string timelineEventId, string title)
         {
             string json = await api.PutJsonAsync("TimelineEventAttachment/Create", new
@@ -84,17 +90,14 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task<string> DownloadAsync(ITimelineService api, string directory)
+        public async Task DownloadAsync(ITimelineService api, string filename)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
-            string file = Path.Combine(directory, Title);
 
-            await api.DownloadFileAsync(url, file);
+            await api.DownloadFileAsync(url, filename);
 
             Debug.WriteLine("URL: " + url);
-            Debug.WriteLine("File: " + file);
-
-            return file;
+            Debug.WriteLine("Filename: " + filename);
         }
     }
 }

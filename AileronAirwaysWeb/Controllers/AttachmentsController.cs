@@ -28,6 +28,11 @@ namespace AileronAirwaysWeb.Controllers
             return Path.Combine(_env.WebRootPath, CacheFolder);
         }
 
+        private string GetCacheFile(Attachment attachment)
+        {
+            return Path.Combine(GetCacheFolder(), attachment.FileName);
+        }
+
         // GET: Attachments
         [HttpGet("Events/{eventId}/Attachments")]
         public async Task<ActionResult> Index(string eventId)
@@ -45,14 +50,14 @@ namespace AileronAirwaysWeb.Controllers
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            // Download attachment file if it's not in cache.
-            var file = Path.Combine(GetCacheFolder(), attachment.Title);
+            // Download attachment file and make ID its name.
+            var file = GetCacheFile(attachment);
             if (!IOFile.Exists(file))
             {
-                await attachment.DownloadAsync(_api, GetCacheFolder());
+                await attachment.DownloadAsync(_api, Path.Combine(GetCacheFolder(), file));
             }
 
-            return Redirect($"~/{CacheFolder}/{attachment.Title}");
+            return Redirect($"~/{CacheFolder}/{attachment.FileName}");
         }
 
         // POST: Attachments/Create
@@ -115,7 +120,7 @@ namespace AileronAirwaysWeb.Controllers
             await attachment.DeleteAsync(_api);
 
             // Delete file if it's in local cache.
-            var file = Path.Combine(GetCacheFolder(), attachment.Title);
+            var file = GetCacheFile(attachment);
             if (IOFile.Exists(file))
             {
                 IOFile.Delete(file);
