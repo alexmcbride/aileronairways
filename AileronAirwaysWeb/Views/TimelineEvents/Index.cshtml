@@ -15,13 +15,12 @@
     </div>*@
         <div class="headerSection">
             <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
-            <hr class="displayHR" />
-            <h4>@ViewBag.TimelineCreationTimeStamp </h4>
+            <hr class="headerHR" />
+            <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
         </div>
 
 
         <hr />
-    
 
 
     <div id="mySidenav" class="sidenav">
@@ -33,7 +32,7 @@
         </div>
 
 
-        <hr class="displayHR" />
+        
 
 
 
@@ -58,16 +57,35 @@
         <div class="containerTimeline left">
             <div class="eventContent">
                 <div class="eventDateSection">
-                    <h3 class="eventDate">Nov 18</h3>
-                    <p>11:49:12</p>
+                    <div class="eventDateTime">
+                        <h3 class="eventDate">Nov 18</h3>
+                        <p>11:49:12</p>
+                    </div>
                     <div class="eventIconDisplay">
-                        <span>Ico</span><span>Ico</span><span>Ico</span>
+                        <div class="col-md-4 ">
+                            <div class="eventIcon">&#xe142;</div>
+                            <div class="eventIcon">4</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="eventIcon">&#xe142;</div>
+                            <div class="eventIcon">4</div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="eventIcon">&#xe142;</div>
+                            <div class="eventIcon">4</div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="eventBodySection">
-
-                    <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, vim ea mazim fierent detracto. Ea quis iuvaret expetendis his, te elit voluptua dignissim per, habeo iusto primis ea eam.</p>
+                    <div class="eventContentPadding">
+                        <h3 class="eventDate uppercase">Event 1</h3>
+                        <p>Lorem ipsum dolor sit amet, quo ei simul congue exerci, ad nec admodum perfecto mnesarchum, 
+                        vim ea mazim fierent detracto. Ea quis</p>
+                        <p class="editDelete">
+                            <a href="#">edit</a> / <a href="#">delete</a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
