@@ -58,9 +58,7 @@ namespace AileronAirwaysWeb.Controllers
                 Timeline tLine = await Timeline.CreateAsync(_api,
                     Request.Form["Title"]);
 
-
                 _flash.Message($"Timeline '{tLine.Title}' has been created!");
-
 
                 return RedirectToAction(nameof(Index));
             }

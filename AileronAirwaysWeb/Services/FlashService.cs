@@ -1,7 +1,6 @@
 ﻿using AileronAirwaysWeb.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Razor.TagHelpers;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 
@@ -16,11 +15,6 @@ namespace AileronAirwaysWeb.Services
             _tempData = factory.GetTempData(contextAccessor.HttpContext);
         }
 
-        public void Message(string text)
-        {
-            Message(text, FlashType.Success);
-        }
-
         public Queue<FlashMessage> GetMessages()
         {
             if (_tempData.TryGetValue("flash-queue", out object data))
@@ -33,6 +27,11 @@ namespace AileronAirwaysWeb.Services
         public void PutMessages(Queue<FlashMessage> messages)
         {
             _tempData["flash-queue"] = JsonConvert.SerializeObject(messages);
+        }
+
+        public void Message(string text)
+        {
+            Message(text, FlashType.Success);
         }
 
         public void Message(string text, FlashType type)

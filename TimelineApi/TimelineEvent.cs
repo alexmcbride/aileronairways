@@ -132,8 +132,8 @@ namespace Echelon.TimelineApi
 
         public static async Task UnlinkAndDeleteAsync(ITimelineService api, string timelineId, string timelineEventId)
         {
-            await DeleteAsync(api, timelineEventId);
             await UnlinkEventAsync(api, timelineId, timelineEventId);
+            await DeleteAsync(api, timelineEventId);
         }
 
         public Task EditAsync(ITimelineService api)
