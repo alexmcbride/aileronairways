@@ -1,6 +1,7 @@
 ﻿using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
@@ -19,7 +20,9 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var timelines = await Timeline.GetTimelinesAsync(_api);
+            var timelines = (await Timeline.GetTimelinesAsync(_api))
+                .OrderBy(t => t.CreationTimeStamp)
+                .ToList();
 
             return Ok(timelines);
         }
