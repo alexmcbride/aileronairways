@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
@@ -16,9 +15,18 @@ namespace Echelon.TimelineApi
         public bool IsDeleted { get; set; }
 
         [JsonIgnore]
+        public string Name
+        {
+            get
+            {
+                return $"{Id}{Path.GetExtension(Title)}";
+            }
+        }
+
+        [JsonIgnore]
         public string FileName
         {
-            get { return Id + Path.GetExtension(Title); }
+            get { return $"~/cache/{Name}"; }
         }
 
         public static async Task<Attachment> CreateAsync(ITimelineService api, string timelineEventId, string title)
@@ -41,12 +49,18 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public Task DeleteAsync(ITimelineService api)
+        public async Task DeleteAsync(ITimelineService api, string cacheFolder)
         {
-            return api.PutJsonAsync("TimelineEventAttachment/Delete", new
+            await api.PutJsonAsync("TimelineEventAttachment/Delete", new
             {
                 AttachmentId = Id
             });
+
+            var file = Path.Combine(cacheFolder, Name);
+            if (api.FileExists(file))
+            {
+                api.FileDelete(file);
+            }
         }
 
         public Task<string> GenerateUploadPresignedUrlAsync(ITimelineService api)
@@ -90,14 +104,19 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task DownloadAsync(ITimelineService api, string filename)
+        public async Task DownloadAsync(ITimelineService api, string cacheFolder)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
 
-            await api.DownloadFileAsync(url, filename);
+            // Download attachment if it doesn't exist in the cache.
+            var file = Path.Combine(cacheFolder, Name);
+            if (!api.FileExists(file))
+            {
+                await api.DownloadFileAsync(url, file);
+            }
 
             Debug.WriteLine("URL: " + url);
-            Debug.WriteLine("Filename: " + filename);
+            Debug.WriteLine("Filename: " + file);
         }
     }
 }

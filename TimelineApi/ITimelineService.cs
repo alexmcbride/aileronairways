@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.IO;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
@@ -11,6 +10,7 @@ namespace Echelon.TimelineApi
         Task<string> PutJsonAsync(string resource, object request);
         Task UploadFileAsync(string url, string filename);
         Task DownloadFileAsync(string url, string filename);
-        void RenameFile(string filename, string uploadFileName);
+        bool FileExists(string filename);
+        void FileDelete(string filename);
     }
 }

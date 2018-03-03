@@ -11,8 +11,6 @@ namespace AileronAirwaysWeb.Controllers
 {
     public class AttachmentsController : Controller
     {
-        private const string CacheFolder = "cache";
-
         private readonly ITimelineService _api;
         private readonly IHostingEnvironment _env;
 
@@ -24,13 +22,7 @@ namespace AileronAirwaysWeb.Controllers
 
         private string GetCacheFolder()
         {
-            // Gets the path of the upload folder in wwwroot
-            return Path.Combine(_env.WebRootPath, CacheFolder);
-        }
-
-        private string GetCacheFile(Attachment attachment)
-        {
-            return Path.Combine(GetCacheFolder(), attachment.FileName);
+            return Path.Combine(_env.WebRootPath, "cache");
         }
 
         // GET: Attachments
@@ -50,14 +42,10 @@ namespace AileronAirwaysWeb.Controllers
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            // Download attachment if it doesn't exist in the cache.
-            var file = GetCacheFile(attachment);
-            if (!IOFile.Exists(file))
-            {
-                await attachment.DownloadAsync(_api, file);
-            }
+            await attachment.DownloadAsync(_api, GetCacheFolder());
 
-            return Redirect($"~/{CacheFolder}/{attachment.FileName}");
+            // TODO: write this to deliver file.
+            return Redirect(attachment.FileName);
         }
 
         // POST: Attachments/Create
@@ -117,14 +105,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             // Delete from API.
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
-            await attachment.DeleteAsync(_api);
-
-            // Delete file if it's in local cache.
-            var file = GetCacheFile(attachment);
-            if (IOFile.Exists(file))
-            {
-                IOFile.Delete(file);
-            }
+            await attachment.DeleteAsync(_api, GetCacheFolder());
 
             //_flash.Message($"Deleted attachment");
 

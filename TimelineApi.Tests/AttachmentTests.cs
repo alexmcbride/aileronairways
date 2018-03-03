@@ -46,13 +46,15 @@ namespace Echelon.TimelineApi.Tests
         public async Task AttachmentDelete()
         {
             var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
 
-            await attachment.DeleteAsync(mock.Object);
+            await attachment.DeleteAsync(mock.Object, "cache");
 
             mock.Verify(m => m.PutJsonAsync("TimelineEventAttachment/Delete", It.Is<object>(o => o.VerifyObject("AttachmentId", "ID1"))));
+            mock.Verify(m => m.FileDelete($@"cache\{attachment.Name}"));
         }
 
         [TestMethod]
@@ -64,6 +66,7 @@ namespace Echelon.TimelineApi.Tests
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
 
             Attachment attachment = new Attachment();
+
             attachment.Id = "ID1";
 
             string result = await attachment.GenerateUploadPresignedUrlAsync(mock.Object);
@@ -147,14 +150,32 @@ namespace Echelon.TimelineApi.Tests
             string presignedUrl = "http://www.test.com/presignedurl";
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
+            mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object, "C:\\example");
+            await attachment.DownloadAsync(mock.Object, "cache");
 
-            mock.Verify(m => m.DownloadFileAsync(presignedUrl, "C:\\example\\" + attachment.Title));
+            mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"));
+        }
+
+        [TestMethod]
+        public async Task DownloadAttachmentAlreadyInCache()
+        {
+            string presignedUrl = "http://www.test.com/presignedurl";
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
+            mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+            Attachment attachment = new Attachment();
+            attachment.Id = "ID1";
+            attachment.Title = "filename.docx";
+
+            await attachment.DownloadAsync(mock.Object, "cache");
+
+            mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"), Times.Never());
         }
     }
 }

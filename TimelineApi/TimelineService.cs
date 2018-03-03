@@ -102,5 +102,15 @@ namespace Echelon.TimelineApi
             File.Copy(oldName, newName, overwrite: true);
             File.Delete(oldName);
         }
+
+        public bool FileExists(string filename)
+        {
+            return File.Exists(filename);
+        }
+
+        public void FileDelete(string filename)
+        {
+            File.Delete(filename);
+        }
     }
 }
