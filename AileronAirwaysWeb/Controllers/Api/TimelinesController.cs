@@ -5,6 +5,7 @@ using System.Linq;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
+    [Area("api")]
     [Produces("application/json")]
     [Route("api/timelines")]
     public class TimelinesController : Controller

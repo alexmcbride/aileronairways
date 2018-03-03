@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
+    [Area("api")]
     [Produces("application/json")]
     [Route("api/events")]
     public class TimelineEventsController : Controller
