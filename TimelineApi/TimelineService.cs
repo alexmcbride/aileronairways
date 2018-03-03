@@ -119,5 +119,15 @@ namespace Echelon.TimelineApi
         {
             File.Delete(filename);
         }
+
+        public Stream FileOpenWrite(string filename)
+        {
+            return File.OpenWrite(filename);
+        }
+
+        public void DisposeStream(Stream stream)
+        {
+            stream.Dispose();
+        }
     }
 }

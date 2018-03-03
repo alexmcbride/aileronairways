@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Specialized;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi.Tests
@@ -158,7 +159,7 @@ namespace Echelon.TimelineApi.Tests
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object);
+            await attachment.DownloadOrCacheAsync(mock.Object);
 
             mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"));
         }
@@ -176,7 +177,7 @@ namespace Echelon.TimelineApi.Tests
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object);
+            await attachment.DownloadOrCacheAsync(mock.Object);
 
             mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"), Times.Never());
         }
@@ -220,6 +221,27 @@ namespace Echelon.TimelineApi.Tests
             attachment.Id = "ID1";
 
             Assert.AreEqual(attachment.FileName, "~/cache/ID1.png");
+        }
+
+        [TestMethod]
+        public async Task CreateAndUploadAttachment()
+        {
+            var tempStream = new MemoryStream();
+            var data = new byte[] { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            var mock = new Mock<ITimelineService>();
+            mock.Setup(m => m.PutJsonAsync(It.IsAny<string>(), It.IsAny<object>())).Returns(TestUtils.GetCompletedTask(AttachmentJson));
+            mock.Setup(m => m.FileOpenWrite(It.IsAny<string>())).Returns(tempStream);
+            mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+
+            var uploadStream = new MemoryStream(data);
+
+            await Attachment.CreateAndUploadAsync(mock.Object, "ID1", "test.txt", uploadStream);
+
+            Assert.AreEqual(tempStream.Length, uploadStream.Length);
+            mock.Verify(m => m.PutJsonAsync("TimelineEventAttachment/Create", It.IsAny<object>()));
+            mock.Verify(m => m.UploadFileAsync(It.IsAny<string>(), It.IsAny<string>()));
+            mock.Verify(m => m.FileDelete(It.IsAny<string>()));
         }
     }
 }

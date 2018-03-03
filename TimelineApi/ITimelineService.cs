@@ -1,4 +1,5 @@
 ﻿using System.Collections.Specialized;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
@@ -13,5 +14,7 @@ namespace Echelon.TimelineApi
         Task DownloadFileAsync(string url, string filename);
         bool FileExists(string filename);
         void FileDelete(string filename);
+        Stream FileOpenWrite(string filename);
+        void DisposeStream(Stream stream);
     }
 }

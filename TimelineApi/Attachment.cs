@@ -126,7 +126,7 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task<string> DownloadAsync(ITimelineService api)
+        public async Task<string> DownloadOrCacheAsync(ITimelineService api)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
 
@@ -141,6 +141,43 @@ namespace Echelon.TimelineApi
             Debug.WriteLine("Filename: " + file);
 
             return file;
+        }
+
+        public static async Task<Attachment> CreateAndUploadAsync(ITimelineService api, string eventId, string filename, Stream fileStream)
+        {
+            var attachment = await CreateAsync(api, eventId, filename);
+
+            string temp = Path.GetTempFileName();
+
+            Stream tempStream = null;
+            try
+            {
+                // Save uploaded file to temp file.
+                tempStream = api.FileOpenWrite(temp);
+                await fileStream.CopyToAsync(tempStream);
+            }
+            finally
+            {
+                if (tempStream != null)
+                {
+                    api.DisposeStream(tempStream);
+                }
+            }
+
+            try
+            {
+                // Upload temp file to AWS
+                await attachment.UploadAsync(api, temp);
+            }
+            finally
+            { 
+                if (api.FileExists(temp))
+                {
+                    api.FileDelete(temp);
+                }
+            }
+
+            return attachment;
         }
     }
 }

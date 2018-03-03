@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using IOFile = System.IO.File;
 
@@ -37,7 +38,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            await attachment.DownloadAsync(_api);
+            await attachment.DownloadOrCacheAsync(_api);
 
             return File(attachment.FileName, attachment.ContentType, attachment.Title);
         }
@@ -47,33 +48,11 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(string eventId, List<IFormFile> files)
         {
+            files = files.Where(f => f.Length > 0).ToList();
             foreach (var file in files)
             {
-                if (file.Length > 0)
-                {
-                    string temp = Path.GetTempFileName();
-
-                    try
-                    {
-                        // Copy file to temp directory.
-                        using (var stream = IOFile.OpenWrite(temp))
-                        {
-                            await file.CopyToAsync(stream);
-                        }
-
-                        // Create attachment and upload to AWS
-                        var attachment = await Attachment.CreateAsync(_api, eventId, file.FileName);
-                        await attachment.UploadAsync(_api, temp);
-                    }
-                    finally
-                    {
-                        // Cleanup temp file.
-                        if (IOFile.Exists(temp))
-                        {
-                            IOFile.Delete(temp);
-                        }
-                    }
-                }
+                // Create attachment and upload to AWS
+                await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
             }
 
             //_flash.Message($"Uploaded {files.Count} attachments");
