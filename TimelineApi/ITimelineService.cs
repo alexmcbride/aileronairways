@@ -5,6 +5,7 @@ namespace Echelon.TimelineApi
 {
     public interface ITimelineService
     {
+        string CacheFolder { get; }
         Task<string> GetJsonAsync(string resource);
         Task<string> GetJsonAsync(string resource, NameValueCollection headers);
         Task<string> PutJsonAsync(string resource, object request);

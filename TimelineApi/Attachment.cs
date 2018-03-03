@@ -29,6 +29,28 @@ namespace Echelon.TimelineApi
             get { return $"~/cache/{Name}"; }
         }
 
+        [JsonIgnore]
+        public string ContentType
+        {
+            get
+            {
+                var ext = Path.GetExtension(Title);
+                if (ext == ".png")
+                {
+                    return "image/png";
+                }
+                else if (ext == ".jpg" || ext == ".jpeg")
+                {
+                    return "image/jpeg";
+                }
+                else if (ext == ".gif")
+                {
+                    return "image/gif";
+                }
+                return "application/octet-stream";
+            }
+        }
+
         public static async Task<Attachment> CreateAsync(ITimelineService api, string timelineEventId, string title)
         {
             string json = await api.PutJsonAsync("TimelineEventAttachment/Create", new
@@ -49,14 +71,14 @@ namespace Echelon.TimelineApi
             });
         }
 
-        public async Task DeleteAsync(ITimelineService api, string cacheFolder)
+        public async Task DeleteAsync(ITimelineService api)
         {
             await api.PutJsonAsync("TimelineEventAttachment/Delete", new
             {
                 AttachmentId = Id
             });
 
-            var file = Path.Combine(cacheFolder, Name);
+            var file = Path.Combine(api.CacheFolder, Name);
             if (api.FileExists(file))
             {
                 api.FileDelete(file);
@@ -104,12 +126,12 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task<string> DownloadAsync(ITimelineService api, string cacheFolder)
+        public async Task<string> DownloadAsync(ITimelineService api)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
 
             // Download attachment if it doesn't exist in the cache.
-            var file = Path.Combine(cacheFolder, Name);
+            var file = Path.Combine(api.CacheFolder, Name);
             if (!api.FileExists(file))
             {
                 await api.DownloadFileAsync(url, file);

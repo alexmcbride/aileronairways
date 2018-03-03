@@ -47,11 +47,12 @@ namespace Echelon.TimelineApi.Tests
         {
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+            mock.SetupGet(m => m.CacheFolder).Returns("cache");
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
 
-            await attachment.DeleteAsync(mock.Object, "cache");
+            await attachment.DeleteAsync(mock.Object);
 
             mock.Verify(m => m.PutJsonAsync("TimelineEventAttachment/Delete", It.Is<object>(o => o.VerifyObject("AttachmentId", "ID1"))));
             mock.Verify(m => m.FileDelete($@"cache\{attachment.Name}"));
@@ -151,12 +152,13 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
             mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(false);
+            mock.SetupGet(m => m.CacheFolder).Returns("cache");
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object, "cache");
+            await attachment.DownloadAsync(mock.Object);
 
             mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"));
         }
@@ -168,14 +170,56 @@ namespace Echelon.TimelineApi.Tests
             var mock = new Mock<ITimelineService>();
             mock.Setup(m => m.GetJsonAsync(It.IsAny<string>(), It.IsAny<NameValueCollection>())).Returns(TestUtils.GetCompletedTask(presignedUrl));
             mock.Setup(m => m.FileExists(It.IsAny<string>())).Returns(true);
+            mock.SetupGet(m => m.CacheFolder).Returns("cache");
 
             Attachment attachment = new Attachment();
             attachment.Id = "ID1";
             attachment.Title = "filename.docx";
 
-            await attachment.DownloadAsync(mock.Object, "cache");
+            await attachment.DownloadAsync(mock.Object);
 
             mock.Verify(m => m.DownloadFileAsync(presignedUrl, @"cache\ID1.docx"), Times.Never());
+        }
+
+        [TestMethod]
+        public void AttachmentContentType()
+        {
+            var attachment = new Attachment();
+
+            attachment.Title = "test.png";
+            Assert.AreEqual("image/png", attachment.ContentType);
+
+            attachment.Title = "test.jpg";
+            Assert.AreEqual("image/jpeg", attachment.ContentType);
+
+            attachment.Title = "test.jpeg";
+            Assert.AreEqual("image/jpeg", attachment.ContentType);
+
+            attachment.Title = "test.gif";
+            Assert.AreEqual("image/gif", attachment.ContentType);
+
+            attachment.Title = "test.doc";
+            Assert.AreEqual("application/octet-stream", attachment.ContentType);
+        }
+
+        [TestMethod]
+        public void AttachmentName()
+        {
+            var attachment = new Attachment();
+            attachment.Title = "test.png";
+            attachment.Id = "ID1";
+
+            Assert.AreEqual(attachment.Name, "ID1.png");
+        }
+
+        [TestMethod]
+        public void AttachmentFilename()
+        {
+            var attachment = new Attachment();
+            attachment.Title = "test.png";
+            attachment.Id = "ID1";
+
+            Assert.AreEqual(attachment.FileName, "~/cache/ID1.png");
         }
     }
 }

@@ -9,6 +9,7 @@ using IOFile = System.IO.File;
 
 namespace AileronAirwaysWeb.Controllers
 {
+    [Route("attachments")]
     public class AttachmentsController : Controller
     {
         private readonly ITimelineService _api;
@@ -20,13 +21,8 @@ namespace AileronAirwaysWeb.Controllers
             _env = env;
         }
 
-        private string GetCacheFolder()
-        {
-            return Path.Combine(_env.WebRootPath, "cache");
-        }
-
         // GET: Attachments
-        [HttpGet("Events/{eventId}/Attachments")]
+        [HttpGet("{eventId}")]
         public async Task<ActionResult> Index(string eventId)
         {
             var attachments = await Attachment.GetAttachmentsAsync(_api, eventId);
@@ -36,18 +32,18 @@ namespace AileronAirwaysWeb.Controllers
             return View(attachments);
         }
 
-        [HttpGet("Attachments/{attachmentId}/Download")]
+        [HttpGet("download/{attachmentId}")]
         public async Task<ActionResult> Download(string attachmentId)
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            var file = await attachment.DownloadAsync(_api, GetCacheFolder());
+            await attachment.DownloadAsync(_api);
 
-            return PhysicalFile(file, "application/octet-stream", attachment.Title);
+            return File(attachment.FileName, attachment.ContentType, attachment.Title);
         }
 
         // POST: Attachments/Create
-        [HttpPost("Events/{eventId}/Attachments/Upload")]
+        [HttpPost("upload/{eventId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Upload(string eventId, List<IFormFile> files)
         {
@@ -86,7 +82,7 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         // GET: Attachments/Delete/5
-        [HttpGet("Events/{eventId}/Attachments/{attachmentId}/Delete")]
+        [HttpGet("{eventId}/delete/{attachmentId}")]
         public async Task<ActionResult> Delete(string eventId, string attachmentId)
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
@@ -97,13 +93,13 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         // POST: Attachments/Delete/5
-        [HttpPost("Events/{eventId}/Attachments/{attachmentId}/Delete")]
+        [HttpPost("{eventId}/delete/{attachmentId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string eventId, string attachmentId, IFormCollection collection)
         {
             // Delete from API.
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
-            await attachment.DeleteAsync(_api, GetCacheFolder());
+            await attachment.DeleteAsync(_api);
 
             //_flash.Message($"Deleted attachment");
 

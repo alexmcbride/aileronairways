@@ -34,7 +34,7 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static async void RunTimelineCollectionTestsAsync()
         {
-            var api = new TimelineService(BaseUrl, AuthToken, TenantId);
+            var api = new TimelineService(BaseUrl, AuthToken, TenantId, null);
 
             var timelines = await Timeline.GetAllTimelinesAndEventsAsync(api);
 
@@ -49,28 +49,28 @@ namespace Echelon.TimelineApi.TestConsole
             }
         }
 
-        private static async void RunAttachmentTestsAsync()
-        {
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
+        //private static async void RunAttachmentTestsAsync()
+        //{
+        //    ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId, );
 
-            Console.WriteLine("Getting event");
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(api, "ID2");
-            Console.WriteLine("Done");
-            DisplayTimelineEvent(evt);
+        //    Console.WriteLine("Getting event");
+        //    TimelineEvent evt = await TimelineEvent.GetEventAsync(api, "ID2");
+        //    Console.WriteLine("Done");
+        //    DisplayTimelineEvent(evt);
 
-            Console.WriteLine("Creating attachment");
-            Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title 2");
-            DisplayAttachment(attachment);
-            Console.WriteLine("Done");
+        //    Console.WriteLine("Creating attachment");
+        //    Attachment attachment = await Attachment.CreateAsync(api, evt.Id, "Attachment Title 2");
+        //    DisplayAttachment(attachment);
+        //    Console.WriteLine("Done");
 
-            Console.WriteLine("Uploading attachment");
-            await attachment.UploadAsync(api, "Test4.txt");
-            Console.WriteLine("Done");
+        //    Console.WriteLine("Uploading attachment");
+        //    await attachment.UploadAsync(api, "Test4.txt");
+        //    Console.WriteLine("Done");
 
-            Console.WriteLine("Downloading attachment");
-            await attachment.DownloadAsync(api, @"C:\Users\alexm\Desktop");
-            Console.WriteLine("Done");
-        }
+        //    Console.WriteLine("Downloading attachment");
+        //    await attachment.DownloadAsync(api);
+        //    Console.WriteLine("Done");
+        //}
 
         private static void DisplayAttachment(Attachment attachment)
         {
@@ -85,7 +85,7 @@ namespace Echelon.TimelineApi.TestConsole
 
         private static async void RunTestsAsync()
         {
-            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId);
+            ITimelineService api = new TimelineService(BaseUrl, AuthToken, TenantId, null);
 
             // Get timeline with this ID.
             Timeline timeline = await Timeline.GetTimelineAsync(api, "255c6ab0-79bc-4d2d-8793-bd508c7c39f9");
