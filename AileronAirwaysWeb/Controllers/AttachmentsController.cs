@@ -1,4 +1,5 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Services;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace AileronAirwaysWeb.Controllers
     public class AttachmentsController : Controller
     {
         private readonly ITimelineService _api;
+        private readonly IFlashService _flash;
 
-        public AttachmentsController(ITimelineService api)
+        public AttachmentsController(ITimelineService api, IFlashService flash)
         {
             _api = api;
+            _flash = flash;
         }
 
         // GET: Attachments
@@ -60,7 +63,7 @@ namespace AileronAirwaysWeb.Controllers
                 await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
             }
 
-            //_flash.Message($"Uploaded {files.Count} attachments");
+            _flash.Message($"Uploaded {files.Count} attachments");
 
             return RedirectToAction(nameof(Index), new { eventId });
         }
@@ -85,7 +88,7 @@ namespace AileronAirwaysWeb.Controllers
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
             await attachment.DeleteAsync(_api);
 
-            //_flash.Message($"Deleted attachment");
+            _flash.Message($"Deleted attachment");
 
             return RedirectToAction(nameof(Index), new { eventId });
         }

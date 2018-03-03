@@ -22,35 +22,6 @@ namespace AileronAirwaysWeb
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
-
-            // Add application services.
-            services.AddTransient<IEmailSender, EmailSender>();
-
-            // Add MVC nand allow of temp data.
-            services.AddMvc()
-                .AddSessionStateTempDataProvider();
-
-            services.AddSession();
-
-            // Add timeline service.
-            services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(
-                Configuration.GetValue<string>("BaseUrl"), 
-                Configuration.GetValue<string>("AuthToken"), 
-                Configuration.GetValue<string>("TenantId")));
-
-            // Add service for handling flasg temp messages.
-            services.AddTransient<IFlashService, FlashService>();
-        }
-
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -109,6 +80,9 @@ namespace AileronAirwaysWeb
                 _env.WebRootPath));
 
             services.AddMvc();
+
+            // Add service for handling flasg temp messages.
+            services.AddTransient<IFlashService, FlashService>();
         }
     }
 }

@@ -25,7 +25,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         }
 
         // GET: api/attachments/abc123
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, id);

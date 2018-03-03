@@ -28,7 +28,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         }
 
         // GET: api/timelines/abc123
-        [HttpGet("{id}", Name = "Get")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var timeline = await Timeline.GetTimelineAsync(_api, id);
