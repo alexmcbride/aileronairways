@@ -34,7 +34,7 @@ namespace AileronAirwaysWeb.Controllers.Api
             return Ok(attachment);
         }
 
-        // DELETE: api/ApiWithActions/5
+        // DELETE: api/attachments/abc123
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {

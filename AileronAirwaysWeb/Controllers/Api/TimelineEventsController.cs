@@ -19,7 +19,7 @@ namespace AileronAirwaysWeb.Controllers.Api
             _api = api;
         }
 
-        // GET: api/events/all/<timelineId>
+        // GET: api/events/all/abc123
         [HttpGet("all/{timelineId}")]
         public async Task<IActionResult> GetAll(string timelineId)
         {
@@ -30,7 +30,7 @@ namespace AileronAirwaysWeb.Controllers.Api
             return Ok(events);
         }
 
-        // GET: api/events/{id}
+        // GET: api/events/abc123
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
@@ -61,7 +61,7 @@ namespace AileronAirwaysWeb.Controllers.Api
             return Ok(@event);
         }
 
-        // PUT: api/events/{id}
+        // PUT: api/events/abc123
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]TimelineEvent value)
         {
@@ -75,7 +75,7 @@ namespace AileronAirwaysWeb.Controllers.Api
             return Ok(@event);
         }
 
-        // DELETE: api/events/{id}
+        // DELETE: api/events/abc123
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
