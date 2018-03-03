@@ -57,13 +57,15 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Upload(string eventId, List<IFormFile> files)
         {
             files = files.Where(f => f.Length > 0).ToList();
+
             foreach (var file in files)
             {
                 // Create attachment and upload to AWS
                 await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
             }
 
-            _flash.Message($"Uploaded {files.Count} attachments");
+            var s = files.Count > 1 ? "s" : "";
+            _flash.Message($"Uploaded {files.Count} attachment{s}");
 
             return RedirectToAction(nameof(Index), new { eventId });
         }
