@@ -36,16 +36,14 @@ namespace AileronAirwaysWeb.Controllers
             return View(attachments);
         }
 
-        // GET: Attachments/Details/5
         [HttpGet("Attachments/{attachmentId}/Download")]
         public async Task<ActionResult> Download(string attachmentId)
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
 
-            await attachment.DownloadAsync(_api, GetCacheFolder());
+            var file = await attachment.DownloadAsync(_api, GetCacheFolder());
 
-            // TODO: write this to deliver file.
-            return Redirect(attachment.FileName);
+            return PhysicalFile(file, "application/octet-stream", attachment.Title);
         }
 
         // POST: Attachments/Create

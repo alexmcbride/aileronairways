@@ -104,7 +104,7 @@ namespace Echelon.TimelineApi
             await api.UploadFileAsync(url, filename);
         }
 
-        public async Task DownloadAsync(ITimelineService api, string cacheFolder)
+        public async Task<string> DownloadAsync(ITimelineService api, string cacheFolder)
         {
             string url = await GenerateGetPresignedUrlAsync(api);
 
@@ -117,6 +117,8 @@ namespace Echelon.TimelineApi
 
             Debug.WriteLine("URL: " + url);
             Debug.WriteLine("Filename: " + file);
+
+            return file;
         }
     }
 }
