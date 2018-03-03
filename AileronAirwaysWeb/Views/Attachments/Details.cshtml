@@ -13,7 +13,7 @@
     <h3>@Html.DisplayFor(model => model.Title)</h3>
 
     <div>
-        <img src="@Url.Action("Download", "Attachments", new { attachmentId=Model.Id })" />
+        <img src="@Url.AttachmentLink(Model)" />
     </div>
 
 </div>
