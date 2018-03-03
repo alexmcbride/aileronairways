@@ -30,7 +30,7 @@ namespace Microsoft.AspNetCore.Mvc
 
         public static string AttachmentLink(this IUrlHelper helper, string attachmentId)
         {
-            return helper.Action("download", "attachments", new { id = attachmentId });
+            return helper.Action("download", "attachments", new { attachmentId });
         }
     }
 }
