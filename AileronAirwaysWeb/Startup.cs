@@ -74,7 +74,7 @@ namespace AileronAirwaysWeb
             services.AddSession();
 
             // Add timeline service.
-            services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(
+            services.AddSingleton<ITimelineService, TimelineService>((i) => new TimelineService(
                 Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId"),
