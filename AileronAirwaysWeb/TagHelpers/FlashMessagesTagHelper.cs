@@ -3,18 +3,24 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AileronAirwaysWeb.TagHelpers
 {
-    [HtmlTargetElement("div", Attributes = "flash-messages")]
-    public class FlashTagHelper : TagHelper
+    [HtmlTargetElement("flash-messages")]
+    public class FlashMessagesTagHelper : TagHelper
     {
         private readonly IFlashService _flashService;
 
-        public FlashTagHelper(IFlashService flashService)
+        public FlashMessagesTagHelper(IFlashService flashService)
         {
             _flashService = flashService;
         }
 
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
+            // Switch custom tag to div with class.
+            output.TagName = "div";
+            output.Attributes.SetAttribute("class", "flash-messages");
+            output.TagMode = TagMode.StartTagAndEndTag;
+
+            // Get messages and add a new Bootstrap alert for each one.
             var messages = _flashService.GetMessages();
             foreach (var message in messages)
             {
