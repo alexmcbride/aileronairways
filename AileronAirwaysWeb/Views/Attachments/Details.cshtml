@@ -1,0 +1,25 @@
+﻿@model Echelon.TimelineApi.Attachment
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Attachment</h4>
+    <hr>
+
+    <h3>@Html.DisplayFor(model => model.Title)</h3>
+
+    <div>
+        <img src="@Url.AttachmentLink(Model)" />
+    </div>
+
+</div>
+
+<br>
+
+<div>
+    <a asp-action="Index" asp-route-eventId="@ViewBag.EventId">Back to List</a>
+</div>

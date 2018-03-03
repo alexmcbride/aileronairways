@@ -13,15 +13,22 @@ namespace Echelon.TimelineApi
         private readonly string _authToken;
         private readonly string _tenantId;
 
-        public TimelineService(string baseUrl, string authToken, string tenantId)
-            : this(baseUrl, authToken, tenantId, new WebClientHelper()) { }
+        public string CacheFolder { get; private set; }
 
-        public TimelineService(string baseUrl, string authToken, string tenantId, IWebClientHelper helper)
+        public TimelineService(string baseUrl, string authToken, string tenantId, string rootFolder)
+            : this(baseUrl, authToken, tenantId, rootFolder, new WebClientHelper()) { }
+
+        public TimelineService(string baseUrl, string authToken, string tenantId, string rootFolder, IWebClientHelper helper)
         {
             _helper = helper;
             _baseUrl = baseUrl;
             _authToken = authToken;
             _tenantId = tenantId;
+
+            if (!string.IsNullOrEmpty(rootFolder))
+            {
+                CacheFolder = Path.Combine(rootFolder, "cache");
+            }
         }
 
         private string GetUrl(string resource)
@@ -95,6 +102,32 @@ namespace Echelon.TimelineApi
         public Task DownloadFileAsync(string url, string filename)
         {
             return _helper.DownloadFileAsync(url, filename);
+        }
+
+        public void RenameFile(string oldName, string newName)
+        {
+            File.Copy(oldName, newName, overwrite: true);
+            File.Delete(oldName);
+        }
+
+        public bool FileExists(string filename)
+        {
+            return File.Exists(filename);
+        }
+
+        public void FileDelete(string filename)
+        {
+            File.Delete(filename);
+        }
+
+        public Stream FileOpenWrite(string filename)
+        {
+            return File.OpenWrite(filename);
+        }
+
+        public void DisposeStream(Stream stream)
+        {
+            stream.Dispose();
         }
     }
 }
