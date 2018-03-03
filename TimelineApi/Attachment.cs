@@ -17,10 +17,7 @@ namespace Echelon.TimelineApi
         [JsonIgnore]
         public string Name
         {
-            get
-            {
-                return $"{Id}{Path.GetExtension(Title)}";
-            }
+            get { return $"{Id}{Path.GetExtension(Title)}"; }
         }
 
         [JsonIgnore]
@@ -34,6 +31,7 @@ namespace Echelon.TimelineApi
         {
             get
             {
+                // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Complete_list_of_MIME_types
                 var ext = Path.GetExtension(Title);
                 if (ext == ".png")
                 {
@@ -47,7 +45,7 @@ namespace Echelon.TimelineApi
                 {
                     return "image/gif";
                 }
-                return "application/octet-stream";
+                return "application/octet-stream"; // General file content type.
             }
         }
 
@@ -148,29 +146,13 @@ namespace Echelon.TimelineApi
             var attachment = await CreateAsync(api, eventId, filename);
 
             string temp = Path.GetTempFileName();
-
-            Stream tempStream = null;
             try
             {
-                // Save uploaded file to temp file.
-                tempStream = api.FileOpenWrite(temp);
-                await fileStream.CopyToAsync(tempStream);
-            }
-            finally
-            {
-                if (tempStream != null)
-                {
-                    api.DisposeStream(tempStream);
-                }
-            }
-
-            try
-            {
-                // Upload temp file to AWS
+                await CopyFileFromStream(api, fileStream, temp);
                 await attachment.UploadAsync(api, temp);
             }
             finally
-            { 
+            {
                 if (api.FileExists(temp))
                 {
                     api.FileDelete(temp);
@@ -178,6 +160,24 @@ namespace Echelon.TimelineApi
             }
 
             return attachment;
+        }
+
+        private static async Task CopyFileFromStream(ITimelineService api, Stream stream, string tempFile)
+        {
+            Stream tempStream = null;
+            try
+            {
+                tempStream = api.FileOpenWrite(tempFile);
+                await stream.CopyToAsync(tempStream);
+            }
+            finally
+            {
+                // We do it like this to prevent "object disposed" errors in tests.
+                if (tempStream != null)
+                {
+                    api.DisposeStream(tempStream);
+                }
+            }
         }
     }
 }
