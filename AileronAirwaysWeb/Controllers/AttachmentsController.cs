@@ -3,10 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using IOFile = System.IO.File;
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -31,6 +29,16 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.EventId = eventId;
 
             return View(attachments);
+        }
+
+        [HttpGet("{eventId}/details/{attachmentId}")]
+        public async Task<ActionResult> Details(string eventId, string attachmentId)
+        {
+            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
+
+            ViewBag.EventId = eventId;
+
+            return View(attachment);
         }
 
         [HttpGet("download/{attachmentId}")]

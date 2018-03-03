@@ -49,6 +49,11 @@ namespace Echelon.TimelineApi
             }
         }
 
+        public bool IsImage
+        {
+            get { return ContentType != "application/octet-stream"; }
+        }
+
         public static async Task<Attachment> CreateAsync(ITimelineService api, string timelineEventId, string title)
         {
             string json = await api.PutJsonAsync("TimelineEventAttachment/Create", new

@@ -24,7 +24,14 @@
                     {
                         <tr>
                             <td>
-                                <a asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                @if (item.IsImage)
+                                {
+                                    <a asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                }
                             </td>
                             <td>
                                 @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
