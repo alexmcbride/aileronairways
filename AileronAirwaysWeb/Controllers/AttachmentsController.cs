@@ -1,5 +1,4 @@
 ﻿using Echelon.TimelineApi;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,12 +11,10 @@ namespace AileronAirwaysWeb.Controllers
     public class AttachmentsController : Controller
     {
         private readonly ITimelineService _api;
-        private readonly IHostingEnvironment _env;
 
-        public AttachmentsController(ITimelineService api, IHostingEnvironment env)
+        public AttachmentsController(ITimelineService api)
         {
             _api = api;
-            _env = env;
         }
 
         // GET: Attachments
