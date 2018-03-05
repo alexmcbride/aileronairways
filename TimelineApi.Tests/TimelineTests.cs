@@ -12,7 +12,7 @@ namespace Echelon.TimelineApi.Tests
         private const string TimelineJson = "{\"Id\": \"ID1\", \"Title\": \"Test Title\", \"CreationTimeStamp\": \"636544632390000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}";
         private const string TimelinesJson = "[{\"Id\": \"ID1\", \"Title\": \"Test Title\", \"CreationTimeStamp\": \"636544632390000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}," +
             "{\"Id\": \"ID2\", \"Title\": \"Test Title 2\", \"CreationTimeStamp\": \"636544632350000000\", \"IsDeleted\": true, \"TenantId\": \"123\"}]";
-        private const string TimelinesAndEventsJson = "{\"Timelines\":[{\"Id\":\"ID1\",\"Title\":\"Test Title 1\",\"CreationTimeStamp\":\"636546486983802709\",\"IsDeleted\":true,\"TimelineEvents\":[{\"Id\":\"ID3\",\"Title\":\"Test Title\",\"EventDateTime\":\"636543763200000000\",\"Description\":\"Text description\",\"IsDeleted\":true,\"Location\":\"-1.1234,1.1234\"},{\"Id\":\"ID4\",\"Title\":\"Test Title\",\"EventDateTime\":\"636543763200000000\",\"Description\":\"Text description\",\"IsDeleted\":true,\"Location\":\"-1.1234,1.1234\"}]},{\"Id\":\"ID2\",\"Title\":\"Test Title\",\"CreationTimeStamp\":\"636546486983802709\",\"IsDeleted\":true,\"TimelineEvents\":[{\"Id\":\"0b3ed256-269b-4219-ad63-6ddd30c7b5f4\",\"Title\":\"Test Title\",\"EventDateTime\":\"636543763200000000\",\"Description\":\"Text description\",\"IsDeleted\":true,\"Location\":\"-1.1234,1.1234\"}]}]}";
+        private const string TimelinesAndEventsJson = "{\"Timelines\":[{\"Id\":\"ID1\",\"Title\":\"Test Title\",\"CreationTimeStamp\":\"636556035550930601\",\"IsDeleted\":true,\"TimelineEvents\":[{\"Id\":\"ID2\",\"Title\":\"Event Title\",\"EventDateTime\":\"636556036027960000\",\"Description\":\"Event description\",\"IsDeleted\":true,\"Location\":\"-1.1234,1.3424\",\"LinkedTimelineEventIds\":[],\"Attachments\":[{\"Id\":\"ID3\",\"Title\":\"attachment.txt\",\"TimelineEventId\":\"ID2\",\"IsDeleted\":true},{\"Id\":\"ID4\",\"Title\":\"attachment.txt\",\"TimelineEventId\":\"ID2\",\"IsDeleted\":false}]},{\"Id\":\"ID5\",\"Title\":\"Event Title\",\"EventDateTime\":\"636556036027960000\",\"Description\":\"Event description\",\"IsDeleted\":true,\"Location\":\"-1.1234,1.3424\",\"LinkedTimelineEventIds\":[],\"Attachments\":[{\"Id\":\"ID6\",\"Title\":\"attachment.txt\",\"TimelineEventId\":\"ID5\",\"IsDeleted\":true},{\"Id\":\"ID7\",\"Title\":\"attachment.txt\",\"TimelineEventId\":\"ID5\",\"IsDeleted\":false}]}]}]}";
 
         [TestMethod]
         public async Task TimelineCreate()
@@ -98,9 +98,9 @@ namespace Echelon.TimelineApi.Tests
 
             var timelines = await Timeline.GetAllTimelinesAndEventsAsync(mock.Object);
 
-            Assert.AreEqual(timelines.Count, 2);
+            Assert.AreEqual(timelines.Count, 1);
             Assert.AreEqual(timelines[0].TimelineEvents.Count, 2);
-            Assert.AreEqual(timelines[1].TimelineEvents.Count, 1);
+            Assert.AreEqual(timelines[0].TimelineEvents[0].Attachments.Count, 2);
         }
     }
 }
