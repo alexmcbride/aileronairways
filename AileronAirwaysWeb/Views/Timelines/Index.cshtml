@@ -9,33 +9,158 @@
 <p>
     <a asp-action="Create">Create New Timeline</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTimeStamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+
+<a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary"> create newe timeline</a>
+@*<table class="table">
+        <thead>
             <tr>
-                <td>
-                    <a asp-controller="TimelineEvents" asp-action="Index" asp-route-timelineId="@item.Id">@item.Title</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationTimeStamp)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-controller="timelines" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-controller="timelines" asp-route-id="@item.Id">Delete</a>
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreationTimeStamp)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-controller="TimelineEvents" asp-action="Index" asp-route-timelineId="@item.Id">@item.Title</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationTimeStamp)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-controller="timelines" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-controller="timelines" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
+
+<div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
+
+        <thead>
+            <tr>
+                <th style="max-width:55%">Title</th>
+                <th style="width:15%">Date Created</th>
+                <th style="width:30%">Link</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+
+    </table>
+</div>
+
+@section scripts
+    {
+    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
+
+
+
+    <script>
+        var createtimelineurl = "@Url.Action("Create", "Timelines")";
+        $(function () {
+            $(".modal-link-create-timeline").click(function () {
+                //debugger;
+                    var $buttonClicked = $(this);
+                    var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: createtimelineurl,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        //debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+    </script>
+
+
+
+
+    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
+    <script>
+        $(document).ready(function () {
+                    $.ajax({
+                        /**/
+                        url: "@Url.Action("GetJsonTimelines", "Timelines")",
+                        method: 'GET',
+                        datatype: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        table: '#tbltimelines',
+                        //idSrc: 'id',
+                        //rowId: 'id',
+                        success: function (jsondata) {
+                             //debugger;
+                             var table = $('#tbltimelines').DataTable({
+                                data: jsondata,
+                                columns: [
+                                    @*{ visible: false },
+                                    //null,
+                                    //null,
+                                    //{ data: 'id'},*@
+                                    { mRender: function (data, type, row) { return '<a href="/TimelineEvents/Index/' + row.id + '">' + row.title +'</a> ' } },
+                                    { data: 'creationTimeStamp' },
+                                    {
+                                        // this is Actions Column
+                                        mRender: function (data, type, row) {
+                                            return '<a href="javascript:void(0);" class="modal-link-edit-timeline btn btn-primary" onclick="editTimeline()" data-id="' + row.id + '" >Edit</a> ' + '<a class="btn btn-danger" href="/Timelines/Delete/' + row.id + '" onclick="return confirm(\'Are you sure you wish to delete this event?\');">Delete</a>';
+                                        }
+                                    }
+                                ]
+                            });
+                            console.log(jsondata);
+                        }
+                    });
+                });
+    </script>
+    <script>
+            function editTimeline() {
+
+                 var edittimelineurl = "@Url.Action("Edit", "Timelines")";
+
+                    var $buttonClicked = $(this);
+                    var id = "82f150f6-86ec-4b6a-ae49-d7c34bbf3921"@*$buttonClicked.attr('data-id')*@;
+                    var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: edittimelineurl,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "Id": id },
+                    datatype: "json",
+                    success: function (data) {
+                        //debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            }
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+
+
+    </script>
+}
