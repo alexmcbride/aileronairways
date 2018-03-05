@@ -17,13 +17,28 @@ namespace AileronAirwaysWeb.Controllers.Api
             _api = api;
         }
 
+        // TODO: remove this and other VMs once they've been done properly.
+        public class TimelineViewModel
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
+            public string CreationTimeStamp { get; set; }
+            public bool IsDeleted { get; set; }
+        }
+
         // GET: api/timelines
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var timelines = (await Timeline.GetTimelinesAsync(_api))
                 .OrderBy(t => t.CreationTimeStamp)
-                .ToList();
+                .Select(t => new TimelineViewModel
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    CreationTimeStamp = t.CreationTimeStamp.ToShortDateString() + " " + t.CreationTimeStamp.ToShortTimeString(),
+                    IsDeleted = t.IsDeleted
+                }).ToList();
 
             return Ok(timelines);
         }

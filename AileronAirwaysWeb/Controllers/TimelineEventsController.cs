@@ -61,7 +61,7 @@ namespace AileronAirwaysWeb.Controllers
             TimelineEvent evt = new TimelineEvent();
             evt.EventDateTime = DateTime.Now;
 
-            return View(evt);
+            return PartialView(evt);
         }
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
@@ -85,14 +85,14 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         //GET: Timelines/Edit/5
-        [HttpGet("Timelines/{timelineId}/Events/Edit")]
-        public async Task<ActionResult> Edit(string timelineId, string id)
+        [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
+        public async Task<ActionResult> Edit(string timelineId, string eventId)
         {
-            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, id);
+            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
 
             ViewBag.TimelineId = timelineId;
 
-            return View(timelineEvent);
+            return PartialView(timelineEvent);
         }
 
         //POST: Timelines/Edit/5

@@ -23,11 +23,12 @@ namespace AileronAirwaysWeb.Controllers
 
         // GET: Attachments
         [HttpGet("{eventId}")]
-        public async Task<ActionResult> Index(string eventId)
+        public async Task<ActionResult> Index(string timelineId, string eventId)
         {
             var attachments = await Attachment.GetAttachmentsAsync(_api, eventId);
 
             ViewBag.EventId = eventId;
+            ViewBag.TimelineId = timelineId;
 
             return View(attachments);
         }
