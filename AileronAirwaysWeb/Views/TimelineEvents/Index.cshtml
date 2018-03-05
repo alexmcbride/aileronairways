@@ -108,7 +108,7 @@
                                     }
                                 </p>
                                 <p class="editDelete">
-                                    <a href="javascript:void(0);" class="modal-link-edit btn btn-primary" data-id="@item.Id"> Edit</a>
+                                    <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id"> Edit</a>
                                     /
                                     <a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>
                                 </p>
@@ -197,11 +197,9 @@
         }
 
         function closeNav() {
-
             document.getElementById("mySidenav").style.width = "20px";
             document.getElementById("mainSidePanel").style.marginLeft = "20px";
             document.getElementById("rightArrowVisibility").style.visibility = 'visible';
-
         }
 
         function topFunction() {

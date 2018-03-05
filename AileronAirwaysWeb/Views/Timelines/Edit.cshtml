@@ -19,7 +19,7 @@
                 <p>Edit the timeline</p>
 
                 <div class="form-group">
-                    <input asp-for="Title" class="form-control" placeholder=@ViewData["EditTitle"] />
+                    <input asp-for="Title" class="form-control" value=@ViewData["EditTitle"] />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
