@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
@@ -22,24 +21,6 @@ namespace AileronAirwaysWeb.Controllers
             _flash = flash;
         }
 
-        [DataContract]
-        internal class jsonTimeline
-        {
-            [DataMember]
-            internal string Id;
-
-            [DataMember]
-            internal string Title;
-
-            [DataMember]
-            internal string CreationTimeStamp;
-
-            [DataMember]
-            internal bool IsDeleted;
-            //[DataMember]
-            //internal string Link;
-        }
-
         // GET: Timelines
         public async Task<ActionResult> Index()
         {
@@ -49,25 +30,6 @@ namespace AileronAirwaysWeb.Controllers
                 .ToList();
 
             return View(timelines);
-        }
-
-        public async Task<JsonResult> GetJsonTimelines()
-        {
-            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api)).Where(t => !t.IsDeleted).OrderByDescending(t => t.CreationTimeStamp).ToList();
-            List<jsonTimeline> jsontimelines = new List<jsonTimeline>();
-            foreach (Timeline t in timelines)
-            {
-                jsontimelines.Add(new jsonTimeline
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    CreationTimeStamp = t.CreationTimeStamp.ToShortDateString() + " " + t.CreationTimeStamp.ToShortTimeString(),
-                    IsDeleted = t.IsDeleted,
-                    //link = @"<a asp-action=""Edit"" asp-route-id=""table.row(this).id()"">Edit</a> | <a asp-action=""elete"" asp-route-id=""table.row(this).id()"">Delete</a>"
-                });
-            }
-            jsontimelines.Where(t => !t.IsDeleted).OrderByDescending(t => t.CreationTimeStamp).ToList();
-            return Json(jsontimelines);
         }
 
         // GET: Timelines/Details/5
@@ -81,7 +43,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: Timelines/Create
@@ -91,18 +53,15 @@ namespace AileronAirwaysWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                Timeline timeline = await Timeline.CreateAsync(_api, Request.Form["Title"]);
 
-                Timeline tLine = await Timeline.CreateAsync(_api,
-                    Request.Form["Title"]);
-
-                _flash.Message($"Timeline '{tLine.Title}' has been created!");
+                _flash.Message("Timeline created!");
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return PartialView();
             }
         }
 
@@ -112,7 +71,7 @@ namespace AileronAirwaysWeb.Controllers
             Timeline t = await Timeline.GetTimelineAsync(_api, id);
             ViewData["EditTitle"] = t.Title;
 
-            return View();
+            return PartialView();
         }
 
         // POST: Timelines/Edit/5
@@ -122,20 +81,18 @@ namespace AileronAirwaysWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-
                 Timeline tline = await Timeline.GetTimelineAsync(_api, id);
                 tline.Title = Request.Form["Title"];
 
                 await tline.EditTitleAsync(_api);
 
-                _flash.Message($"Timeline '{tline.Title}' has been edited!");
+                _flash.Message("Timeline has been edited!");
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return PartialView();
             }
         }
         // GET: Timelines/Delete/5
@@ -144,7 +101,7 @@ namespace AileronAirwaysWeb.Controllers
             Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
             await tline.DeleteAsync(_api);
 
-            _flash.Message($"Timeline '{tline.Title}' has been deleted!");
+            _flash.Message("Timeline has been deleted!");
 
             return RedirectToAction(nameof(Index));
         }

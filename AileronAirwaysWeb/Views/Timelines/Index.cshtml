@@ -7,12 +7,6 @@
 
 <h2>@ViewData["Title"]</h2>
 
-<p>
-    @*<a asp-action="Create" asp-route-id="@ViewBag.TimelineId">Create New Timeline</a>*@
-    <a href="javascript:void(0);" class="modal-link-create-timeline"> create newe timeline</a>
-    <a href="javascript:void(0);" class="modal-link-edit-timeline"> create newe timeline</a>
-
-</p>
 <div id='myModal' class='modal'>
     <div class="modal-dialog">
         <div class="modal-content">
@@ -21,41 +15,12 @@
     </div>
 </div>
 
-<a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary"> create newe timeline</a>
-@*<table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Title)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.CreationTimeStamp)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        <a asp-controller="TimelineEvents" asp-action="Index" asp-route-timelineId="@item.Id">@item.Title</a>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CreationTimeStamp)
-                    </td>
-                    <td>
-                        <a asp-action="Edit" asp-controller="timelines" asp-route-id="@item.Id">Edit</a> |
-                        <a asp-action="Delete" asp-controller="timelines" asp-route-id="@item.Id">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>*@
+<p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
+
+<hr>
 
 <div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
     <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
-
         <thead>
             <tr>
                 <th style="max-width:55%">Title</th>
@@ -64,15 +29,12 @@
             </tr>
         </thead>
         <tbody></tbody>
-
     </table>
 </div>
 
 @section scripts
     {
     <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
-
-
 
     <script>
         var createtimelineurl = "@Url.Action("Create", "Timelines")";
@@ -102,17 +64,10 @@
             });
         });
 
-    </script>
-
-
-
-
-    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
-    <script>
         $(document).ready(function () {
                     $.ajax({
                         /**/
-                        url: "@Url.Action("GetJsonTimelines", "Timelines")",
+                        url: "api/timelines",
                         method: 'GET',
                         datatype: 'json',
                         contentType: "application/json; charset=utf-8",
@@ -142,8 +97,7 @@
                         }
                     });
                 });
-    </script>
-    <script>
+
             function editTimeline() {
 
                  var edittimelineurl = "@Url.Action("Edit", "Timelines")";
