@@ -85,10 +85,10 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         //GET: Timelines/Edit/5
-        [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
-        public async Task<ActionResult> Edit(string timelineId, string eventId)
+        [HttpGet("Timelines/{timelineId}/Events/Edit")]
+        public async Task<ActionResult> Edit(string timelineId, string id)
         {
-            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
+            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, id);
 
             ViewBag.TimelineId = timelineId;
 

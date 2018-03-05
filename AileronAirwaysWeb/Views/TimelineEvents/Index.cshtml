@@ -41,7 +41,7 @@
         </div>
 
         <div id="eventNameList">
-            
+
             @foreach (var item in Model)
             {
                 <a href="#">@item.Title</a>
@@ -111,7 +111,7 @@
                                     }
                                 </p>
                                 <p class="editDelete">
-                                    <a href="#">edit</a> / <a href="#">delete</a>
+                                    <a href="javascript:void(0);" class="modal-link-edit btn btn-primary" data-id="@item.Id"> Edit</a> / <a href="#">delete</a>
                                 </p>
                             </div>
                         </div>
@@ -129,7 +129,7 @@
 
 
 
-
+        <a href="javascript:void(0);" class="modal-link-create"> create new event</a>
     </div>
     <div class="backToTopContainer">
 
@@ -142,31 +142,6 @@
 
 
 
-<script>
-    function openNav() {
-
-        document.getElementById("mySidenav").style.width = "200px";
-        document.getElementById("mainSidePanel").style.marginLeft = "200px";
-        document.getElementById("rightArrowVisibility").style.visibility = 'hidden';
-
-    }
-
-    function closeNav() {
-
-        document.getElementById("mySidenav").style.width = "20px";
-        document.getElementById("mainSidePanel").style.marginLeft = "20px";
-        document.getElementById("rightArrowVisibility").style.visibility = 'visible';
-
-    }
-
-</script>
-
-<script>
-    function topFunction() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-    }
-</script>
 
 
 
@@ -220,4 +195,108 @@
         </tbody>
     </table>*@
 
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
 
+</div>
+
+@section Scripts{
+
+
+    <script>
+        function openNav() {
+
+            document.getElementById("mySidenav").style.width = "200px";
+            document.getElementById("mainSidePanel").style.marginLeft = "200px";
+            document.getElementById("rightArrowVisibility").style.visibility = 'hidden';
+
+        }
+
+        function closeNav() {
+
+            document.getElementById("mySidenav").style.width = "20px";
+            document.getElementById("mainSidePanel").style.marginLeft = "20px";
+            document.getElementById("rightArrowVisibility").style.visibility = 'visible';
+
+        }
+
+    </script>
+
+    <script>
+        function topFunction() {
+            document.body.scrollTop = 0;
+            document.documentElement.scrollTop = 0;
+        }
+    </script>
+
+
+
+    <script>
+        var createurl = "@Url.Action("Create", "TimelineEvents")"@*'/TimelineEvents/Create'*@;
+        $(function () {
+            $(".modal-link-create").click(function () {
+                debugger;
+                    var $buttonClicked = $(this);
+                    //var id = $buttonClicked.attr('data-id');
+                    var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: createurl,
+                    contentType: "application/json; charset=utf-8",
+                    //data: { "Id": id},
+                    datatype: "json",
+                    success: function (data) {
+                        debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+    </script>
+
+    <script>
+        var editurl = "/Timelines/"+"@ViewBag.TimelineId"+"/Events/Edit";
+        @*"@Url.Action("Edit", "TimelineEvents", new {timelineId=ViewBag.TimelineId })"@*'"Timelines/{ timelineId } /Events/{eventId } /Edit"'*@
+        $(function () {
+            $(".modal-link-edit").click(function () {
+                    debugger;
+                    var $buttonClicked = $(this);
+                    var id = $buttonClicked.attr('data-id');
+                    var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: editurl,
+                    contentType: "application/json; charset=utf-8",
+                    data: { "Id": id },
+                    datatype: "json",
+                    success: function (data) {
+                        debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+    </script>
+
+}
