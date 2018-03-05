@@ -2,56 +2,222 @@
 @{
     ViewData["Title"] = "Timeline Events";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+
 }
 
-<h2>`@ViewBag.TimelineTitle` Timeline</h2>
+<button id="addEventBtn" title="Add Event">&#43;</button>
 
-<p class="text-right">
-    <a asp-action="Create" asp-route-timelineId="@ViewBag.TimelineId">Create New Event</a>
-</p>
+@*Side Panel - Will Display all Headings*@
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.EventDateTime)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Location)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var evt in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-action="Details" asp-route-eventId="@evt.Id" asp-route-timelineId="@ViewBag.TimelineId">@evt.Title</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => evt.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => evt.EventDateTime)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => evt.Location)
-                </td>
-                <td>
-                    <a asp-action="Index" asp-controller="Attachments" asp-route-eventId="@evt.Id">Attachments</a> |
-                    <a asp-action="Edit" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@evt.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@evt.Id">Delete</a>
-                </td>
-            </tr>
+
+
+<div id="mainSidePanel">
+    @*<div class="container body-content">
+        </div>*@
+    <div class="headerSection">
+        <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
+        <hr class="headerHR" />
+        <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
+    </div>
+
+
+    <hr />
+
+
+    <div id="mySidenav" class="sidenav">
+        <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
+        -->
+        <div id="sideNavArrows">
+            <span onclick="openNav()" id="rightArrowVisibility"><i class="rightArrow"></i></span>
+            <span class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></span>
+        </div>
+
+
+        <hr class="sidPanelHR" />
+
+        <div id="searchBox">
+            &nbsp; @Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
+        </div>
+
+        <div id="eventNameList">
+            
+            @foreach (var item in Model)
+            {
+                <a href="#">@item.Title</a>
+
+            }
+
+        </div>
+    </div>
+
+
+
+    @*-----------------------------------------------------------------------------*@
+
+
+    <div class="timeline">
+
+
+        @{
+            int eventCount = -1;
+            string cssClassIdentifier = "";
+
+            foreach (var item in Model)
+            {
+                eventCount = eventCount + 1;
+
+                if (eventCount % 2 == 0)
+                { cssClassIdentifier = "left"; }
+                else
+                { cssClassIdentifier = "right"; }
+
+
+                <div class="containerTimeline @cssClassIdentifier  ">
+
+                    <div class="eventContent">
+                        <div class="eventDateSection">
+                            <div class="eventDateTime">
+                                <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
+                                <p>@item.EventDateTime.ToString("h:mm:ss")</p>
+                            </div>
+                            <div class="eventIconDisplay">
+                                <div class="col-md-4 iconSection">
+                                    <div class="eventIcon">&#xe142;</div>
+                                    <div class="eventIcon"></div>
+                                </div>
+                                <div class="col-md-4 iconSection">
+                                    <div class="eventIcon">&#xe142;</div>
+                                    <div class="eventIcon">4</div>
+                                </div>
+                                <div class="col-md-4 iconSection">
+                                    <div class="eventIcon">&#xe142;</div>
+                                    <div class="eventIcon">4</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="eventBodySection">
+                            <div class="eventContentPadding">
+                                <h3 class="eventDate uppercase">@item.Title</h3>
+                                <p>
+                                    @if (item.Description.Count() >= 150)
+                                    {
+                                        @item.Description.ToString().Substring(1, 150)
+                                    }
+                                    else
+                                    {
+                                        @item.Description
+                                    }
+                                </p>
+                                <p class="editDelete">
+                                    <a href="#">edit</a> / <a href="#">delete</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr />
+            }
         }
-    </tbody>
-</table>
+
+
+
+
+
+
+
+
+
+
+    </div>
+    <div class="backToTopContainer">
+
+
+        <span onclick="topFunction()"><i class="backToTop"></i></span>
+
+    </div>
+
+</div>
+
+
+
+<script>
+    function openNav() {
+
+        document.getElementById("mySidenav").style.width = "200px";
+        document.getElementById("mainSidePanel").style.marginLeft = "200px";
+        document.getElementById("rightArrowVisibility").style.visibility = 'hidden';
+
+    }
+
+    function closeNav() {
+
+        document.getElementById("mySidenav").style.width = "20px";
+        document.getElementById("mainSidePanel").style.marginLeft = "20px";
+        document.getElementById("rightArrowVisibility").style.visibility = 'visible';
+
+    }
+
+</script>
+
+<script>
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
+
+
+
+
+
+@*<p class="text-right">
+        <a asp-action="Create">Create New Event</a>
+    </p>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.EventDateTime)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Id">@item.Title</a>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.EventDateTime)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
 
 

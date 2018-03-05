@@ -32,6 +32,7 @@ namespace AileronAirwaysWeb.Controllers
             return View(timelines);
         }
 
+
         // GET: Timelines/Details/5
         public async Task<ActionResult> Details(string id)
         {

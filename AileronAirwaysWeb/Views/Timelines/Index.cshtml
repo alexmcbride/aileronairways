@@ -1,41 +1,128 @@
 ﻿@model IEnumerable<Echelon.TimelineApi.Timeline>
 
+
 @{
     ViewData["Title"] = "Timeline Register";
 }
 
-<h2>@ViewData["Title"]</h2>
+<section>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <h2>Timeline Register</h2>
+                <hr />
+                <br />
 
-<p>
-    <a asp-action="Create">Create New Timeline</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTimeStamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <a asp-controller="TimelineEvents" asp-action="Index" asp-route-timelineId="@item.Id">@item.Title</a>
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationTimeStamp)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-controller="timelines" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-controller="timelines" asp-route-id="@item.Id">Delete</a>
-                </td>
-            </tr>
+
+
+                <p>
+                    <a asp-action="Create" class="btnMain">Create Timeline</a>
+                </p>
+
+
+                <br />
+                @using (Html.BeginForm("Index", "Admin", FormMethod.Get))
+            {
+
+                <div class="form-group">
+                    &nbsp; @Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
+
+
+                    @*<a href="@Url.Action()" class="btn btn-primary job-main-form__button"><i class="fa fa-search"></i></a>
+
+        <input type="submit" value="Search" />*@
+                </div>
         }
-    </tbody>
-</table>
+                <br />
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Title)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CreationTimeStamp)
+                            </th>
+                            <th></th>
+                        </tr>
+
+                        @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { id = item.Id })
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.CreationTimeStamp)
+                            </td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                            </td>
+                        </tr>
+                }
+
+
+                    </table>
+
+                </div>
+                <br />
+
+                <!-- Declaration of pagination for user accounts -->
+                @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+                @Html.PagedListPager(Model, page => Url.Action("Index", new
+                {
+                    page,
+                    searchStringUserNameOrEmail = ViewBag.searchStringUserNameOrEmail,
+                    currentFilter = ViewBag.CurrentFilter
+                }))
+
+                <hr />*@
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+
+@*<p>
+        <a asp-action="Create">Create New Timeline</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Title)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.CreationTimeStamp)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { id = item.Id })
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CreationTimeStamp)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>*@
