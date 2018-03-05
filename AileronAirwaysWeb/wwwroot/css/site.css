@@ -36,14 +36,13 @@
 
 /* Custom Bootstrap colours */
 .navbar-custom {
-    background-color: #734EA6;
-    
+    background-color: #0D1B2E;
 }
 
-.navbar-custom .navbar-nav > li > a {
-    color: #fff;
-}
+    .navbar-custom .navbar-nav > li > a {
+        color: gray;
+    }
 
-.navbar-custom .navbar-brand {
-    color: #fff;
-}
+    .navbar-custom .navbar-brand {
+        color: #fff;
+    }

@@ -13,12 +13,46 @@ namespace AileronAirwaysWeb
 {
     public class Startup
     {
+        private IHostingEnvironment _env;
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
+
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseBrowserLink();
+                app.UseDebugExceptionMiddleware();
+                app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
+            }
+            else
+            {
+                app.UseExceptionHandler("/Timelines/Error");
+            }
+
+            app.UseStaticFiles();
+
+            app.UseAuthentication();
+
+            //allows temp data use
+            app.UseSession();
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Timelines}/{action=Index}/{id?}");
+            });
+
+            _env = env;
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -39,41 +73,16 @@ namespace AileronAirwaysWeb
             services.AddSession();
 
             // Add timeline service.
-            services.AddTransient<ITimelineService, TimelineService>((i) => new TimelineService(Configuration.GetValue<string>("BaseUrl"), 
+            services.AddSingleton<ITimelineService, TimelineService>((i) => new TimelineService(
+                Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
-                Configuration.GetValue<string>("TenantId")));
+                Configuration.GetValue<string>("TenantId"),
+                _env.WebRootPath));
 
             services.AddMvc();
-        }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseBrowserLink();
-                app.UseDebugExceptionMiddleware();
-                app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-            }
-
-            app.UseStaticFiles();
-
-            app.UseAuthentication();
-
-            //allows temp data use
-            app.UseSession();
-
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Timelines}/{action=Index}/{id?}");
-            });
+            // Add service for handling flasg temp messages.
+            services.AddTransient<IFlashService, FlashService>();
         }
     }
 }

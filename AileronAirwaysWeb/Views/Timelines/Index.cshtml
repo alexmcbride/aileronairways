@@ -1,41 +1,130 @@
 ﻿@model IEnumerable<Echelon.TimelineApi.Timeline>
 
+
 @{
     ViewData["Title"] = "Timeline Register";
 }
 
 <h2>@ViewData["Title"]</h2>
 
-<p>
-    <a asp-action="Create">Create New Timeline</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreationTimeStamp)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+<p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
+
+<hr>
+
+<div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
+        <thead>
             <tr>
-                <td>
-                    @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { id = item.Id })
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.CreationTimeStamp)
-                </td>
-                <td>
-                    @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
-                    @Html.ActionLink("Delete", "Delete", new { id=item.Id })
-                </td>
+                <th style="max-width:55%">Title</th>
+                <th style="width:15%">Date Created</th>
+                <th style="width:30%">Link</th>
             </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+@section scripts
+    {
+    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
+
+    <script>
+        var createtimelineurl = "@Url.Action("Create", "Timelines")";
+        $(function () {
+            $(".modal-link-create-timeline").click(function () {
+                //debugger;
+                    var $buttonClicked = $(this);
+                    var options = { "backdrop": "static", keyboard: true };
+                $.ajax({
+                    type: "GET",
+                    url: createtimelineurl,
+                    contentType: "application/json; charset=utf-8",
+                    datatype: "json",
+                    success: function (data) {
+                        //debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
+            });
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+        });
+
+        $(document).ready(function () {
+                    $.ajax({
+                        /**/
+                        url: "api/timelines",
+                        method: 'GET',
+                        datatype: 'json',
+                        contentType: "application/json; charset=utf-8",
+                        table: '#tbltimelines',
+                        //idSrc: 'id',
+                        //rowId: 'id',
+                        success: function (jsondata) {
+                             //debugger;
+                             var table = $('#tbltimelines').DataTable({
+                                data: jsondata,
+                                columns: [
+                                    @*{ visible: false },
+                                    //null,
+                                    //null,
+                                    //{ data: 'id'},*@
+                                    { mRender: function (data, type, row) { return '<a href="/Timelines/' + row.id + '/Events/">' + row.title +'</a> ' } },
+                                    { data: 'creationTimeStamp' },
+                                    {
+                                        // this is Actions Column
+                                        mRender: function (data, type, row) {
+                                            
+                                            return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\''+row.id+'\')">Edit</a> ' +
+                                                '<a href="/Timelines/Delete/' + row.id + '" onclick="return confirm(\'Are you sure you wish to delete this event?\');">Delete</a>';
+                                        }
+                                    }
+                                ]
+                            });
+                            console.log(jsondata);
+                        }
+                    });
+                });
+
+            function editTimeline(id) {
+                var options = { "backdrop": "static", keyboard: true };
+                var editUrl = "timelines/edit/" + id;
+
+                $.ajax({
+                    type: "GET",
+                    url: editUrl,
+                    //contentType: "application/json; charset=utf-8",
+                    //datatype: "json",
+                    success: function (data) {
+                        //debugger;
+                        $('#myModalContent').html(data);
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    },
+                    error: function () {
+                        alert("Dynamic content load failed.");
+                    }
+                });
         }
-    </tbody>
-</table>
+
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+
+
+    </script>
+}

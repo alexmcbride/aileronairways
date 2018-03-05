@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using AileronAirwaysWeb.Controllers;
+using Echelon.TimelineApi;
 
 namespace Microsoft.AspNetCore.Mvc
 {
@@ -24,6 +21,16 @@ namespace Microsoft.AspNetCore.Mvc
                 controller: "Account",
                 values: new { userId, code },
                 protocol: scheme);
+        }
+
+        public static string AttachmentLink(this IUrlHelper helper, Attachment attachment)
+        {
+            return helper.AttachmentLink(attachment.Id);
+        }
+
+        public static string AttachmentLink(this IUrlHelper helper, string attachmentId)
+        {
+            return helper.Action("download", "attachments", new { attachmentId });
         }
     }
 }

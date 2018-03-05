@@ -1,7 +1,10 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,16 +13,21 @@ namespace AileronAirwaysWeb.Controllers
     public class TimelinesController : Controller
     {
         private readonly ITimelineService _api;
+        private readonly IFlashService _flash;
 
-        public TimelinesController(ITimelineService api)
+        public TimelinesController(ITimelineService api, IFlashService flash)
         {
             _api = api;
+            _flash = flash;
         }
 
         // GET: Timelines
         public async Task<ActionResult> Index()
         {
-            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api)).Where(t => !t.IsDeleted).ToList();
+            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api))
+                .Where(t => !t.IsDeleted)
+                .OrderByDescending(t => t.CreationTimeStamp)
+                .ToList();
 
             return View(timelines);
         }
@@ -35,7 +43,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            return View();
+            return PartialView();
         }
 
         // POST: Timelines/Create
@@ -45,29 +53,25 @@ namespace AileronAirwaysWeb.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
+                Timeline timeline = await Timeline.CreateAsync(_api, Request.Form["Title"]);
 
-                Timeline tLine = await Timeline.CreateAsync(_api,
-                    Request.Form["Title"]);
-
+                _flash.Message("Timeline created!");
 
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return PartialView();
             }
         }
 
         // GET: Timelines/Edit/5
-         public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(string id)
         {
-
             Timeline t = await Timeline.GetTimelineAsync(_api, id);
             ViewData["EditTitle"] = t.Title;
-       
 
-            return View();
+            return PartialView();
         }
 
         // POST: Timelines/Edit/5
@@ -77,17 +81,18 @@ namespace AileronAirwaysWeb.Controllers
         {
             try
             {
-                // TODO: Add update logic here
-                
                 Timeline tline = await Timeline.GetTimelineAsync(_api, id);
                 tline.Title = Request.Form["Title"];
 
                 await tline.EditTitleAsync(_api);
+
+                _flash.Message("Timeline has been edited!");
+
                 return RedirectToAction(nameof(Index));
             }
             catch
             {
-                return View();
+                return PartialView();
             }
         }
         // GET: Timelines/Delete/5
@@ -95,7 +100,9 @@ namespace AileronAirwaysWeb.Controllers
         {
             Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
             await tline.DeleteAsync(_api);
-            
+
+            _flash.Message("Timeline has been deleted!");
+
             return RedirectToAction(nameof(Index));
         }
 
@@ -114,6 +121,11 @@ namespace AileronAirwaysWeb.Controllers
             {
                 return View();
             }
+        }
+
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Echelon.TimelineApi.Attachment>
+
+@{
+    ViewData["Title"] = "Attachments";
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        <h2>@ViewData["Title"]</h2>
+
+        @if (Model.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @if (item.IsImage)
+                                {
+                                    <a asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                }
+                                else
+                                {
+                                    <a asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><em>There are no attachments to display.</em></p>
+        }
+
+        <h3>Upload</h3>
+
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+            <div class="form-group">
+                <p>Upload one or more attachments:</p>
+                <input type="file" name="files" multiple class="form-control" />
+            </div>
+
+            <input type="submit" value="Upload" class="btn btn-default" />
+        </form>
+
+        <hr>
+
+        <p><a asp-action="Details" asp-controller="TimelineEvents" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.EventId">Go back</a></p>
+    </div>
+</div>

@@ -1,18 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Models.AccountViewModels;
+using AileronAirwaysWeb.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using AileronAirwaysWeb.Models;
-using AileronAirwaysWeb.Models.AccountViewModels;
-using AileronAirwaysWeb.Services;
+using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -247,7 +243,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             await _signInManager.SignOutAsync();
             _logger.LogInformation("User logged out.");
-            return RedirectToAction(nameof(HomeController.Index), "Home");
+            return RedirectToAction(nameof(TimelinesController.Index), "Timelines");
         }
 
         [HttpPost]
@@ -335,7 +331,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(TimelinesController.Index), "Home");
             }
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
@@ -455,7 +451,7 @@ namespace AileronAirwaysWeb.Controllers
             }
             else
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(nameof(TimelinesController.Index), "Home");
             }
         }
 
