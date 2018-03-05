@@ -51,7 +51,7 @@
                     {
                         <tr>
                             <td>
-                                @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { id = item.Id })
+                                @Html.ActionLink(item.Title, "Index", "TimelineEvents", new { timelineId = item.Id })
                             </td>
                             <td>
                                 @Html.DisplayFor(modelItem => item.CreationTimeStamp)

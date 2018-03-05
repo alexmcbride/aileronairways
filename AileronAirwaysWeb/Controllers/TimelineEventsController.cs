@@ -35,6 +35,7 @@ namespace AileronAirwaysWeb.Controllers
             // Extra data needed by view.
             ViewBag.TimelineId = timelineId;
             ViewBag.TimelineTitle = timeline.Title;
+            ViewBag.TimelineCreationTimeStamp = timeline.CreationTimeStamp;
 
             return View(events);
         }
