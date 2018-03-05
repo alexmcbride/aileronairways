@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
@@ -21,6 +22,24 @@ namespace AileronAirwaysWeb.Controllers
             _flash = flash;
         }
 
+        [DataContract]
+        internal class jsonTimeline
+        {
+            [DataMember]
+            internal string Id;
+
+            [DataMember]
+            internal string Title;
+
+            [DataMember]
+            internal string CreationTimeStamp;
+
+            [DataMember]
+            internal bool IsDeleted;
+            //[DataMember]
+            //internal string Link;
+        }
+
         // GET: Timelines
         public async Task<ActionResult> Index()
         {
@@ -32,6 +51,24 @@ namespace AileronAirwaysWeb.Controllers
             return View(timelines);
         }
 
+        public async Task<JsonResult> GetJsonTimelines()
+        {
+            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api)).Where(t => !t.IsDeleted).OrderByDescending(t => t.CreationTimeStamp).ToList();
+            List<jsonTimeline> jsontimelines = new List<jsonTimeline>();
+            foreach (Timeline t in timelines)
+            {
+                jsontimelines.Add(new jsonTimeline
+                {
+                    Id = t.Id,
+                    Title = t.Title,
+                    CreationTimeStamp = t.CreationTimeStamp.ToShortDateString() + " " + t.CreationTimeStamp.ToShortTimeString(),
+                    IsDeleted = t.IsDeleted,
+                    //link = @"<a asp-action=""Edit"" asp-route-id=""table.row(this).id()"">Edit</a> | <a asp-action=""elete"" asp-route-id=""table.row(this).id()"">Delete</a>"
+                });
+            }
+            jsontimelines.Where(t => !t.IsDeleted).OrderByDescending(t => t.CreationTimeStamp).ToList();
+            return Json(jsontimelines);
+        }
 
         // GET: Timelines/Details/5
         public async Task<ActionResult> Details(string id)
