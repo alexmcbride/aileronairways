@@ -65,6 +65,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]TimelineEvent value)
         {
+            // TODO: add validation for JSON stuff.
             var @event = await TimelineEvent.GetEventAsync(_api, id);
             @event.Title = value.Title;
             @event.Description = value.Description;

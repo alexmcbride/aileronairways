@@ -1,4 +1,5 @@
-﻿using AileronAirwaysWeb.Services;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AileronAirwaysWeb.TagHelpers
@@ -27,7 +28,7 @@ namespace AileronAirwaysWeb.TagHelpers
                 string type = message.Type.ToString();
                 output.Content.AppendHtml($"<div class=\"alert alert-{type.ToLower()} alert-dismissible\" role=\"alert\">");
                 output.Content.AppendHtml("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
-                output.Content.AppendHtml($"<strong>{type}!</strong> {message.Text}");
+                output.Content.AppendHtml($"<strong>{type}</strong> {message.Text}");
                 output.Content.AppendHtml("</div>");
             }
         }

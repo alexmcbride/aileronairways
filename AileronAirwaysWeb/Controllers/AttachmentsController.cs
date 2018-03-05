@@ -1,4 +1,5 @@
-﻿using AileronAirwaysWeb.Services;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -58,14 +59,21 @@ namespace AileronAirwaysWeb.Controllers
         {
             files = files.Where(f => f.Length > 0).ToList();
 
-            foreach (var file in files)
+            if (files.Any())
             {
-                // Create attachment and upload to AWS
-                await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
-            }
+                foreach (var file in files)
+                {
+                    // Create attachment and upload to AWS
+                    await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
+                }
 
-            var s = files.Count > 1 ? "s" : "";
-            _flash.Message($"Uploaded {files.Count} attachment{s}");
+                var s = files.Count > 1 ? "s" : "";
+                _flash.Message($"Uploaded {files.Count} attachment{s}");
+            }
+            else
+            {
+                _flash.Message("No attachments uploaded", FlashType.Info);
+            }
 
             return RedirectToAction(nameof(Index), new { eventId });
         }

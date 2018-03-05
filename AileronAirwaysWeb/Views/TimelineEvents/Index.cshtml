@@ -46,8 +46,8 @@
                 </td>
                 <td>
                     <a asp-action="Index" asp-controller="Attachments" asp-route-eventId="@evt.Id">Attachments</a> |
-                    <a asp-action="Edit" asp-route-id="@evt.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@evt.Id" onclick="return confirm('Are you sure you wish to delete this event?');">Delete</a>
+                    <a asp-action="Edit" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@evt.Id">Edit</a> |
+                    <a asp-action="Delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@evt.Id">Delete</a>
                 </td>
             </tr>
         }
