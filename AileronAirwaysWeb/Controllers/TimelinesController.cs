@@ -51,7 +51,7 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Timelines/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(TimelineViewModel vm)
+        public async Task<ActionResult> Create([Bind("Title")] TimelineViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -82,7 +82,7 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Timelines/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, TimelineViewModel vm)
+        public async Task<ActionResult> Edit(string id, [Bind("Title")] TimelineViewModel vm)
         {
             if (ModelState.IsValid)
             {
