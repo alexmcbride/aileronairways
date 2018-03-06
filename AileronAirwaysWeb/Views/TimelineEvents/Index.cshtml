@@ -246,7 +246,7 @@
                 console.log(response);
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events/' + eventId;
+                    location.href = '/timelines/@ViewBag.TimelineId/events';
                     $('#myModal').modal('hide');
                 }
                 else {

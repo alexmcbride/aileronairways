@@ -55,7 +55,7 @@
             });
         }
 
-        function displayCreateModel(data) {
+        function displayCreateModal(data) {
             $('#myModalContent').html(data);
             $('#myModal').modal({ "backdrop": "static", keyboard: true });
             $('#myModal').modal('show');
@@ -64,7 +64,6 @@
                 e.preventDefault();
 
                 var data = $('#create-form').serialize();
-
                 $.post('timelines/create', data, function (response) {
                     // If timeline was created response is OK followed by ID of new timeline.
                     if (response.startsWith('OK')) {
@@ -72,7 +71,7 @@
                         location.href = 'timelines/' + id + '/events'; // Redirect to events view.
                     }
                     else {
-                        displayCreateModel(response);
+                        displayCreateModal(response);
                     }
                 }, 'html');
             });
@@ -86,7 +85,7 @@
                     contentType: "application/html; charset=utf-8",
                     datatype: "html",
                     success: function (data) {
-                        displayCreateModel(data);
+                        displayCreateModal(data);
                     },
                     error: function (xhr, status, error) {
                         alert("Error - look in console.log");
@@ -117,7 +116,7 @@
                 contentType: "application/html; charset=utf-8",
                 datatype: "html",
                 success: function (data) {
-                    displayEditForm(data, id); },
+                    displayEditModal(data, id); },
                 error: function () {
                     alert("Error - look in console.log");
                     console.log('Status: ' + status);
@@ -126,7 +125,7 @@
             });
         }
 
-        function displayEditForm(data, id) {
+        function displayEditModal(data, id) {
             $('#myModalContent').html(data);
             $('#myModal').modal({ "backdrop": "static", keyboard: true });
             $('#myModal').modal('show');
@@ -135,7 +134,6 @@
                 e.preventDefault();
 
             var data = $('#edit-form').serialize();
-
             $.post("timelines/edit/" + id, data, function (response) {
                 // If edit was successful post returns with OK
                 if (response.startsWith('OK')) {
@@ -144,7 +142,7 @@
                 }
                 else {
                     // Otherwise redisplay form.
-                    displayEditForm(response, id);
+                    displayEditModal(response, id);
                 }
             }, 'html');
             });
