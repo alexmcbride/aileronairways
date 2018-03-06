@@ -1,12 +1,11 @@
-﻿using AileronAirwaysWeb.Services;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using AileronAirwaysWeb.ViewModels.EventsViewModel;
-
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -60,34 +59,34 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timelineId;
 
             // Create new blank timeline and set default values
-            TimelineEvent evt = new TimelineEvent();
-            evt.EventDateTime = DateTime.Now;
-            CreateViewModel CVM = new CreateViewModel
+            var vm = new TimelineEventViewModel
             {
-                DateTime = evt.EventDateTime
+                EventDateTime = DateTime.Now
             };
 
-            return PartialView(CVM);
+            return PartialView(vm);
         }
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string timelineId, CreateViewModel CVM)
+        public async Task<ActionResult> Create(string timelineId, TimelineEventViewModel vm)
         {
-            //DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
+            if (ModelState.IsValid)
+            {
+                TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
+                    vm.Title,
+                    vm.Description,
+                    vm.EventDateTime,
+                    vm.Location);
+                await evt.LinkEventAsync(_api, timelineId);
 
-            TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
-                CVM.Title,
-                CVM.Description,
-                CVM.DateTime,
-                CVM.Location);
-            await evt.LinkEventAsync(_api, timelineId);
+                _flash.Message($"Event '{evt.Title}' added!");
 
-            _flash.Message($"Event '{evt.Title}' added!");
+                return RedirectToAction(nameof(Index), new { timelineId });
+            }
 
             ViewBag.TimelineId = timelineId;
-
-            return RedirectToAction(nameof(Index), new { timelineId });
+            return PartialView(vm);
         }
 
         //GET: Timelines/Edit/5
@@ -98,37 +97,39 @@ namespace AileronAirwaysWeb.Controllers
 
             ViewBag.TimelineId = timelineId;
 
-            //view model = model
-            //EVM = Edit View Model
-            EditViewModel EVM = new EditViewModel
+            var vm = new TimelineEventViewModel
             {
                 Title = timelineEvent.Title,
                 Description = timelineEvent.Description,
-                DateTime = timelineEvent.EventDateTime,
+                EventDateTime = timelineEvent.EventDateTime,
                 Location = timelineEvent.Location
             };
 
-            return PartialView(EVM);
+            return PartialView(vm);
         }
 
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string timelineId, string eventId, EditViewModel EVM)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, TimelineEventViewModel vm)
         {
-            //var date = DateTime.Parse(Request.Form["EventDateTime"]);
+            if (ModelState.IsValid)
+            {
+                TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
+                evt.Title = vm.Title;
+                evt.Description = vm.Description;
+                evt.EventDateTime = vm.EventDateTime;
+                evt.Location = vm.Location;
 
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
-            evt.Title = EVM.Title;
-            evt.Description = EVM.Description;
-            evt.EventDateTime = EVM.DateTime;
-            evt.Location = EVM.Location;
+                await evt.EditAsync(_api);
 
-            await evt.EditAsync(_api);
+                _flash.Message($"Event '{evt.Title}' edited!");
 
-            _flash.Message($"Event '{evt.Title}' edited!");
+                return RedirectToAction("Details", "TimelineEvents", new { timelineId, eventId = evt.Id });
+            }
 
-            return RedirectToAction("Details", "TimelineEvents", new { timelineId, eventId = evt.Id });
+            ViewBag.TimelineId = timelineId;
+            return PartialView(vm);
         }
 
         // GET: Timelines/Delete/5

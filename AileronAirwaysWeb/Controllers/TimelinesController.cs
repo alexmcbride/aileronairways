@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using AileronAirwaysWeb.ViewModels.TimelineViewModels;
-
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -45,65 +43,61 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            var createVM = new CreateViewModel();
+            var vm = new TimelineViewModel();
 
-            return PartialView(createVM);
+            return PartialView(vm);
         }
 
         // POST: Timelines/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(CreateViewModel VM)
+        public async Task<ActionResult> Create(TimelineViewModel vm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                Timeline tLine = await Timeline.CreateAsync(_api, VM.Title);
-                tLine.Title = VM.Title;
+                Timeline timeline = await Timeline.CreateAsync(_api, vm.Title);
+                timeline.Title = vm.Title;
 
                 _flash.Message("Timeline created!");
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return PartialView();
-            }
+
+            return PartialView(vm);
         }
 
         // GET: Timelines/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            Timeline t = await Timeline.GetTimelineAsync(_api, id);
-            
-            var editVM = new EditViewModel
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+
+            var vm = new TimelineViewModel
             {
-                Title = t.Title,
-                ID = t.Id
+                Title = timeline.Title,
+                Id = timeline.Id
             };
-            return PartialView(editVM);
+            return PartialView(vm);
         }
 
         // POST: Timelines/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, EditViewModel VM)
+        public async Task<ActionResult> Edit(string id, TimelineViewModel vm)
         {
-            try
+            if (ModelState.IsValid)
             {
-                Timeline tline = await Timeline.GetTimelineAsync(_api, id);
-                tline.Title = VM.Title;
-
-                await tline.EditTitleAsync(_api);
+                Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+                timeline.Title = vm.Title;
+                await timeline.EditTitleAsync(_api);
 
                 _flash.Message("Timeline has been edited!");
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
-            {
-                return PartialView();
-            }
+
+            return PartialView(vm);
         }
+
         // GET: Timelines/Delete/5
         public async Task<ActionResult> Delete(string id)
         {

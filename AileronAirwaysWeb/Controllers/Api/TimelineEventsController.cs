@@ -1,4 +1,5 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Models;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System;
@@ -37,17 +38,6 @@ namespace AileronAirwaysWeb.Controllers.Api
             var @event = await TimelineEvent.GetEventAsync(_api, id);
 
             return Ok(@event);
-        }
-
-        public class TimelineEventViewModel
-        {
-            public string Id { get; set; }
-            public string TimelineId { get; set; }
-            public string Title { get; set; }
-            public string Description { get; set; }
-            [JsonConverter(typeof(CustomDateTimeConverter))]
-            public DateTime EventDateTime { get; set; }
-            public string Location { get; set; }
         }
 
         // POST: api/events

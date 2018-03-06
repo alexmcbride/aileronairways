@@ -1,4 +1,4 @@
-﻿@model AileronAirwaysWeb.ViewModels.TimelineViewModels.EditViewModel
+﻿@model AileronAirwaysWeb.Models.TimelineViewModel
 
 <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -11,27 +11,24 @@
 
     <div class="row">
         <div class="col-md-12">
-            @using (Html.BeginForm("Edit", "Timelines", FormMethod.Post))
-            {
+            <form method="post" asp-action="edit" asp-route-id="@Model.Id">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ID" />
 
                 <p>Edit the timeline</p>
 
                 <div class="form-group">
-                    <input asp-for="Title" class="form-control"  />
+                    <input asp-for="Title" class="form-control" />
                     <span asp-validation-for="Title" class="text-danger"></span>
                 </div>
 
                 <div class="modal-footer">
                     <input type="submit" value="Save" class="btn btn-default" />
                 </div>
-            }
+            </form>
         </div>
     </div>
 </div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-
 }
