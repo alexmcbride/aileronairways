@@ -63,7 +63,7 @@ namespace AileronAirwaysWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return PartialView(vm);
+            return View(vm);
         }
 
         // GET: Timelines/Edit/5
@@ -95,7 +95,7 @@ namespace AileronAirwaysWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return PartialView(vm);
+            return View(vm);
         }
 
         // GET: Timelines/Delete/5

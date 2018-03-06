@@ -8,13 +8,12 @@
 </div>
 
 <div class="modal-body">
-
     <div class="row">
         <div class="col-md-12">
             <form method="post" asp-action="edit" asp-route-id="@Model.Id">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-                <p>Edit the timeline</p>
+                <p>Edit the timeline.</p>
 
                 <div class="form-group">
                     <input asp-for="Title" class="form-control" />
