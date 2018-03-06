@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using AileronAirwaysWeb.ViewModels.TimelineViewModels;
+
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -43,17 +45,20 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Create
         public ActionResult Create()
         {
-            return PartialView();
+            var createVM = new CreateViewModel();
+
+            return PartialView(createVM);
         }
 
         // POST: Timelines/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateViewModel VM)
         {
             try
             {
-                Timeline timeline = await Timeline.CreateAsync(_api, Request.Form["Title"]);
+                Timeline tLine = await Timeline.CreateAsync(_api, VM.Title);
+                tLine.Title = VM.Title;
 
                 _flash.Message("Timeline created!");
 
@@ -69,20 +74,24 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Edit(string id)
         {
             Timeline t = await Timeline.GetTimelineAsync(_api, id);
-            ViewData["EditTitle"] = t.Title;
-
-            return PartialView();
+            
+            var editVM = new EditViewModel
+            {
+                Title = t.Title,
+                ID = t.Id
+            };
+            return PartialView(editVM);
         }
 
         // POST: Timelines/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string id, IFormCollection collection)
+        public async Task<ActionResult> Edit(string id, EditViewModel VM)
         {
             try
             {
                 Timeline tline = await Timeline.GetTimelineAsync(_api, id);
-                tline.Title = Request.Form["Title"];
+                tline.Title = VM.Title;
 
                 await tline.EditTitleAsync(_api);
 

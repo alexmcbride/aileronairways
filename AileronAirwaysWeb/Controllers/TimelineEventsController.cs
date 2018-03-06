@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using AileronAirwaysWeb.ViewModels.EventsViewModel;
+
 
 namespace AileronAirwaysWeb.Controllers
 {
@@ -60,22 +62,26 @@ namespace AileronAirwaysWeb.Controllers
             // Create new blank timeline and set default values
             TimelineEvent evt = new TimelineEvent();
             evt.EventDateTime = DateTime.Now;
+            CreateViewModel CVM = new CreateViewModel
+            {
+                DateTime = evt.EventDateTime
+            };
 
-            return PartialView(evt);
+            return PartialView(CVM);
         }
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string timelineId, IFormCollection collection)
+        public async Task<ActionResult> Create(string timelineId, CreateViewModel CVM)
         {
-            DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
+            //DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-            TimelineEvent evt = await TimelineEvent.CreateAndLinkAsync(_api,
-                Request.Form["Title"],
-                Request.Form["Description"],
-                date,
-                Request.Form["Location"],
-                timelineId);
+            TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
+                CVM.Title,
+                CVM.Description,
+                CVM.DateTime,
+                CVM.Location);
+            await evt.LinkEventAsync(_api, timelineId);
 
             _flash.Message($"Event '{evt.Title}' added!");
 
@@ -92,21 +98,31 @@ namespace AileronAirwaysWeb.Controllers
 
             ViewBag.TimelineId = timelineId;
 
-            return PartialView(timelineEvent);
+            //view model = model
+            //EVM = Edit View Model
+            EditViewModel EVM = new EditViewModel
+            {
+                Title = timelineEvent.Title,
+                Description = timelineEvent.Description,
+                DateTime = timelineEvent.EventDateTime,
+                Location = timelineEvent.Location
+            };
+
+            return PartialView(EVM);
         }
 
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string timelineId, string eventId, IFormCollection collection)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, EditViewModel EVM)
         {
-            var date = DateTime.Parse(Request.Form["EventDateTime"]);
+            //var date = DateTime.Parse(Request.Form["EventDateTime"]);
 
-            var evt = await TimelineEvent.GetEventAsync(_api, eventId);
-            evt.Title = Request.Form["Title"];
-            evt.Description = Request.Form["Description"];
-            evt.EventDateTime = date;
-            evt.Location = Request.Form["Location"];
+            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
+            evt.Title = EVM.Title;
+            evt.Description = EVM.Description;
+            evt.EventDateTime = EVM.DateTime;
+            evt.Location = EVM.Location;
 
             await evt.EditAsync(_api);
 

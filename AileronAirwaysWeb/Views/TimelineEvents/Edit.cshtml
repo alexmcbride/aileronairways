@@ -1,4 +1,4 @@
-﻿@model Echelon.TimelineApi.TimelineEvent
+﻿@model AileronAirwaysWeb.ViewModels.EventsViewModel.EditViewModel
 @{
     ViewData["Title"] = "Edit Event";
 }
@@ -20,7 +20,7 @@
                     <h4>Edit an event on the timeline.</h4>
                     <hr />
                     <div asp-validation-summary="All" class="text-danger"></div>
-                    <input type="hidden" asp-for="Id" />
+                    <!--input type="hidden" asp-for="ID" /-->
                     <div class="form-group">
                         <label asp-for="Title"></label>
                         <input asp-for="Title" class="form-control" />
@@ -33,9 +33,9 @@
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="EventDateTime"></label>
-                        <input asp-for="EventDateTime" class="form-control" />
-                        <span asp-validation-for="EventDateTime" class="text-danger"></span>
+                        <label asp-for="DateTime"></label>
+                        <input asp-for="DateTime" class="form-control" />
+                        <span asp-validation-for="DateTime" class="text-danger"></span>
                     </div>
 
                     <div class="form-group">
