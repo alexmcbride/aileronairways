@@ -56,9 +56,6 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events/Create")]
         public ActionResult Create(string timelineId)
         {
-            ViewBag.TimelineId = timelineId;
-
-            // Create new blank timeline and set default values
             var vm = new TimelineEventViewModel
             {
                 EventDateTime = DateTime.Now
@@ -82,10 +79,9 @@ namespace AileronAirwaysWeb.Controllers
 
                 _flash.Message($"Event '{evt.Title}' added!");
 
-                return RedirectToAction(nameof(Index), new { timelineId });
+                return Ok("OK " + evt.Id);
             }
 
-            ViewBag.TimelineId = timelineId;
             return PartialView(vm);
         }
 
@@ -94,8 +90,6 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Edit(string timelineId, string eventId)
         {
             TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
-
-            ViewBag.TimelineId = timelineId;
 
             var vm = new TimelineEventViewModel
             {
@@ -125,10 +119,9 @@ namespace AileronAirwaysWeb.Controllers
 
                 _flash.Message($"Event '{evt.Title}' edited!");
 
-                return RedirectToAction("Details", "TimelineEvents", new { timelineId, eventId = evt.Id });
+                return Ok("OK " + evt.Id);
             }
 
-            ViewBag.TimelineId = timelineId;
             return PartialView(vm);
         }
 

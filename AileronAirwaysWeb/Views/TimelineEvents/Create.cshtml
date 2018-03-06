@@ -12,10 +12,8 @@
     <div class="modal-body">
         <div class="row">
             <div class="col-md-12">
-
-                @using (Html.BeginForm("Create", "TimelineEvents", FormMethod.Post))
-                {
-                    <div asp-validation-summary="All" class="text-danger"></div>
+                <form asp-antiforgery="true" id="create-event-form">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                     <div class="form-group">
                         <label asp-for="Title"></label>
@@ -43,12 +41,12 @@
                     <div class="modal-footer">
                         <button type="submit" id="btnSave" class="btn btn-default">Create New Event</button>
                     </div>
-                }
-
+                </form>
             </div>
         </div>
     </div>
 </div>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
