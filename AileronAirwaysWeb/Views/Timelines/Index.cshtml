@@ -89,6 +89,17 @@
             });
         });
 
+        function handleEditForm(id) {
+            var data = $('#edit-form').serialize();
+
+            $.post("timelines/edit/" + id, data, function (data) { 
+                $('#myModalContent').html(data);
+                $('#myModal').modal({ "backdrop": "static", keyboard: true });
+                $('#myModal').modal('show');
+
+            }, 'html');
+        }
+
         function editTimeline(id) {
             $.ajax({
                 type: "GET",
@@ -99,6 +110,12 @@
                     $('#myModalContent').html(data);
                     $('#myModal').modal({ "backdrop": "static", keyboard: true });
                     $('#myModal').modal('show');
+
+                    $('#edit-form').on('submit', function (e) {
+                        e.preventDefault();
+
+                        handleEditForm(id);
+                    });
                 },
                 error: function () {
                     alert("Error - look in console.log");

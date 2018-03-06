@@ -95,7 +95,7 @@ namespace AileronAirwaysWeb.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            return View(vm);
+            return PartialView(vm);
         }
 
         // GET: Timelines/Delete/5

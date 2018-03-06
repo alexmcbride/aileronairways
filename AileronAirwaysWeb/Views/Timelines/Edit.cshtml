@@ -10,7 +10,7 @@
 <div class="modal-body">
     <div class="row">
         <div class="col-md-12">
-            <form method="post" asp-action="edit" asp-route-id="@Model.Id">
+            <form id="edit-form" asp-antiforgery="true">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
                 <p>Edit the timeline.</p>
