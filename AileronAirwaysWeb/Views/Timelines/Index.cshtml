@@ -36,7 +36,6 @@
 
     <script>
         function updateTable(jsondata) {
-
             var table = $('#tbltimelines').DataTable({
                 data: jsondata,
                 columns: [
@@ -46,7 +45,7 @@
                         }
                     },
                     {
-                        data: 'creationTimeStamp'
+                        data: 'prettyCreation'
                     },
                     {
                         mRender: function (data, type, row) {
