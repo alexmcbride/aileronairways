@@ -70,12 +70,12 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
+                TimelineEvent evt = await TimelineEvent.CreateAndLinkAsync(_api,
                     vm.Title,
                     vm.Description,
                     vm.EventDateTime,
-                    vm.Location);
-                await evt.LinkEventAsync(_api, timelineId);
+                    vm.Location,
+                    timelineId);
 
                 _flash.Message($"Event '{evt.Title}' added!");
 
