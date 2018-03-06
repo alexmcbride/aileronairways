@@ -55,22 +55,7 @@
             });
         }
 
-        function submitCreateForm() {
-            var data = $('#create-form').serialize();
-
-            $.post('timelines/create', data, function (response) {
-                // If timeline was created response is OK followed by ID of new timeline.
-                if (response.startsWith('OK')) {
-                    var id = response.split(' ')[1];
-                    location.href = 'timelines/' + id + '/events'; // Redirect to events view.
-                }
-                else {
-                    displayCreateForm(response);
-                }
-            }, 'html');
-        }
-
-        function displayCreateForm(data) {
+        function displayCreateModel(data) {
             $('#myModalContent').html(data);
             $('#myModal').modal({ "backdrop": "static", keyboard: true });
             $('#myModal').modal('show');
@@ -78,7 +63,18 @@
             $('#create-form').on('submit', function (e) {
                 e.preventDefault();
 
-                submitCreateForm();
+                var data = $('#create-form').serialize();
+
+                $.post('timelines/create', data, function (response) {
+                    // If timeline was created response is OK followed by ID of new timeline.
+                    if (response.startsWith('OK')) {
+                        var id = response.split(' ')[1];
+                        location.href = 'timelines/' + id + '/events'; // Redirect to events view.
+                    }
+                    else {
+                        displayCreateModel(response);
+                    }
+                }, 'html');
             });
         }
 
@@ -90,7 +86,7 @@
                     contentType: "application/html; charset=utf-8",
                     datatype: "html",
                     success: function (data) {
-                        displayCreateForm(data);
+                        displayCreateModel(data);
                     },
                     error: function (xhr, status, error) {
                         alert("Error - look in console.log");
@@ -114,29 +110,13 @@
             });
         });
 
-        function submitEditForm(id) {
-            var data = $('#edit-form').serialize();
-
-            $.post("timelines/edit/" + id, data, function (response) {
-                // If edit was successful post returns with OK
-                if (response.startsWith('OK')) {
-                    location.href = "@Url.Action("index", "timelines")"; // Redirect here instead of on server-side
-                    $('#myModal').modal('hide');
-                }
-                else {
-                    // Otherwise redisplay form.
-                    displayEditForm(response);
-                }
-            }, 'html');
-        }
-
         function editTimeline(id) {
             $.ajax({
                 type: "GET",
                 url: "timelines/edit/" + id,
                 contentType: "application/html; charset=utf-8",
                 datatype: "html",
-                success: function (data) { 
+                success: function (data) {
                     displayEditForm(data, id); },
                 error: function () {
                     alert("Error - look in console.log");
@@ -154,7 +134,19 @@
             $('#edit-form').on('submit', function (e) {
                 e.preventDefault();
 
-                submitEditForm(id);
+            var data = $('#edit-form').serialize();
+
+            $.post("timelines/edit/" + id, data, function (response) {
+                // If edit was successful post returns with OK
+                if (response.startsWith('OK')) {
+                    location.href = "@Url.Action("index", "timelines")"; // Redirect here instead of on server-side
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    // Otherwise redisplay form.
+                    displayEditForm(response, id);
+                }
+            }, 'html');
             });
         }
 
