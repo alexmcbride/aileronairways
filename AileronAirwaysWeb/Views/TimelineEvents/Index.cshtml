@@ -108,7 +108,7 @@
                                     }
                                 </p>
                                 <p class="editDelete">
-                                    <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id"> Edit</a>
+                                    <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
                                     /
                                     <a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>
                                 </p>
@@ -188,8 +188,7 @@
 </div>
 
 @section Scripts{
-
-<script>
+    <script>
         function openNav() {
             document.getElementById("mySidenav").style.width = "200px";
             document.getElementById("mainSidePanel").style.marginLeft = "200px";
@@ -209,13 +208,11 @@
 
         $(function () {
             $("#addEventBtn").click(function () {
-                var createurl = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
-
                 $.ajax({
                     type: "GET",
-                    url: createurl,
-                    contentType: "application/json; charset=utf-8",
-                    datatype: "json",
+                    url: "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })",
+                    contentType: "application/html; charset=utf-8",
+                    datatype: "html",
                     success: function (data) {
                         //debugger;
                         $('#myModalContent').html(data);
@@ -227,26 +224,17 @@
                     }
                 });
             });
-            $("#closbtn").click(function () {
-                $('#myModal').modal('hide');
-            });
-        });
 
-        $(function () {
             $(".modal-link-edit").click(function () {
-                //debugger;
                 var id = $(this).attr('data-id');
-                var editurl = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Edit";
-                var options = { "backdrop": "static", keyboard: true };
                 $.ajax({
                     type: "GET",
-                    url: editurl,
+                    url: "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Edit",
                     contentType: "application/json; charset=utf-8",
                     datatype: "json",
                     success: function (data) {
-                        //debugger;
                         $('#myModalContent').html(data);
-                        $('#myModal').modal(options);
+                        $('#myModal').modal({ "backdrop": "static", keyboard: true });
                         $('#myModal').modal('show');
                     },
                     error: function () {
@@ -260,7 +248,6 @@
             });
         });
 
-
-</script>
+    </script>
 
 }

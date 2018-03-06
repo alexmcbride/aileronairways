@@ -44,9 +44,7 @@
                             return '<a href="/timelines/' + row.id + '/events/">' + row.title + '</a> '
                         }
                     },
-                    {
-                        data: 'created'
-                    },
+                    { data: 'created'},
                     {
                         mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
