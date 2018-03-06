@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
@@ -56,13 +57,14 @@ namespace AileronAirwaysWeb.Controllers
             if (ModelState.IsValid)
             {
                 Timeline timeline = await Timeline.CreateAsync(_api, vm.Title);
-                timeline.Title = vm.Title;
 
                 _flash.Message("Timeline created!");
 
+                // On success we return OK followed by the ID of the timeline just created.
                 return Ok("OK " + timeline.Id);
             }
 
+            // Error - return view with validation errors showing.
             return PartialView(vm);
         }
 
@@ -101,29 +103,28 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
-            Timeline tline = await Timeline.GetTimelineAsync(_api, id.ToString());
-            await tline.DeleteAsync(_api);
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
 
-            _flash.Message("Timeline has been deleted!");
-
-            return RedirectToAction(nameof(Index));
+            return View(new TimelineViewModel
+            {
+                Id = timeline.Id,
+                CreationTimeStamp = timeline.CreationTimeStamp,
+                Title = timeline.Title
+            });
         }
 
         // POST: Timelines/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(string id, IFormCollection collection)
         {
-            try
-            {
-                // TODO: Add delete logic here
+            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            await timeline.DeleteAsync(_api);
+
+            _flash.Message("Timeline has been deleted!");
+
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Error()

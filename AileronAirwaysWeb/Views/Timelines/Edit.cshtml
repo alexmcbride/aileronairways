@@ -1,31 +1,30 @@
 ﻿@model AileronAirwaysWeb.Models.TimelineViewModel
 
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-    <div class="modal-title" id="myModalLabel" style="color:#3A87AD">
-        <h2>Edit Timeline</h2>
-    </div>
-</div>
-
-<div class="modal-body">
-    <div class="row">
-        <div class="col-md-12">
-            <form id="edit-form" asp-antiforgery="true">
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-
-                <p>Edit the timeline.</p>
-
-                <div class="form-group">
-                    <input asp-for="Title" class="form-control" />
-                    <span asp-validation-for="Title" class="text-danger"></span>
-                </div>
-
-                <div class="modal-footer">
-                    <input type="submit" value="Save" class="btn btn-default" />
-                </div>
-            </form>
+<div id="modal-container">
+    <form id="edit-form" asp-antiforgery="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" style="color:#3A87AD">
+                Edit Timeline
+            </h4>
         </div>
-    </div>
+
+        <div class="modal-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <p>Edit the title of an existing timeline.</p>
+
+            <div class="form-group">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <input type="submit" value="Save Timeline" class="btn btn-default" />
+        </div>
+    </form>
 </div>
 
 @section Scripts {
