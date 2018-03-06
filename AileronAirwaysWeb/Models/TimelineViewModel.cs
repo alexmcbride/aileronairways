@@ -15,7 +15,7 @@ namespace AileronAirwaysWeb.Models
         [Display(Name = "Created")]
         public DateTime CreationTimeStamp { get; set; }
 
-        public string PrettyCreation
+        public string Created
         {
             get { return CreationTimeStamp.ToShortDateString() + " " + CreationTimeStamp.ToShortTimeString(); }
         }
