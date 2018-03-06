@@ -89,14 +89,19 @@
             });
         });
 
-        function handleEditForm(id) {
+        function submitEditForm(id) {
             var data = $('#edit-form').serialize();
 
-            $.post("timelines/edit/" + id, data, function (data) { 
-                $('#myModalContent').html(data);
-                $('#myModal').modal({ "backdrop": "static", keyboard: true });
-                $('#myModal').modal('show');
-
+            $.post("timelines/edit/" + id, data, function (response) {
+                // If edit was successful post returns with OK
+                if (response.startsWith('OK')) {
+                    location.href = "@Url.Action("index", "timelines")"; // Redirect here instead of on server-side
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    // Otherwise redisplay form.
+                    displayEditForm(response);
+                }
             }, 'html');
         }
 
@@ -106,22 +111,25 @@
                 url: "timelines/edit/" + id,
                 contentType: "application/html; charset=utf-8",
                 datatype: "html",
-                success: function (data) {
-                    $('#myModalContent').html(data);
-                    $('#myModal').modal({ "backdrop": "static", keyboard: true });
-                    $('#myModal').modal('show');
-
-                    $('#edit-form').on('submit', function (e) {
-                        e.preventDefault();
-
-                        handleEditForm(id);
-                    });
-                },
+                success: function (data) { displayEditForm(data, id); },
                 error: function () {
                     alert("Error - look in console.log");
                     console.log('Status: ' + status);
                     console.log('Error: ' + error);
                 }
+            });
+        }
+
+        function displayEditForm(data, id) {
+
+            $('#myModalContent').html(data);
+            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal('show');
+
+            $('#edit-form').on('submit', function (e) {
+                e.preventDefault();
+
+                submitEditForm(id);
             });
         }
 

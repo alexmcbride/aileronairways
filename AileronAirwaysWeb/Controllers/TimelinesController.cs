@@ -92,7 +92,7 @@ namespace AileronAirwaysWeb.Controllers
 
                 _flash.Message("Timeline has been edited!");
 
-                return RedirectToAction(nameof(Index));
+                return Ok("OK " + id);
             }
 
             return PartialView(vm);
