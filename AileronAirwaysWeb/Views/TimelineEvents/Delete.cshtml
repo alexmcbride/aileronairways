@@ -1,4 +1,4 @@
-﻿@model Echelon.TimelineApi.TimelineEvent
+﻿@model AileronAirwaysWeb.Models.TimelineEventViewModel
 
 @{
     ViewData["Title"] = "Delete Timeline Event";
@@ -31,8 +31,8 @@
         </dd>
     </dl>
     
-    <form asp-action="Delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">
+    <form asp-action="Delete" asp-route-timelineId="@Model.TimelineId" asp-route-eventId="@Model.Id">
         <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to List</a>
+        <a asp-action="Index" asp-route-timelineId="@Model.TimelineId">Back to List</a>
     </form>
 </div>

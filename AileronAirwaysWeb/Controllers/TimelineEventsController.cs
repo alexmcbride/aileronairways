@@ -131,9 +131,15 @@ namespace AileronAirwaysWeb.Controllers
         {
             TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
 
-            ViewBag.TimelineId = timelineId;
-
-            return View(evt);
+            return View(new TimelineEventViewModel
+            {
+                Id = evt.Id,
+                TimelineId = timelineId,
+                Description = evt.Description,
+                EventDateTime = evt.EventDateTime,
+                Location = evt.Location,
+                Title = evt.Title
+            });
         }
 
         // POST: Timelines/Delete/5

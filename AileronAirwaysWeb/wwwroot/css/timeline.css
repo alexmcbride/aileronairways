@@ -28,7 +28,6 @@ a:hover {
     width: 100%;
     height: 80px;
     top: 0;
-    background-color: #0D1B2E;
 }
 
 .navList {
@@ -509,7 +508,7 @@ footer {
 
     text-align: center;
     float: left;
-    background-color: #0D1B2E;
+
     font-size: .8em;
     width: 100%;
     padding: 20px 0;
