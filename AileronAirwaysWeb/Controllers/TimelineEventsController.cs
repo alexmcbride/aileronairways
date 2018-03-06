@@ -116,7 +116,7 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(string timelineId, string eventId, EditViewModel EVM)
         {
-            var date = DateTime.Parse(Request.Form["EventDateTime"]);
+            //var date = DateTime.Parse(Request.Form["EventDateTime"]);
 
             TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
             evt.Title = EVM.Title;
