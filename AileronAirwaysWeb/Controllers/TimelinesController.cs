@@ -60,10 +60,10 @@ namespace AileronAirwaysWeb.Controllers
 
                 _flash.Message("Timeline created!");
 
-                return RedirectToAction(nameof(Index));
+                return Ok("OK " + timeline.Id);
             }
 
-            return View(vm);
+            return PartialView(vm);
         }
 
         // GET: Timelines/Edit/5

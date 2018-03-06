@@ -55,6 +55,33 @@
             });
         }
 
+        function submitCreateForm() {
+            var data = $('#create-form').serialize();
+
+            $.post('timelines/create', data, function (response) {
+                // If timeline was created response is OK followed by ID of new timeline.
+                if (response.startsWith('OK')) {
+                    var id = response.split(' ')[1];
+                    location.href = 'timelines/' + id + '/events'; // Redirect to events view.
+                }
+                else {
+                    displayCreateForm(response);
+                }
+            }, 'html');
+        }
+
+        function displayCreateForm(data) {
+            $('#myModalContent').html(data);
+            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal('show');
+
+            $('#create-form').on('submit', function (e) {
+                e.preventDefault();
+
+                submitCreateForm();
+            });
+        }
+
         $(function () {
             $(".modal-link-create-timeline").click(function () {
                 $.ajax({
@@ -63,9 +90,7 @@
                     contentType: "application/html; charset=utf-8",
                     datatype: "html",
                     success: function (data) {
-                        $('#myModalContent').html(data);
-                        $('#myModal').modal({ "backdrop": "static", keyboard: true });
-                        $('#myModal').modal('show');
+                        displayCreateForm(data);
                     },
                     error: function (xhr, status, error) {
                         alert("Error - look in console.log");
@@ -111,7 +136,8 @@
                 url: "timelines/edit/" + id,
                 contentType: "application/html; charset=utf-8",
                 datatype: "html",
-                success: function (data) { displayEditForm(data, id); },
+                success: function (data) { 
+                    displayEditForm(data, id); },
                 error: function () {
                     alert("Error - look in console.log");
                     console.log('Status: ' + status);
@@ -121,7 +147,6 @@
         }
 
         function displayEditForm(data, id) {
-
             $('#myModalContent').html(data);
             $('#myModal').modal({ "backdrop": "static", keyboard: true });
             $('#myModal').modal('show');
