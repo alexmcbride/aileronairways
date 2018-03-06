@@ -16,6 +16,7 @@ namespace AileronAirwaysWeb.Models
 
         public string Description { get; set; }
 
+        [Display(Name = "Event Occured")]
         public DateTime EventDateTime { get; set; }
 
         public string Location { get; set; }

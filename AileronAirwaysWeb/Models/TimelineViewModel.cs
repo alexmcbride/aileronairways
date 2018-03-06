@@ -11,6 +11,7 @@ namespace AileronAirwaysWeb.Models
         [Required]
         public string Title { get; set; }
 
+        [Display(Name = "Created")]
         public DateTime CreationTimeStamp { get; set; }
 
         public bool IsDeleted { get; set; }
