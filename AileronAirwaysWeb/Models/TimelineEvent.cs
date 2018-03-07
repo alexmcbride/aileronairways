@@ -20,8 +20,6 @@ namespace AileronAirwaysWeb.Models
         public string Location { get; set; }
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
-
-        [JsonIgnore]
         public string TimelineId { get; set; }
 
         [JsonIgnore]

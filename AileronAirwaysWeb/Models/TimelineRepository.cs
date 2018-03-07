@@ -112,6 +112,11 @@ namespace AileronAirwaysWeb.Models
             return _context.Attachments.Find(attachmentId);
         }
 
+        public IQueryable<Attachment> GetAttachments(string eventId)
+        {
+            return _context.Attachments.Where(a => a.TimelineEventId == eventId);
+        }
+
         public async Task<Attachment> CreateAttachmentAsync(string eventId, string fileName, Stream stream)
         {
             var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, fileName, stream);

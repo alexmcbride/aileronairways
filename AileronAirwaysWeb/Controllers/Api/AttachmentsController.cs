@@ -1,6 +1,7 @@
 ﻿using AileronAirwaysWeb.Models;
-using AileronAirwaysWeb.Services;
+using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers.Api
@@ -10,38 +11,46 @@ namespace AileronAirwaysWeb.Controllers.Api
     [Route("api/attachments")]
     public class AttachmentsController : Controller
     {
-        private readonly ITimelineService _api;
+        private readonly TimelineRepository _repo;
 
-        public AttachmentsController(ITimelineService api)
+        public AttachmentsController(TimelineRepository repo)
         {
-            _api = api;
+            _repo = repo;
         }
 
         // GET: api/attachments/all/abc123
         [HttpGet("all/{eventId}")]
-        public async Task<IActionResult> GetAll(string eventId)
+        public IActionResult GetAll(string eventId)
         {
-            var attachments = await Attachment.GetAttachmentsAsync(_api, eventId);
+            var attachments = _repo.GetAttachments(eventId).Select(a => new AttachmentViewModel
+            {
+                Id = a.Id,
+                Title = a.Title,
+                TimelineEventId = a.TimelineEventId
+            });
 
             return Ok(attachments);
         }
 
         // GET: api/attachments/abc123
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public IActionResult Get(string id)
         {
-            var attachment = await Attachment.GetAttachmentAsync(_api, id);
+            var attachment = _repo.GetAttachment(id);
 
-            return Ok(attachment);
+            return Ok(new AttachmentViewModel
+            {
+                Id = attachment.Id,
+                Title = attachment.Title,
+                TimelineEventId = attachment.TimelineEventId
+            });
         }
 
         // DELETE: api/attachments/abc123
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var attachment = await Attachment.GetAttachmentAsync(_api, id);
-
-            await attachment.DeleteAsync(_api);
+            await _repo.DeleteAttachmentAsync(id);
 
             return Ok();
         }

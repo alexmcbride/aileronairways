@@ -21,5 +21,8 @@ namespace AileronAirwaysWeb.ViewModels
         public DateTime EventDateTime { get; set; }
 
         public string Location { get; set; }
+
+        public int AttachmentFilesCount { get; set; }
+        public int AttachmentImagesCount { get; set; }
     }
 }

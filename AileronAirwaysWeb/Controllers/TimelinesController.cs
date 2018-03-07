@@ -13,7 +13,7 @@ namespace AileronAirwaysWeb.Controllers
         private readonly IFlashService _flash;
         private readonly TimelineRepository _repo;
 
-        public TimelinesController(IFlashService flash, TimelineRepository repo)
+        public TimelinesController(TimelineRepository repo, IFlashService flash)
         {
             _flash = flash;
             _repo = repo;
@@ -30,7 +30,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Details/5
         public ActionResult Details(string id)
         {
-            Timeline timeline =  _repo.GetTimeline(id);
+            Timeline timeline = _repo.GetTimeline(id);
 
             return View(timeline);
         }

@@ -39,12 +39,18 @@ namespace AileronAirwaysWeb.Controllers.Api
         {
             var timeline = _repo.GetTimeline(id);
 
-            return Ok(timeline);
+            return Ok(new TimelineViewModel
+            {
+                Id = timeline.Id,
+                Title = timeline.Title,
+                CreationTimeStamp = timeline.CreationTimeStamp,
+                IsDeleted = timeline.IsDeleted
+            });
         }
 
         // POST: api/timelines
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody]Timeline value)
+        public async Task<IActionResult> Post([FromBody]TimelineViewModel value)
         {
             var timeline = await _repo.CreateTimelineAsync(value.Title);
 
@@ -53,13 +59,19 @@ namespace AileronAirwaysWeb.Controllers.Api
 
         // PUT: api/timelines/abc123
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(string id, [FromBody]Timeline value)
+        public async Task<IActionResult> Put(string id, [FromBody]TimelineViewModel value)
         {
             var timeline = _repo.GetTimeline(id);
             timeline.Title = value.Title;
             await _repo.UpdateTimelineAsync(timeline);
 
-            return Ok(timeline);
+            return Ok(new TimelineViewModel
+            {
+                Id = timeline.Id,
+                Title = timeline.Title,
+                CreationTimeStamp = timeline.CreationTimeStamp,
+                IsDeleted = timeline.IsDeleted
+            });
         }
 
         // DELETE: api/timelines/abc123
