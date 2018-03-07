@@ -188,6 +188,9 @@
 
         document.getElementById("arrowChange").classList.remove("rightArrow");
         document.getElementById("arrowChange").classList.add("leftArrow");
+
+        // Make sure flash-message changes position.
+        $('.flash-messages').animate({ marginLeft: '200px'});
     }
 
 
@@ -207,7 +210,8 @@
         document.getElementById("arrowChange").classList.remove("leftArrow");
         document.getElementById("arrowChange").classList.add("rightArrow");
 
-
+        // Make sure flash-message changes position.
+        $('.flash-messages').animate({ marginLeft: '20px' });
     }
 
     function topFunction() {
@@ -298,6 +302,9 @@
         $("#closbtn").click(function () {
             $('#myModal').modal('hide');
         });
+
+        // Hack to make flash message appear correctly when side bar is shown.
+        $('.flash-messages').css('margin-left', '20px');
     });
 
 </script>
