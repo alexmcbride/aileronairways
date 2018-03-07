@@ -72,9 +72,6 @@ namespace AileronAirwaysWeb
 
             services.AddSession();
 
-            // We use this to cache API responses.
-            services.AddMemoryCache();
-
             // Add timeline service.
             services.AddSingleton<ITimelineService, TimelineService>((i) => new TimelineService(
                 Configuration.GetValue<string>("BaseUrl"), 
@@ -86,7 +83,7 @@ namespace AileronAirwaysWeb
 
             services.AddMvc();
 
-            // Add service for handling flasg temp messages.
+            // Add service for handling flash temp messages.
             services.AddTransient<IFlashService, FlashService>();
         }
     }
