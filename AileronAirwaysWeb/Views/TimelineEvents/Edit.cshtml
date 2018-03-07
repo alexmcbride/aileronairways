@@ -30,7 +30,12 @@
 
             <div class="form-group">
                 <label asp-for="EventDateTime"></label>
-                <input asp-for="EventDateTime" class="form-control" />
+                <div class='input-group date' id='eventDateTime'>
+                    <input asp-for="EventDateTime" type='text' class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
                 <span asp-validation-for="EventDateTime" class="text-danger"></span>
             </div>
 
@@ -46,6 +51,14 @@
         </div>
     </form>
 </div>
+
+<script>
+    $(function () {
+        $('#eventDateTime').datetimepicker({
+            format: 'DD/MM/YYYY hh:mm'
+        });
+    });
+</script>
 
 @section scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
