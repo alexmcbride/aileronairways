@@ -1,6 +1,6 @@
 using System;
 
-namespace AileronAirwaysWeb.Models
+namespace AileronAirwaysWeb.ViewModels
 {
     public class ErrorViewModel
     {

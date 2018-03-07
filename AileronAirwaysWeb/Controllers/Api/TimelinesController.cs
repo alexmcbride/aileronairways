@@ -1,9 +1,8 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using System.Linq;
-using AileronAirwaysWeb.Models;
-using AileronAirwaysWeb.Services;
+using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
@@ -12,35 +11,33 @@ namespace AileronAirwaysWeb.Controllers.Api
     [Route("api/timelines")]
     public class TimelinesController : Controller
     {
-        private readonly ICachedTimelineService _api;
+        private readonly TimelineRepository _repo;
 
-        public TimelinesController(ICachedTimelineService api)
+        public TimelinesController(TimelineRepository repo)
         {
-            _api = api;
+            _repo = repo;
         }
 
         // GET: api/timelines
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public IActionResult Get()
         {
-            var timelines = (await CachedTimeline.CacheGetTimelinesAsync(_api))
-                .OrderBy(t => t.CreationTimeStamp)
-                .Select(t => new TimelineViewModel
-                {
-                    Id = t.Id,
-                    Title = t.Title,
-                    CreationTimeStamp = t.CreationTimeStamp,
-                    IsDeleted = t.IsDeleted
-                }).ToList();
+            var timelines = _repo.Timelines.OrderByDescending(t => t.CreationTimeStamp).Select(t => new TimelineViewModel
+            {
+                Id = t.Id,
+                Title = t.Title,
+                CreationTimeStamp = t.CreationTimeStamp,
+                IsDeleted = t.IsDeleted
+            }).ToList();
 
             return Ok(timelines);
         }
 
         // GET: api/timelines/abc123
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public IActionResult Get(string id)
         {
-            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
+            var timeline = _repo.GetTimeline(id);
 
             return Ok(timeline);
         }
@@ -49,7 +46,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Timeline value)
         {
-            var timeline = await CachedTimeline.CacheCreateAsync(_api, value.Title);
+            var timeline = await _repo.CreateTimelineAsync(value.Title);
 
             return Ok(timeline);
         }
@@ -58,10 +55,9 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]Timeline value)
         {
-            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
-
+            var timeline = _repo.GetTimeline(id);
             timeline.Title = value.Title;
-            await timeline.EditTitleAsync(_api);
+            await _repo.UpdateTimelineAsync(timeline);
 
             return Ok(timeline);
         }
@@ -70,8 +66,8 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
-            await timeline.DeleteAsync(_api);
+            await _repo.DeleteTimelineAsync(id);
+
             return Ok();
         }
     }

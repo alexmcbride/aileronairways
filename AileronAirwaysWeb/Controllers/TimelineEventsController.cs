@@ -1,6 +1,6 @@
 ﻿using AileronAirwaysWeb.Models;
 using AileronAirwaysWeb.Services;
-using Echelon.TimelineApi;
+using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -11,26 +11,21 @@ namespace AileronAirwaysWeb.Controllers
 {
     public class TimelineEventsController : Controller
     {
-        private readonly ITimelineService _api;
+        private readonly TimelineRepository _repo;
         private readonly IFlashService _flash;
 
-        public TimelineEventsController(ICachedTimelineService api, IFlashService flash)
+        public TimelineEventsController(TimelineRepository repo, IFlashService flash)
         {
-            _api = api;
+            _repo = repo;
             _flash = flash;
         }
 
         [HttpGet("Timelines/{timelineId}/Events")]
-        public async Task<ActionResult> Index(string timelineId)
+        public ActionResult Index(string timelineId)
         {
-            var timeline = await Timeline.GetTimelineAsync(_api, timelineId);
-            var linkedEvents = await TimelineEvent.GetEventsAsync(_api, timelineId);
-
-            // Download all TimelineEvent objects at the same time.
-            var tasks = linkedEvents.Select(e => TimelineEvent.GetEventAsync(_api, e.TimelineEventId));
-            var events = (await Task.WhenAll(tasks))
-                .Where(e => !e.IsDeleted)
-                .OrderByDescending(e => e.EventDateTime)
+            var timeline = _repo.GetTimeline(timelineId);
+            var events = timeline.TimelineEvents
+                .OrderBy(e => e.EventDateTime)
                 .ToList();
 
             // Extra data needed by view.
@@ -42,10 +37,10 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
-        public async Task<ActionResult> Details(string timelineId, string eventId)
+        public ActionResult Details(string timelineId, string eventId)
         {
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, timelineId);
-            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
+            Timeline timeline = _repo.GetTimeline(timelineId);
+            TimelineEvent timelineEvent = _repo.GetTimelineEvent(eventId);
 
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
@@ -70,7 +65,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                TimelineEvent evt = await TimelineEvent.CreateAndLinkAsync(_api,
+                TimelineEvent evt = await _repo.CreateTimelineEventAsync(
                     vm.Title,
                     vm.Description,
                     vm.EventDateTime,
@@ -87,9 +82,9 @@ namespace AileronAirwaysWeb.Controllers
 
         //GET: Timelines/Edit/5
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
-        public async Task<ActionResult> Edit(string timelineId, string eventId)
+        public ActionResult Edit(string timelineId, string eventId)
         {
-            TimelineEvent timelineEvent = await TimelineEvent.GetEventAsync(_api, eventId);
+            TimelineEvent timelineEvent = _repo.GetTimelineEvent(eventId);
 
             var vm = new TimelineEventViewModel
             {
@@ -109,13 +104,12 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
+                TimelineEvent evt = _repo.GetTimelineEvent(eventId);
                 evt.Title = vm.Title;
                 evt.Description = vm.Description;
                 evt.EventDateTime = vm.EventDateTime;
                 evt.Location = vm.Location;
-
-                await evt.EditAsync(_api);
+                await _repo.EditTimelineEventAsync(evt);
 
                 _flash.Message($"Event '{evt.Title}' edited!");
 
@@ -127,9 +121,9 @@ namespace AileronAirwaysWeb.Controllers
 
         // GET: Timelines/Delete/5
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Delete")]
-        public async Task<ActionResult> Delete(string timelineId, string eventId)
+        public ActionResult Delete(string timelineId, string eventId)
         {
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
+            TimelineEvent evt = _repo.GetTimelineEvent(eventId);
 
             return View(new TimelineEventViewModel
             {
@@ -147,7 +141,8 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string timelineId, string eventId, IFormCollection collection)
         {
-            await TimelineEvent.UnlinkAndDeleteAsync(_api, timelineId, eventId);
+            var evt = _repo.GetTimelineEvent(eventId);
+            await _repo.DeleteTimelineEventAsync(evt);
 
             _flash.Message("Deleted timeline event");
 

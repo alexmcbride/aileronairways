@@ -2,7 +2,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace AileronAirwaysWeb.Models
+namespace AileronAirwaysWeb.ViewModels
 {
     public class TimelineViewModel
     {

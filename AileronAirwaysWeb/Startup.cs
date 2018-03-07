@@ -1,7 +1,6 @@
 ﻿using AileronAirwaysWeb.Data;
 using AileronAirwaysWeb.Models;
 using AileronAirwaysWeb.Services;
-using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -15,7 +14,6 @@ namespace AileronAirwaysWeb
     public class Startup
     {
         private IHostingEnvironment _env;
-        private IMemoryCache _cache;
 
         public Startup(IConfiguration configuration)
         {
@@ -25,7 +23,7 @@ namespace AileronAirwaysWeb
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -54,7 +52,6 @@ namespace AileronAirwaysWeb
             });
 
             _env = env;
-            _cache = cache;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -79,12 +76,13 @@ namespace AileronAirwaysWeb
             services.AddMemoryCache();
 
             // Add timeline service.
-            services.AddSingleton<ICachedTimelineService, CachedTimelineService>((i) => new CachedTimelineService(
+            services.AddSingleton<ITimelineService, TimelineService>((i) => new TimelineService(
                 Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId"),
-                _env.WebRootPath,
-                _cache));
+                _env.WebRootPath));
+
+            services.AddTransient<TimelineRepository>();
 
             services.AddMvc();
 

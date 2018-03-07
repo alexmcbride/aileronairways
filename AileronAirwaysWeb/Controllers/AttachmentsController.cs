@@ -1,6 +1,5 @@
 ﻿using AileronAirwaysWeb.Models;
 using AileronAirwaysWeb.Services;
-using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,20 +11,21 @@ namespace AileronAirwaysWeb.Controllers
     [Route("attachments")]
     public class AttachmentsController : Controller
     {
-        private readonly ITimelineService _api;
+        private readonly TimelineRepository _repo;
         private readonly IFlashService _flash;
 
-        public AttachmentsController(ICachedTimelineService api, IFlashService flash)
+        public AttachmentsController(TimelineRepository repo, IFlashService flash)
         {
-            _api = api;
+            _repo = repo;
             _flash = flash;
         }
 
         // GET: Attachments
         [HttpGet("{eventId}")]
-        public async Task<ActionResult> Index(string timelineId, string eventId)
+        public ActionResult Index(string timelineId, string eventId)
         {
-            var attachments = await Attachment.GetAttachmentsAsync(_api, eventId);
+            var @event = _repo.GetTimelineEvent(eventId);
+            var attachments = @event.Attachments.OrderBy(a => a.Title).ToList();
 
             ViewBag.EventId = eventId;
             ViewBag.TimelineId = timelineId;
@@ -34,9 +34,9 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         [HttpGet("{eventId}/details/{attachmentId}")]
-        public async Task<ActionResult> Details(string eventId, string attachmentId)
+        public ActionResult Details(string eventId, string attachmentId)
         {
-            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
+            var attachment = _repo.GetAttachment(attachmentId);
 
             ViewBag.EventId = eventId;
 
@@ -46,9 +46,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("download/{attachmentId}")]
         public async Task<ActionResult> Download(string attachmentId)
         {
-            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
-
-            await attachment.DownloadOrCacheAsync(_api);
+            var attachment = await _repo.DownloadAttachmentAsync(attachmentId);
 
             return File(attachment.FileName, attachment.ContentType, attachment.Title);
         }
@@ -65,7 +63,7 @@ namespace AileronAirwaysWeb.Controllers
                 foreach (var file in files)
                 {
                     // Create attachment and upload to AWS
-                    await Attachment.CreateAndUploadAsync(_api, eventId, file.FileName, file.OpenReadStream());
+                    await _repo.CreateAttachmentAsync(eventId, file.FileName, file.OpenReadStream());
                 }
 
                 var s = files.Count > 1 ? "s" : "";
@@ -81,9 +79,9 @@ namespace AileronAirwaysWeb.Controllers
 
         // GET: Attachments/Delete/5
         [HttpGet("{eventId}/delete/{attachmentId}")]
-        public async Task<ActionResult> Delete(string eventId, string attachmentId)
+        public ActionResult Delete(string eventId, string attachmentId)
         {
-            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
+            var attachment = _repo.GetAttachment(attachmentId);
 
             ViewBag.EventId = eventId;
 
@@ -96,8 +94,7 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Delete(string eventId, string attachmentId, IFormCollection collection)
         {
             // Delete from API.
-            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
-            await attachment.DeleteAsync(_api);
+            await _repo.DeleteAttachmentAsync(attachmentId);
 
             _flash.Message($"Deleted attachment");
 

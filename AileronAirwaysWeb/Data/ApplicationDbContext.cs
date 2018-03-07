@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AileronAirwaysWeb.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using AileronAirwaysWeb.Models;
 
 namespace AileronAirwaysWeb.Data
 {
@@ -22,5 +18,9 @@ namespace AileronAirwaysWeb.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public DbSet<Timeline> Timelines { get; set; }
+        public DbSet<TimelineEvent> TimelineEvents { get; set; }
+        public DbSet<Attachment> Attachments { get; set; }
     }
 }
