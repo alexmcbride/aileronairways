@@ -152,10 +152,10 @@
 
 
     </div>
-    <div class="backToTopContainer">
+    <div class="backToTopContainer" onclick="topFunction()">
 
 
-        <span onclick="topFunction()"><i class="backToTop"></i></span>
+        <span><i class="backToTop"></i></span>
 
     </div>
 
@@ -211,8 +211,8 @@
     }
 
     function topFunction() {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+        // Use jQuery to animate the scroll.
+        $("html, body").animate({ scrollTop: 0 }, "fast");
     }
 
     function displayCreateModal(data) {
