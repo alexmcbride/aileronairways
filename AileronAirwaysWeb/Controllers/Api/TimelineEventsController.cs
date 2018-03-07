@@ -1,8 +1,7 @@
 ﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace AileronAirwaysWeb.Controllers.Api
     {
         private readonly ITimelineService _api;
 
-        public TimelineEventsController(ITimelineService api)
+        public TimelineEventsController(ICachedTimelineService api)
         {
             _api = api;
         }

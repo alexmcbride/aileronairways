@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using System.Linq;
 using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
@@ -11,9 +12,9 @@ namespace AileronAirwaysWeb.Controllers.Api
     [Route("api/timelines")]
     public class TimelinesController : Controller
     {
-        private readonly ITimelineService _api;
+        private readonly ICachedTimelineService _api;
 
-        public TimelinesController(ITimelineService api)
+        public TimelinesController(ICachedTimelineService api)
         {
             _api = api;
         }
@@ -22,7 +23,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var timelines = (await Timeline.GetTimelinesAsync(_api))
+            var timelines = (await CachedTimeline.CacheGetTimelinesAsync(_api))
                 .OrderBy(t => t.CreationTimeStamp)
                 .Select(t => new TimelineViewModel
                 {
@@ -39,7 +40,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
-            var timeline = await Timeline.GetTimelineAsync(_api, id);
+            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             return Ok(timeline);
         }
@@ -48,7 +49,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPost]
         public async Task<IActionResult> Post([FromBody]Timeline value)
         {
-            var timeline = await Timeline.CreateAsync(_api, value.Title);
+            var timeline = await CachedTimeline.CacheCreateAsync(_api, value.Title);
 
             return Ok(timeline);
         }
@@ -57,7 +58,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]Timeline value)
         {
-            var timeline = await Timeline.GetTimelineAsync(_api, id);
+            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             timeline.Title = value.Title;
             await timeline.EditTitleAsync(_api);
@@ -69,7 +70,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var timeline = await Timeline.GetTimelineAsync(_api, id);
+            var timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
             await timeline.DeleteAsync(_api);
             return Ok();
         }

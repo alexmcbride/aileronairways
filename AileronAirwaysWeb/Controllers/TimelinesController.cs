@@ -3,40 +3,33 @@ using AileronAirwaysWeb.Services;
 using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Net;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
     public class TimelinesController : Controller
     {
-        private readonly ITimelineService _api;
+        private readonly ICachedTimelineService _api;
         private readonly IFlashService _flash;
 
-        public TimelinesController(ITimelineService api, IFlashService flash)
+        public TimelinesController(ICachedTimelineService api, IFlashService flash)
         {
             _api = api;
             _flash = flash;
         }
 
         // GET: Timelines
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            IList<Timeline> timelines = (await Timeline.GetTimelinesAsync(_api))
-                .Where(t => !t.IsDeleted)
-                .OrderByDescending(t => t.CreationTimeStamp)
-                .ToList();
-
-            return View(timelines);
+            // Timelines are loaded through JSON
+            return View();
         }
 
         // GET: Timelines/Details/5
         public async Task<ActionResult> Details(string id)
         {
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            Timeline timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             return View(timeline);
         }
@@ -56,7 +49,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                Timeline timeline = await Timeline.CreateAsync(_api, vm.Title);
+                Timeline timeline = await CachedTimeline.CacheCreateAsync(_api, vm.Title);
 
                 _flash.Message("Timeline created!");
 
@@ -71,7 +64,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            Timeline timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             var vm = new TimelineViewModel
             {
@@ -88,7 +81,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+                Timeline timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
                 timeline.Title = vm.Title;
                 await timeline.EditTitleAsync(_api);
 
@@ -103,7 +96,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Delete/5
         public async Task<ActionResult> Delete(string id)
         {
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            Timeline timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             return View(new TimelineViewModel
             {
@@ -118,7 +111,7 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string id, IFormCollection collection)
         {
-            Timeline timeline = await Timeline.GetTimelineAsync(_api, id);
+            Timeline timeline = await CachedTimeline.CacheGetTimelineAsync(_api, id);
 
             await timeline.DeleteAsync(_api);
 

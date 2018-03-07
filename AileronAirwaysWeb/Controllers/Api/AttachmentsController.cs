@@ -1,4 +1,5 @@
-﻿using Echelon.TimelineApi;
+﻿using AileronAirwaysWeb.Services;
+using Echelon.TimelineApi;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
@@ -11,7 +12,7 @@ namespace AileronAirwaysWeb.Controllers.Api
     {
         private readonly ITimelineService _api;
 
-        public AttachmentsController(ITimelineService api)
+        public AttachmentsController(ICachedTimelineService api)
         {
             _api = api;
         }

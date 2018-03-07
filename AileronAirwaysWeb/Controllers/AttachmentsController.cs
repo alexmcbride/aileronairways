@@ -15,7 +15,7 @@ namespace AileronAirwaysWeb.Controllers
         private readonly ITimelineService _api;
         private readonly IFlashService _flash;
 
-        public AttachmentsController(ITimelineService api, IFlashService flash)
+        public AttachmentsController(ICachedTimelineService api, IFlashService flash)
         {
             _api = api;
             _flash = flash;

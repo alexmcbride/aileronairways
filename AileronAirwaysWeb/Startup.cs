@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +15,7 @@ namespace AileronAirwaysWeb
     public class Startup
     {
         private IHostingEnvironment _env;
+        private IMemoryCache _cache;
 
         public Startup(IConfiguration configuration)
         {
@@ -23,7 +25,7 @@ namespace AileronAirwaysWeb
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IMemoryCache cache)
         {
             if (env.IsDevelopment())
             {
@@ -52,6 +54,7 @@ namespace AileronAirwaysWeb
             });
 
             _env = env;
+            _cache = cache;
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -72,12 +75,16 @@ namespace AileronAirwaysWeb
 
             services.AddSession();
 
+            // We use this to cache API responses.
+            services.AddMemoryCache();
+
             // Add timeline service.
-            services.AddSingleton<ITimelineService, TimelineService>((i) => new TimelineService(
+            services.AddSingleton<ICachedTimelineService, CachedTimelineService>((i) => new CachedTimelineService(
                 Configuration.GetValue<string>("BaseUrl"), 
                 Configuration.GetValue<string>("AuthToken"), 
                 Configuration.GetValue<string>("TenantId"),
-                _env.WebRootPath));
+                _env.WebRootPath,
+                _cache));
 
             services.AddMvc();
 

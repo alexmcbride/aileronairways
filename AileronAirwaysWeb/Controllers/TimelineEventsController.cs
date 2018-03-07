@@ -14,7 +14,7 @@ namespace AileronAirwaysWeb.Controllers
         private readonly ITimelineService _api;
         private readonly IFlashService _flash;
 
-        public TimelineEventsController(ITimelineService api, IFlashService flash)
+        public TimelineEventsController(ICachedTimelineService api, IFlashService flash)
         {
             _api = api;
             _flash = flash;
