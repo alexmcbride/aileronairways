@@ -5,7 +5,7 @@ using Moq;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
-namespace Echelon.TimelineApi.Tests
+namespace AileronAirwaysWeb.Tests
 {
     [TestClass]
     public class TimelineTests

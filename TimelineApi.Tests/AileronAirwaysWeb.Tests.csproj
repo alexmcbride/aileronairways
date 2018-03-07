@@ -7,7 +7,7 @@
 
     <RootNamespace>Echelon.TimelineApi.Tests</RootNamespace>
 
-    <AssemblyName>Echelon.TimelineApi.Tests</AssemblyName>
+    <AssemblyName>AileronAirwaysWeb.Tests</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

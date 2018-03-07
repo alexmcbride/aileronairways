@@ -8,7 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Echelon.TimelineApi.Tests
+namespace AileronAirwaysWeb.Tests
 {
     [TestClass]
     public class TimelineServiceTests

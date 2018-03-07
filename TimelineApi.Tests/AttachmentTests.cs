@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Echelon.TimelineApi.Tests
+namespace AileronAirwaysWeb.Tests
 {
     [TestClass]
     public class AttachmentTests

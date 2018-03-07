@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Echelon.TimelineApi.Tests
+namespace AileronAirwaysWeb.Tests
 {
     public static class TestUtils
     {
