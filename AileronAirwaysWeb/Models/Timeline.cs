@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
@@ -44,6 +45,14 @@ namespace AileronAirwaysWeb.Models
             {
                 TimelineId = Id,
             });
+        }
+
+        public void UpdateAttachmentCounts()
+        {
+            foreach (var @event in TimelineEvents)
+            {
+                @event.UpdateAttachmentCounts();
+            }
         }
 
         public static async Task<Timeline> GetTimelineAsync(ITimelineService api, string timelineId)

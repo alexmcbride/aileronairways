@@ -11,9 +11,10 @@ using System;
 namespace AileronAirwaysWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180307164540_AddedAttachmentCounts")]
+    partial class AddedAttachmentCounts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -114,13 +115,13 @@ namespace AileronAirwaysWeb.Data.Migrations
                     b.Property<string>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("AttachmentFilesCount");
-
-                    b.Property<int>("AttachmentImagesCount");
+                    b.Property<int>("AttachmentsCount");
 
                     b.Property<string>("Description");
 
                     b.Property<DateTime>("EventDateTime");
+
+                    b.Property<int>("ImagesCount");
 
                     b.Property<bool>("IsDeleted");
 

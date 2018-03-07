@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
@@ -17,6 +18,8 @@ namespace AileronAirwaysWeb.Models
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
         public string Location { get; set; }
+        public int AttachmentFilesCount { get; set; }
+        public int AttachmentImagesCount { get; set; }
 
         [JsonIgnore]
         public string TimelineId { get; set; }
@@ -25,7 +28,7 @@ namespace AileronAirwaysWeb.Models
         public virtual Timeline Timeline { get; set; }
 
         public virtual List<Attachment> Attachments { get; set; }
-
+     
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
         {
             return CreateAsync(api, Guid.NewGuid().ToString(), title, description, eventDateTime, location);
@@ -157,6 +160,12 @@ namespace AileronAirwaysWeb.Models
         {
             string json = await api.GetJsonAsync("TimelineEvent/GetAllEvents");
             return JsonConvert.DeserializeObject<List<TimelineEvent>>(json);
+        }
+
+        public void UpdateAttachmentCounts()
+        {
+            AttachmentFilesCount = Attachments.Where(a => !a.IsImage).Count();
+            AttachmentImagesCount = Attachments.Where(a => a.IsImage).Count();
         }
     }
 }

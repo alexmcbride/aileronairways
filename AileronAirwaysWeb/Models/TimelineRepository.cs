@@ -40,26 +40,20 @@ namespace AileronAirwaysWeb.Models
             if (!await _context.Timelines.AnyAsync())
             {
                 var timelines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
+
+                foreach (var timeline in timelines)
+                {
+                    timeline.UpdateAttachmentCounts();
+                }
+
                 await _context.AddRangeAsync(timelines);
                 await _context.SaveChangesAsync();
             }
         }
 
-        public Attachment GetAttachment(string attachmentId)
-        {
-            return _context.Attachments.Find(attachmentId);
-        }
-
         public Timeline GetTimeline(string id)
         {
             return _context.Timelines.Include(t => t.TimelineEvents).SingleOrDefault(t => t.Id == id);
-        }
-
-        public async Task<Attachment> DownloadAttachmentAsync(string attachmentId)
-        {
-            var attachment = GetAttachment(attachmentId);
-            await attachment.DownloadOrCacheAsync(_api);
-            return attachment;
         }
 
         public async Task<Timeline> CreateTimelineAsync(string title)
@@ -68,17 +62,6 @@ namespace AileronAirwaysWeb.Models
             await _context.Timelines.AddAsync(timeline);
             await _context.SaveChangesAsync();
             return timeline;
-        }
-
-        public async Task<Attachment> CreateAttachmentAsync(string eventId, string fileName, Stream stream)
-        {
-            var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, fileName, stream);
-
-            attachment.TimelineEventId = eventId;
-            await _context.Attachments.AddAsync(attachment);
-            await _context.SaveChangesAsync();
-
-            return attachment;
         }
 
         public async Task UpdateTimelineAsync(Timeline timeline)
@@ -110,15 +93,6 @@ namespace AileronAirwaysWeb.Models
             return timelineEvent;
         }
 
-        public async Task DeleteAttachmentAsync(string attachmentId)
-        {
-            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
-            await attachment.DeleteAsync(_api);
-
-            _context.Attachments.Remove(attachment);
-            await _context.SaveChangesAsync();
-        }
-
         public async Task EditTimelineEventAsync(TimelineEvent evt)
         {
             await evt.EditAsync(_api);
@@ -133,6 +107,61 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
-        
+        public Attachment GetAttachment(string attachmentId)
+        {
+            return _context.Attachments.Find(attachmentId);
+        }
+
+        public async Task<Attachment> CreateAttachmentAsync(string eventId, string fileName, Stream stream)
+        {
+            var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, fileName, stream);
+
+            // Set relation and update event attachment counters.
+            var @event = await _context.TimelineEvents.FindAsync(eventId);
+            attachment.TimelineEvent = @event;
+            
+            if (attachment.IsImage)
+            {
+                @event.AttachmentImagesCount++;
+            }
+            else
+            {
+                @event.AttachmentFilesCount++;
+            }
+
+            _context.Entry(@event).State = EntityState.Modified;
+
+            await _context.Attachments.AddAsync(attachment);
+            await _context.SaveChangesAsync();
+
+            return attachment;
+        }
+
+        public async Task<Attachment> DownloadAttachmentAsync(string attachmentId)
+        {
+            var attachment = GetAttachment(attachmentId);
+            await attachment.DownloadOrCacheAsync(_api);
+            return attachment;
+        }
+
+        public async Task DeleteAttachmentAsync(string attachmentId)
+        {
+            var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
+            await attachment.DeleteAsync(_api);
+
+            // Remove from DB and update counters
+            _context.Attachments.Remove(attachment);
+            var @event = await _context.TimelineEvents.FindAsync(attachment.TimelineEventId);
+            if (attachment.IsImage)
+            {
+                @event.AttachmentImagesCount--;
+            }
+            else
+            {
+                @event.AttachmentFilesCount--;
+            }
+            _context.Entry(@event).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }
