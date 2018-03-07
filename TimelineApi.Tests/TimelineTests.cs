@@ -5,7 +5,7 @@ using Moq;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 
-namespace AileronAirwaysWeb.Tests
+namespace AileronAirwaysWebTests
 {
     [TestClass]
     public class TimelineTests

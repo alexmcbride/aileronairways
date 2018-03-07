@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace AileronAirwaysWeb.Tests
+namespace AileronAirwaysWebTests
 {
     [TestClass]
     public class AttachmentTests

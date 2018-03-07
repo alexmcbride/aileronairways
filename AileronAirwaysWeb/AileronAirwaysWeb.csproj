@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <UserSecretsId>aspnet-AileronAirwaysWeb-0D3A2562-D2D5-49CA-A9EE-EBE8FEA7E547</UserSecretsId>
+    <StartupObject>AileronAirwaysWeb.Program</StartupObject>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

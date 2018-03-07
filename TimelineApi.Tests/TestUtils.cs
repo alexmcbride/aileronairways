@@ -6,7 +6,7 @@ using System.Collections.Specialized;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace AileronAirwaysWeb.Tests
+namespace AileronAirwaysWebTests
 {
     public static class TestUtils
     {

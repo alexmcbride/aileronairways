@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AileronAirwaysWeb.Tests", "TimelineApi.Tests\AileronAirwaysWeb.Tests.csproj", "{A1953A66-81B7-425B-A80D-CA0877BC4A7A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AileronAirwaysWebTests", "TimelineApi.Tests\AileronAirwaysWebTests.csproj", "{A1953A66-81B7-425B-A80D-CA0877BC4A7A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AileronAirwaysWeb", "AileronAirwaysWeb\AileronAirwaysWeb.csproj", "{4F82AFAE-250E-4A8C-AC5A-99B8797CC8D7}"
 EndProject
