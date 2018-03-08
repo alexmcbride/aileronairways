@@ -24,10 +24,9 @@ a:hover {
 
 
 /*Navigation ------------------------------------------------------------- */
-#navbar {
-    width: 100%;
-    height: 80px;
-    top: 0;
+.navbar {
+   
+    background-color: #0D1B2E;
 }
 
 .navList {
@@ -57,7 +56,7 @@ li {
     align-content: center;
     width: 100%;
     text-align: center;
-    padding: 100px 0 20px 0;
+    padding: 80px 0 20px 0;
 }
 
 
@@ -238,8 +237,11 @@ li {
     float: right;
     width: 100%;
     height: 45%;
-    border: medium solid #0D1B2E;
+    border: medium solid #0D1B2E; 
     border-width: 2px 0 0 0;
+
+
+
 }
 
 .iconSection {
@@ -324,6 +326,7 @@ li {
 
 #mainSidePanel {
     transition: margin-left .5s;
+
 }
 
 
@@ -334,21 +337,17 @@ li {
     position: fixed;
     /* z-index: 1;*/
     top: 0px;
-    left: 0;
+    left: 0px;
     background-color: #f0e8eb;
     overflow-x: hidden;
     transition: 0.5s;
     display: inline;
+
+
+    border-right: 1px solid #0D1B2E;
 }
 
-.sidenav a {
-    padding: 8px 8px 8px 32px;
-    text-decoration: none;
-    font-size: 15px;
-    color: #0D1B2E;
-    display: block;
-    transition: 0.3s;
-}
+
 
 .sidenav a:hover {
     color: #0D1B2E;
@@ -365,18 +364,52 @@ li {
 #sideNavArrows {
 
     width: 100%;
-    padding-top: 100px;
+    padding-top: 65px;
     padding-left: 5px;
     display: block;
 
 }
 
 
-#eventNameList {
+/*#eventNameContainer {
+    height: 100%;
     width: 100%;
-    padding: 5px 5px;
+    overflow: hidden;
+    position: relative;
     
+
+}*/
+
+#sideNavContent {
+    
+    height: 60%;
+    position: relative;
+    top: 65px;
 }
+
+
+
+#eventNameList {
+    height: 100%;
+    width: 90%;
+    position: absolute;
+    display: inline;
+    padding: 30% 10% 10% 0;
+    overflow: auto;
+
+    right: -5px;
+}
+
+
+    #eventNameList a {
+        padding: 4px;
+        text-decoration: none;
+        font-size: 12px;
+        display: block;
+        transition: 0.3s;
+    }
+
+
 
 h3.eventDate {
     font-size: 18px;
@@ -393,7 +426,6 @@ h3.eventDate {
 
 #searchBox {
     width: 100%;
-    padding: 10px 0;
 
 }
 

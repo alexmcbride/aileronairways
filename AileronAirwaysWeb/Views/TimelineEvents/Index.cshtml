@@ -30,15 +30,13 @@
         <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
         -->
         <div id="sideNavArrows">
-            <!--<span class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></span>
-
-    <i class="rightArrow"></i>-->
-
-
-
-
             <div" id="arrowsSidePanel" onclick="openNav()" ><i id="arrowChange" class="rightArrow"></i></div">
         </div>
+
+        <br /><br />
+
+
+
 
         <div id="sideNavContent" style="visibility: hidden;">
             <!--
@@ -48,18 +46,16 @@
                 &nbsp; @Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
             </div>
 
-            <div id="eventNameList">
 
-                @{
-                    int linkId = 1;
-                    @foreach (var item in Model)
-                    {
+                <div id="eventNameList">
 
-                        <a href="#eventLink + @linkId">@item.Title</a>
-                        linkId += 1;
+                    @{
+                        @foreach (var item in Model)
+                        {
+                            <a class="uppercase" href="#eventLink + @item.Id">@item.Title</a>
+                        }
                     }
-                }
-            </div>
+                </div>
         </div>
     </div>
 
@@ -72,25 +68,24 @@
 
 
         @{
-        int eventCount = -1;
-        string cssClassIdentifier = "";
+            int eventCount = -1;
+            string cssClassIdentifier = "";
 
-        int IdForLink = 0;
 
-        foreach (var item in Model)
-        {
-            eventCount += 1;
-            IdForLink += 1;
-            if (eventCount % 2 == 0)
-            { cssClassIdentifier = "left"; }
-            else
-            { cssClassIdentifier = "right"; }
+            foreach (var item in Model)
+            {
+                eventCount += 1;
 
-            <div id="eventLink + @IdForLink" style="padding: 25px 0">
+                if (eventCount % 2 == 0)
+                { cssClassIdentifier = "left"; }
+                else
+                { cssClassIdentifier = "right"; }
+
+            <div id="eventLink + @item.Id" style="padding: 25px 0">
 
             </div>
 
-
+         
             <div class="containerTimeline @cssClassIdentifier">
 
                 <div class="eventContent">
@@ -111,11 +106,11 @@
                             </div>
                             <div class="col-md-4 iconSection">
                                 <i class="eventIcon fas fa-paperclip"></i>
-                                <div class="eventIcon">3</div>
+                                <div class="eventIcon">@item.AttachmentFilesCount</div>
                             </div>
                             <div class="col-md-4 iconSection">
                                 <i class="far fa-image"></i>
-                                <div class="eventIcon">4</div>
+                                <div class="eventIcon">@item.AttachmentImagesCount</div>
                             </div>
                         </div>
                     </div>
@@ -175,11 +170,11 @@
     var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
 
     function openNav() {
-        document.getElementById("mySidenav").style.width = "200px";
-        document.getElementById("mainSidePanel").style.marginLeft = "200px";
+        document.getElementById("mySidenav").style.width = "230px";
+        document.getElementById("mainSidePanel").style.marginLeft = "230px";
 
         document.getElementById("sideNavContent").style.visibility = 'visible';
-        document.getElementById("sideNavArrows").style.paddingLeft = '160px';
+        document.getElementById("sideNavArrows").style.paddingLeft = '180px';
         document.getElementById("sideNavArrows").style.transition = '.5s';
 
         document.getElementById("arrowsSidePanel").removeEventListener("click", openNav);
@@ -211,8 +206,10 @@
     }
 
     function topFunction() {
+        $("html, body").animate({ scrollTop:0 }, "fast");
+        /*
         document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
+        document.documentElement.scrollTop = 0;*/
     }
 
     function displayCreateModal(data) {
