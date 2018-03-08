@@ -14,9 +14,17 @@ namespace AileronAirwaysWeb.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
-            // Customize the ASP.NET Identity model and override the defaults if needed.
-            // For example, you can rename the ASP.NET Identity table names and more.
-            // Add your customizations after calling base.OnModelCreating(builder);
+
+            // Make sure deletions cascade correctly.
+            builder.Entity<Timeline>()
+                .HasMany(t => t.TimelineEvents)
+                .WithOne(e => e.Timeline)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<TimelineEvent>()
+                .HasMany(e => e.Attachments)
+                .WithOne(a => a.TimelineEvent)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Timeline> Timelines { get; set; }

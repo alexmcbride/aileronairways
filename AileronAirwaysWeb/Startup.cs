@@ -81,8 +81,6 @@ namespace AileronAirwaysWeb
 
             services.AddTransient<TimelineRepository>();
 
-            services.AddMvc();
-
             // Add service for handling flash temp messages.
             services.AddTransient<IFlashService, FlashService>();
         }

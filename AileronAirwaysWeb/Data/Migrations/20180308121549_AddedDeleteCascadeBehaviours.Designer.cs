@@ -11,9 +11,10 @@ using System;
 namespace AileronAirwaysWeb.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180308121549_AddedDeleteCascadeBehaviours")]
+    partial class AddedDeleteCascadeBehaviours
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
