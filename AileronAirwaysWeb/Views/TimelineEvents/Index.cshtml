@@ -29,6 +29,9 @@
     <div id="mySidenav" class="sidenav">
         <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
         -->
+
+
+        <!-- Searching for Events -->
         <div id="sideNavArrows">
             <div" id="arrowsSidePanel" onclick="openNav()" ><i id="arrowChange" class="rightArrow"></i></div">
         </div>
@@ -38,25 +41,27 @@
 
 
 
-        <div id="sideNavContent" style="visibility: hidden;">
-            <!--
-                <hr class="sidPanelHR" />
-            -->
-            <div id="searchBox">
-                &nbsp; @Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
-            </div>
+              <div id="sideNavContent" style="visibility: hidden;">
+                  <!--
+    <hr class="sidPanelHR" />
 
+              <div id="searchBox">
+                  &nbsp; Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
+              </div> -->
+                  <div id="searchBox">
+                      <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
+                  </div>
 
-                <div id="eventNameList">
+                  <div id="eventNameList">
 
-                    @{
-                        @foreach (var item in Model)
-                        {
-                            <a class="uppercase" href="#eventLink + @item.Id">@item.Title</a>
-                        }
-                    }
-                </div>
-        </div>
+                      @{
+                          @foreach (var item in Model)
+                            {
+                                <a class="eventTitlesFilter uppercase" href="#eventLink + @item.Id">@item.Title</a>                         
+                            }
+                      }
+                  </div>
+              </div>
     </div>
 
 
@@ -120,13 +125,13 @@
                             <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
                             <p>
                                 @if (item.Description != null && item.Description.Length >= 150)
-                            {
-                                @item.Description.Substring(1, 150)
-                        }
-                        else
-                        {
-                            @item.Description
-                    }
+                                {
+                                    @item.Description.Substring(1, 150)
+                                }
+                                else
+                                {
+                                    @item.Description
+                                }
                             </p>
                             <p class="editDelete">
                                 <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
@@ -167,6 +172,34 @@
 
 @section Scripts{
 <script>
+
+    /* Filetring Event Titles */
+    function filterEventTitles() {
+        var input, filter, table, tr, td, i;
+
+        input = document.getElementById("myInputSearchEvents");
+
+        filter = input.value.toUpperCase();
+        titles = document.getElementsByClassName("eventTitlesFilter");
+
+
+        for (i = 0; i < titles.length; i++) {
+            td = titles[i];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    titles[i].style.display = "";
+                } else {
+                    titles[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+
+
+
+
+
     var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
 
     function openNav() {
@@ -174,7 +207,7 @@
         document.getElementById("mainSidePanel").style.marginLeft = "230px";
 
         document.getElementById("sideNavContent").style.visibility = 'visible';
-        document.getElementById("sideNavArrows").style.paddingLeft = '180px';
+        document.getElementById("sideNavArrows").style.paddingLeft = '200px';
         document.getElementById("sideNavArrows").style.transition = '.5s';
 
         document.getElementById("arrowsSidePanel").removeEventListener("click", openNav);
@@ -184,6 +217,10 @@
         document.getElementById("arrowChange").classList.remove("rightArrow");
         document.getElementById("arrowChange").classList.add("leftArrow");
     }
+
+
+
+
 
 
     function closeNav() {

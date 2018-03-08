@@ -88,7 +88,8 @@ li {
 .timeline {
     position: relative;
     max-width: 100%;
-    margin: 0 auto;
+    width: 100%;
+    margin: 0;
 }
 
     /* The actual timeline (the vertical ruler) */
@@ -182,7 +183,7 @@ li {
     background-color: white;
     position: relative;
     /*border-radius: 6px;*/
-    border: 2px solid #0D1B2E;
+    border: 1.5px solid #0D1B2E;
 
 
     display: flex;
@@ -200,7 +201,7 @@ li {
     background-color: rgba(112,112,112,.3);
 
     border: medium solid #0D1B2E;
-    border-width: 0 2px 0 0;
+    border-width: 0 1.5px 0 0;
     
     text-align: center;
 
@@ -211,6 +212,9 @@ li {
     width: 75%;
     height: inherit;
     float: left;
+
+
+    line-height: 1.2;
 }
 
 
@@ -238,7 +242,7 @@ li {
     width: 100%;
     height: 45%;
     border: medium solid #0D1B2E; 
-    border-width: 2px 0 0 0;
+    border-width: 1.5px 0 0 0;
 
 
 
@@ -247,6 +251,7 @@ li {
 .iconSection {
     float: left;
     width: 33%;
+    align-content: center;
 }
 
 
@@ -340,10 +345,9 @@ li {
     left: 0px;
     background-color: #f0e8eb;
     overflow-x: hidden;
+    overflow-y: hidden;
     transition: 0.5s;
     display: inline;
-
-
     border-right: 1px solid #0D1B2E;
 }
 
@@ -381,23 +385,23 @@ li {
 }*/
 
 #sideNavContent {
-    
-    height: 60%;
+    height: 100%;
     position: relative;
-    top: 65px;
+    overflow: hidden;
 }
 
 
 
 #eventNameList {
-    height: 100%;
+    height: 70%;
     width: 90%;
     position: absolute;
     display: inline;
-    padding: 30% 10% 10% 0;
-    overflow: auto;
+    padding: 5% 5% 5% 5%;
+    overflow-y: auto;
+    left: 10px;
+    right: -15px;
 
-    right: -5px;
 }
 
 
@@ -425,8 +429,14 @@ h3.eventDate {
 }
 
 #searchBox {
-    width: 100%;
+    width: 80%;
+    align-content: center;
+    margin: 0 10%;
+    padding: 0 0 20px 0;
+}
 
+#myInputSearchEvents {
+    padding-left: 10px;
 }
 
 
