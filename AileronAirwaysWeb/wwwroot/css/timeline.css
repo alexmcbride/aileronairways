@@ -380,7 +380,7 @@ li {
     padding-top: 65px;
     padding-left: 5px;
     display: block;
-
+    cursor: pointer;
 }
 
 
@@ -513,6 +513,7 @@ i {
     width: 100%;
     padding: 40px 10px 10px 10px;
     text-align: center;
+    cursor: pointer;
 }
 
 
