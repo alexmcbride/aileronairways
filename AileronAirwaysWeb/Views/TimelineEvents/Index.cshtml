@@ -190,13 +190,6 @@
         }
     }
 
-
-
-
-
-
-    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
-
     function openNav() {
         document.getElementById("mySidenav").style.width = "230px";
         document.getElementById("mainSidePanel").style.marginLeft = "230px";
@@ -213,7 +206,7 @@
         document.getElementById("arrowChange").classList.add("leftArrow");
 
         // Make sure flash-message changes position.
-        $('.flash-messages').css({ marginLeft: '200px'});
+        $('.flash-messages').css({ marginLeft: '230px'});
     }
 
 
@@ -245,6 +238,7 @@
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
 
+    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
         $('#myModal').modal({ "backdrop": "static", keyboard: true });
@@ -329,8 +323,8 @@
             $('#myModal').modal('hide');
         });
 
-        // Hack to make flash message appear correctly when side bar is shown.
-        $('.flash-messages').css('margin-left', '20px');
+        // Sidebar defaults to open.
+        openNav();
     });
 
     </script>
