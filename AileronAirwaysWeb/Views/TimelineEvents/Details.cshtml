@@ -4,19 +4,30 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="row">
-    <div class="col-sm-12">
-        <h2>Description</h2>
 
-        <h3>@Model.Title</h3>
-        <p>Date: @Model.EventDateTime</p>
-        <p>Location: @Model.Location</p>
-        <p>Description: @Model.Description</p>
 
-        <p>
-            <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
-            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-            <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
-        </p>
-    </div>
+<div class="headerSection">
+    <h2 class="mainHeader">@Model.Title </h2>
+    <hr class="headerHR" />
+    <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
 </div>
+
+
+<hr />
+<content style="background-color: blue;">
+    <div class="row">
+        <div class="col-sm-12">
+
+
+            <p>Location: @Model.Location</p>
+            <p>DescriptiSon: @Model.Description</p>
+
+
+            <p>
+                <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
+                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+                <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
+            </p>
+        </div>
+    </div>
+</content>

@@ -55,10 +55,12 @@
                   <div id="eventNameList">
 
                       @{
-                          @foreach (var item in Model)
-                            {
-                                <a class="eventTitlesFilter uppercase" href="#eventLink + @item.Id">@item.Title</a>                         
-                            }
+                          int i = 0;
+                          foreach (var item in Model)
+                          {
+                              i = i + 1;
+                              <a class="eventTitlesFilter uppercase" href="#eventLink + @item.Id">@i: @item.Title</a>                         
+                          }
                       }
                   </div>
               </div>
@@ -97,7 +99,7 @@
                     <div class="eventDateSection">
                         <div class="eventDateTime">
                             <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
-                            <p>@item.EventDateTime.ToString("HH:mm")</p>
+                            <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
                         </div>
                         <div class="eventIconDisplay">
                             <div class="col-md-4 iconSection">
