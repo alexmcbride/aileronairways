@@ -1,4 +1,5 @@
-﻿using AileronAirwaysWeb.Services;
+﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AileronAirwaysWeb.TagHelpers
