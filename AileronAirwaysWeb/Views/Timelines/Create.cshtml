@@ -36,4 +36,7 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+    $('#btnSave').on("click", function () { $('input').val(""); });
+    </script>
 }

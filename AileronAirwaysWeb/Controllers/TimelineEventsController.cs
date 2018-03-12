@@ -74,6 +74,7 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(string timelineId, CreateViewModel CVM)
         {
+            if(ModelState.IsValid){ 
             //DateTime date = DateTime.Parse(Request.Form["EventDateTime"]);
 
             TimelineEvent evt = await TimelineEvent.CreateAsync(_api,
@@ -88,6 +89,9 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timelineId;
 
             return RedirectToAction(nameof(Index), new { timelineId });
+        }
+            //return BadRequest(ModelState);
+            return View(CVM);
         }
 
         //GET: Timelines/Edit/5
@@ -117,8 +121,8 @@ namespace AileronAirwaysWeb.Controllers
         public async Task<ActionResult> Edit(string timelineId, string eventId, EditViewModel EVM)
         {
             //var date = DateTime.Parse(Request.Form["EventDateTime"]);
-
-            TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
+            if (ModelState.IsValid) { 
+                TimelineEvent evt = await TimelineEvent.GetEventAsync(_api, eventId);
             evt.Title = EVM.Title;
             evt.Description = EVM.Description;
             evt.EventDateTime = EVM.DateTime;
@@ -129,6 +133,8 @@ namespace AileronAirwaysWeb.Controllers
             _flash.Message($"Event '{evt.Title}' edited!");
 
             return RedirectToAction("Details", "TimelineEvents", new { timelineId, eventId = evt.Id });
+            }
+            return BadRequest(ModelState);
         }
 
         // GET: Timelines/Delete/5

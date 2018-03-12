@@ -19,7 +19,12 @@
 
 <hr>
 
-<div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+<label for="myInput1">Date from</label><input type="text" class="myInput" id="myInput1" placeholder="Search for any input value.." title="Type in a name">
+<label for="myInput2">Date to</label><input type="text" class="myInput" id="myInput2" placeholder="Search for any input value.." title="Type in a name">
+<hr />
+<br />
+
+<div id="main" style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
     <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
         <thead>
             <tr>
@@ -36,13 +41,14 @@
     {
     <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
 
+
     <script>
         var createtimelineurl = "@Url.Action("Create", "Timelines")";
         $(function () {
             $(".modal-link-create-timeline").click(function () {
                 //debugger;
-                    var $buttonClicked = $(this);
-                    var options = { "backdrop": "static", keyboard: true };
+                var $buttonClicked = $(this);
+                var options = { "backdrop": "static", keyboard: true };
                 $.ajax({
                     type: "GET",
                     url: createtimelineurl,
@@ -58,12 +64,15 @@
                         alert("Dynamic content load failed.");
                     }
                 });
+
             });
+
             $("#closbtn").click(function () {
                 $('#myModal').modal('hide');
             });
         });
 
+        //mie updated this
         $(document).ready(function () {
                     $.ajax({
                         /**/
@@ -76,7 +85,7 @@
                         //rowId: 'id',
                         success: function (jsondata) {
                              //debugger;
-                             var table = $('#tbltimelines').DataTable({
+                            var timelinetable = $('#tbltimelines').DataTable({
                                 data: jsondata,
                                 columns: [
                                     @*{ visible: false },
@@ -84,21 +93,51 @@
                                     //null,
                                     //{ data: 'id'},*@
                                     { mRender: function (data, type, row) { return '<a href="/Timelines/' + row.id + '/Events/">' + row.title +'</a> ' } },
-                                    { data: 'creationTimeStamp' },
+                                    //{ data: 'creationTimeStamp' },
+                                    {
+                                        mRender: function (data, type, row) {
+                                            var date = new Date(row.creationTimeStamp);
+                                            var month = date.getDate();
+                                            var day = date.getMonth() + 1;
+                                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":"+ date.getMinutes();
+                                        }
+                                    },
                                     {
                                         // this is Actions Column
                                         mRender: function (data, type, row) {
-                                            
+
                                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\''+row.id+'\')">Edit</a> ' +
                                                 '<a href="/Timelines/Delete/' + row.id + '" onclick="return confirm(\'Are you sure you wish to delete this event?\');">Delete</a>';
                                         }
                                     }
                                 ]
                             });
+                            // Event listener to the two range filtering inputs to redraw on input
+                            $('#myInput1, #myInput2').keyup(function () {
+                                timelinetable.draw();
+                            });
                             console.log(jsondata);
                         }
-                    });
-                });
+                     });
+        });
+
+        /* Mie updated this Custom filtering function which will search data in column four between two values */
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+
+                var min = new Date(($('#myInput1').val().split(/\W/)[2]), $('#myInput1').val().split('/')[1] - 1, $('#myInput1').val().split('/')[0]);
+                var max = new Date(($('#myInput2').val().split(/\W/)[2]), $('#myInput2').val().split('/')[1] - 1, $('#myInput2').val().split('/')[0]);
+                var date = new Date((data[1].split(/\W/)[2]), data[1].split('/')[1] - 1, data[1].split('/')[0]) || 0;
+
+                if ((isNaN(min) && isNaN(max)) ||
+                    (isNaN(min) && date <= max) ||
+                    (min <= date && isNaN(max)) ||
+                    (min <= date && date <= max)) {
+                    return true;
+                }
+                return false;
+            }
+        );
 
             function editTimeline(id) {
                 var options = { "backdrop": "static", keyboard: true };
@@ -125,6 +164,60 @@
                 $('#myModal').modal('hide');
             });
 
+
+    $('#btnSave').on("click", function () { $('input').val(""); });
+
+    </script>
+
+    @*Mie added*@
+    @*<script>
+            $(document).ready(function () {
+                $('.myInput').keyup(function (event) {
+                    if (event.which == "13" || event.keyCode == "13") {
+                        var searchstr1, searchstsr2, filter1, filter2, trs, tc, tds, atable, i, j, k, l;
+                        searchstr1 = document.getElementById("myInput1");
+                        filter1 = searchstr1.value.toUpperCase();
+                        searchstr2 = document.getElementById("myInput2");
+                        filter2 = searchstr2.value.toUpperCase();
+                        atable = document.getElementById("tbltimelines");
+                        trs = atable.getElementsByTagName("TR");
+                        for (k = 1; k < trs.length; k++) {
+
+                            if (filter1 == null || filter1 == "" || filter2 == null || filter2 == "") {
+                                trs[k].style.display = "";
+                            }else{
+
+                                /*atable = document.getElementById("tbltimelines").DataTable();.fnGetNodes();
+                                var data = table.rows().data();*/
+
+
+                                var stringcontaincounter = 0;
+                                tds = trs[k].cells[1].firstChild.data;
+                                //for (i = 1; i < tc.length; i++) {
+
+                                var td1dt = new Date(tds.split('/')[2].split(' ')[0], tds.split('/')[1] - 1, tds.split('/')[0]);
+                                var filter1dt = new Date(filter1.split('/')[2].split(' ')[0], filter1.split('/')[1] - 1, filter1.split('/')[0]);
+                                var filter2dt = new Date(filter2.split('/')[2].split(' ')[0], filter2.split('/')[1] - 1, filter2.split('/')[0]);
+
+                                if (filter1dt <= td1dt && td1dt <= filter2dt) {
+                                    //if (td.toUpperCase().indexOf(filter) > -1) {
+                                    stringcontaincounter += 1;
+                                }
+                                //}
+                                if (stringcontaincounter > 0) {
+
+                                    trs[k].style.display = "";
+                                } else {
+                                    trs[k].style.display = "none";
+                                }
+                            }
+                        }
+                    }//if of fileter1 and filter2
+
+                    });
+            });
+        </script>*@
+    <script>
 
     </script>
 }

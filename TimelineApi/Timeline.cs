@@ -2,12 +2,16 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 
 namespace Echelon.TimelineApi
 {
     public class Timeline : ModelBase
     {
+        [Display(Name = "Title")]
+        [Required(ErrorMessage = "Title required")]
+        [StringLength(50, ErrorMessage = "The {0} must be at least {2}, maximum 50 characters long.", MinimumLength = 2)]
         public string Title { get; set; }
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime CreationTimeStamp { get; set; }
