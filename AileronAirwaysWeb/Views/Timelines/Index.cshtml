@@ -17,6 +17,12 @@
 <p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
 
 <hr>
+<div>
+    <label for="myInput1">Date from</label><input type="text" class="myInput" id="myInput1" placeholder="Search for any input value.." title="Type in a name">
+    <label for="myInput2">Date to</label><input type="text" class="myInput" id="myInput2" placeholder="Search for any input value.." title="Type in a name">
+</div>
+<hr />
+<br />
 
 <div style="margin-right: auto; margin-left: auto; width:100%" @*class="col-lg-9 col-md-12" *@>
     <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
@@ -35,8 +41,52 @@
     <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
 
     <script>
-        function updateTable(jsondata) {
-            var table = $('#tbltimelines').DataTable({
+       ////mie updated this
+       // $(document).ready(function () {
+       //     $.ajax({
+       //         /**/
+       //         url: "api/timelines",
+       //         method: 'GET',
+       //         datatype: 'json',
+       //         contentType: "application/json; charset=utf-8",
+       //         table: '#tbltimelines',
+       //         //idSrc: 'id',
+       //         //rowId: 'id',
+       //         success: function (jsondata) {
+       //             //debugger;
+       //             var timelinetable = $('#tbltimelines').DataTable({
+       //                 data: jsondata,
+       //                 columns: [
+       //                 { mRender: function (data, type, row) { return '<a href="/Timelines/' + row.id + '/Events/">' + row.title + '</a> ' } },
+       //                 //{ data: 'creationTimeStamp' },
+       //                 {
+       //                     mRender: function (data, type, row) {
+       //                         var date = new Date(row.creationTimeStamp);
+       //                         var month = date.getDate();
+       //                         var day = date.getMonth() + 1;
+       //                         return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+       //                     }
+       //                 },
+       //                 {
+       //                     // this is Actions Column
+       //                     mRender: function (data, type, row) {
+
+       //                         return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> ' +
+       //                             '<a href="/Timelines/Delete/' + row.id + '" onclick="return confirm(\'Are you sure you wish to delete this event?\');">Delete</a>';
+       //                     }
+       //                 }
+       //                         ]
+       //         });
+       //     // Event listener to the two range filtering inputs to redraw on input
+       //     $('#myInput1, #myInput2').keyup(function () {
+       //         timelinetable.draw();
+       //     });
+       //     console.log(jsondata);
+       // }
+       //              });
+       // });
+function updateTable(jsondata) {
+            var timelinetable = $('#tbltimelines').DataTable({
                 data: jsondata,
                 columns: [
                     {
@@ -44,7 +94,15 @@
                             return '<a href="/timelines/' + row.id + '/events/">' + row.title + '</a> '
                         }
                     },
-                    { data: 'created'},
+                    //{ data: 'creationTimeStamp' },
+                    {
+                        mRender: function (data, type, row) {
+                            var date = new Date(row.creationTimeStamp);
+                            var day = date.getDate();
+                            var month = date.getMonth() + 1;
+                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                        }
+                    },
                     {
                         mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
@@ -52,8 +110,31 @@
                         }, sortable: false
                     }
                 ]
+              });
+
+            // Event listener to the two range filtering inputs to redraw on input
+            $('#myInput1, #myInput2').keyup(function () {
+                timelinetable.draw();
             });
         }
+        /* Mie updated this Custom filtering function which will search data in column four between two values */
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+
+                var min = new Date(($('#myInput1').val().split(/\W/)[2]), ($('#myInput1').val().split('/')[1]-1), $('#myInput1').val().split('/')[0]);
+                var max = new Date(($('#myInput2').val().split(/\W/)[2]), ($('#myInput2').val().split('/')[1]-1), $('#myInput2').val().split('/')[0]);
+                var date = new Date((data[1].split(/\W/)[2]), data[1].split('/')[1] - 1, data[1].split('/')[0]) || 0;
+
+                if ((isNaN(min) && isNaN(max)) ||
+                    (isNaN(min) && date <= max) ||
+                    (min <= date && isNaN(max)) ||
+                    (min <= date && date <= max)) {
+                    return true;
+                }
+                return false;
+            }
+        );
+        
 
         function displayCreateModal(data) {
             $('#myModalContent').html(data);
