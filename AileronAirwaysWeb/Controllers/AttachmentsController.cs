@@ -22,13 +22,13 @@ namespace AileronAirwaysWeb.Controllers
 
         // GET: Attachments
         [HttpGet("{eventId}")]
-        public ActionResult Index(string timelineId, string eventId)
+        public ActionResult Index(string eventId)
         {
             var @event = _repo.GetTimelineEvent(eventId);
             var attachments = @event.Attachments.OrderBy(a => a.Title).ToList();
 
             ViewBag.EventId = eventId;
-            ViewBag.TimelineId = timelineId;
+            ViewBag.TimelineId = @event.TimelineId;
 
             return View(attachments);
         }
