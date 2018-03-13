@@ -24,7 +24,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("{eventId}")]
         public ActionResult Index(string eventId)
         {
-            var @event = _repo.GetTimelineEvent(eventId);
+            var @event = _repo.GetTimelineEventWithAttachments(eventId);
             var attachments = @event.Attachments.OrderBy(a => a.Title).ToList();
 
             ViewBag.EventId = eventId;

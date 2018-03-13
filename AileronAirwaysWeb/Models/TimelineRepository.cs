@@ -53,6 +53,11 @@ namespace AileronAirwaysWeb.Models
 
         public Timeline GetTimeline(string id)
         {
+            return _context.Timelines.SingleOrDefault(t => t.Id == id);
+        }
+
+        public Timeline GetTimelineWithEvents(string id)
+        {
             return _context.Timelines.Include(t => t.TimelineEvents).SingleOrDefault(t => t.Id == id);
         }
 
@@ -73,13 +78,18 @@ namespace AileronAirwaysWeb.Models
 
         public async Task DeleteTimelineAsync(string id)
         {
-            var timeline = GetTimeline(id);
+            var timeline = GetTimelineWithEvents(id);
             await timeline.DeleteAsync(_api);
             _context.Timelines.Remove(timeline);
             await _context.SaveChangesAsync();
         }
 
         public TimelineEvent GetTimelineEvent(string id)
+        {
+            return _context.TimelineEvents.SingleOrDefault(e => e.Id == id);
+        }
+
+        public TimelineEvent GetTimelineEventWithAttachments(string id)
         {
             return _context.TimelineEvents.Include(e => e.Attachments).SingleOrDefault(e => e.Id == id);
         }

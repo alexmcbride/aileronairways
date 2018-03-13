@@ -37,7 +37,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var timeline = _repo.GetTimeline(id);
+            var timeline = _repo.GetTimelineWithEvents(id);
 
             return Ok(new TimelineViewModel
             {
@@ -61,7 +61,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(string id, [FromBody]TimelineViewModel value)
         {
-            var timeline = _repo.GetTimeline(id);
+            var timeline = _repo.GetTimelineWithEvents(id);
             timeline.Title = value.Title;
             await _repo.UpdateTimelineAsync(timeline);
 

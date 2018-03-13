@@ -45,7 +45,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpGet("{id}")]
         public IActionResult Get(string id)
         {
-            var @event = _repo.GetTimelineEvent(id);
+            var @event = _repo.GetTimelineEventWithAttachments(id);
 
             if (@event == null)
             {
@@ -89,7 +89,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         public async Task<IActionResult> Put(string id, [FromBody]TimelineEvent value)
         {
             // TODO: add validation for JSON stuff.
-            var @event = _repo.GetTimelineEvent(id);
+            var @event = _repo.GetTimelineEventWithAttachments(id);
             @event.Title = value.Title;
             @event.Description = value.Description;
             @event.EventDateTime = value.EventDateTime;
@@ -113,7 +113,7 @@ namespace AileronAirwaysWeb.Controllers.Api
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
-            var @event = _repo.GetTimelineEvent(id);
+            var @event = _repo.GetTimelineEventWithAttachments(id);
             await _repo.DeleteTimelineEventAsync(@event);
             return Ok();
         }

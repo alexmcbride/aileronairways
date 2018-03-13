@@ -30,7 +30,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Details/5
         public ActionResult Details(string id)
         {
-            Timeline timeline = _repo.GetTimeline(id);
+            Timeline timeline = _repo.GetTimelineWithEvents(id);
 
             return View(timeline);
         }
@@ -65,7 +65,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Edit/5
         public ActionResult Edit(string id)
         {
-            var timeline = _repo.GetTimeline(id);
+            var timeline = _repo.GetTimelineWithEvents(id);
 
             var vm = new TimelineViewModel
             {
@@ -82,7 +82,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                Timeline timeline = _repo.GetTimeline(id);
+                Timeline timeline = _repo.GetTimelineWithEvents(id);
                 timeline.Title = vm.Title;
                 await _repo.UpdateTimelineAsync(timeline);
 
@@ -97,7 +97,7 @@ namespace AileronAirwaysWeb.Controllers
         // GET: Timelines/Delete/5
         public ActionResult Delete(string id)
         {
-            Timeline timeline = _repo.GetTimeline(id);
+            Timeline timeline = _repo.GetTimelineWithEvents(id);
 
             return View(new TimelineViewModel
             {

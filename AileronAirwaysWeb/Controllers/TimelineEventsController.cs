@@ -23,7 +23,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events")]
         public ActionResult Index(string timelineId)
         {
-            var timeline = _repo.GetTimeline(timelineId);
+            var timeline = _repo.GetTimelineWithEvents(timelineId);
             var events = timeline.TimelineEvents
                 .OrderBy(e => e.EventDateTime)
                 .ToList();
@@ -39,8 +39,8 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
         public ActionResult Details(string timelineId, string eventId)
         {
-            Timeline timeline = _repo.GetTimeline(timelineId);
-            TimelineEvent timelineEvent = _repo.GetTimelineEvent(eventId);
+            Timeline timeline = _repo.GetTimelineWithEvents(timelineId);
+            TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
 
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
@@ -84,7 +84,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
         public ActionResult Edit(string timelineId, string eventId)
         {
-            TimelineEvent timelineEvent = _repo.GetTimelineEvent(eventId);
+            TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
 
             var vm = new TimelineEventViewModel
             {
@@ -104,7 +104,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                TimelineEvent evt = _repo.GetTimelineEvent(eventId);
+                TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
                 evt.Title = vm.Title;
                 evt.Description = vm.Description;
                 evt.EventDateTime = vm.EventDateTime;
@@ -123,7 +123,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Delete")]
         public ActionResult Delete(string timelineId, string eventId)
         {
-            TimelineEvent evt = _repo.GetTimelineEvent(eventId);
+            TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
 
             return View(new TimelineEventViewModel
             {
@@ -141,7 +141,7 @@ namespace AileronAirwaysWeb.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string timelineId, string eventId, IFormCollection collection)
         {
-            var evt = _repo.GetTimelineEvent(eventId);
+            var evt = _repo.GetTimelineEventWithAttachments(eventId);
             await _repo.DeleteTimelineEventAsync(evt);
 
             _flash.Message("Deleted timeline event");
