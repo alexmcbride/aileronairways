@@ -12,6 +12,10 @@
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/css/timeline.css" rel="stylesheet" />
 
+
+        <link href="~/css/eventDetails.css" rel="stylesheet" type="text/css" />
+
+
         <!-- Font Awesome -->
         <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
     </environment>
@@ -21,6 +25,9 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.css" />
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/css/timeline.css" rel="stylesheet" />
+
+        <link href="~/css/eventDetails.css" rel="stylesheet" />
+
     </environment>
    
 </head>
@@ -42,9 +49,10 @@
     @*Use tag helper to display flash messages.*@
     <flash-messages />
 
-    <div class="container body-content">
+    <div>
+        @*class="container body-content"*@
         @RenderBody()
-        <hr />
+
     </div>
     <footer class="small text-center text-muted">
         <p>&copy; @DateTime.Now.Year - Aileron Airways</p>

@@ -6,28 +6,107 @@
 
 
 
-<div class="headerSection">
-    <h2 class="mainHeader">@Model.Title </h2>
-    <hr class="headerHR" />
-    <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
+<div class="container">
+    <div class="col-sm-12">
+
+        <div id="eventHeader">
+            <div id="backArrow">
+
+                <a class="arrowLink" onclick="goBack()" @*asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId" *@><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="headerSection">
+                <h2 class="mainHeader">@Model.Title </h2>
+                <hr class="headerHR" />
+                <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
+            </div>
+
+
+        </div>
+    </div>
 </div>
 
 
-<hr />
-<content style="background-color: blue;">
-    <div class="row">
-        <div class="col-sm-12">
+<br />
 
 
-            <p>Location: @Model.Location</p>
-            <p>DescriptiSon: @Model.Description</p>
+            <!-- Tab Section Start -->
+<div class="bgColor">
+    <div>
+        <div class="tabLinksContainer">
+            <div class="tab">
+                <button class="tablinks uppercase" onclick="openTab(event, 'overview')">Overview</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'location')">Location</button>
 
-
-            <p>
-                <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
-                <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-                <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
-            </p>
+            </div>
         </div>
     </div>
-</content>
+
+
+
+
+
+    <!-- Tabs/Headings -->
+    <div id="overview" class="tabcontent" style="display: block;">
+        <p>@Model.Description</p>
+        <a href="#" class="btnRight">Edit</a>
+    </div>
+
+    <div id="attachments" class="tabcontent">
+        <p>attachments is the capital of France.</p>
+    </div>
+
+    <div id="gallery" class="tabcontent">
+        <p>Gallery is the capital of Japan.</p>
+    </div>
+
+
+    <div id="location" class="tabcontent">
+        <p>Location is the capital of Japan.</p>
+    </div>
+
+</div>
+
+    <div id="bottomEventNav">
+        <button class="btnMain btnLeft uppercase"><i class="leftArrow"></i>Pre-event Name</button>
+        <button class="btnMain btnCenter uppercase">Delete</button>
+        <button class="btnMain btnRight uppercase">Post-event Name<i class="rightArrow"></i></button>
+
+    </div>
+
+
+
+
+    @*<p>Location: @Model.Location</p>
+        <p>DescriptiSon: @Model.Description</p>
+
+
+        <p>
+            <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
+            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+            <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
+        </p>*@
+
+
+
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
