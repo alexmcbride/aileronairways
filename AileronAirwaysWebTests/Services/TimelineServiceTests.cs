@@ -3,12 +3,10 @@ using AileronAirwaysWeb.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace AileronAirwaysWebTests
+namespace AileronAirwaysWebTests.Services
 {
     [TestClass]
     public class TimelineServiceTests
