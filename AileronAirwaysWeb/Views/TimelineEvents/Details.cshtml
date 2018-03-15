@@ -26,7 +26,6 @@
 </div>
 
 
-<br />
 
 
             <!-- Tab Section Start -->
@@ -34,7 +33,7 @@
     <div>
         <div class="tabLinksContainer">
             <div class="tab">
-                <button class="tablinks uppercase" onclick="openTab(event, 'overview')">Overview</button>
+                <button class="tablinks uppercase active" onclick="openTab(event, 'overview')">Overview</button>
                 <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
                 <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
                 <button class="tablinks uppercase" onclick="openTab(event, 'location')">Location</button>
@@ -48,31 +47,109 @@
 
 
     <!-- Tabs/Headings -->
+    <!-- Overview TAB -->
     <div id="overview" class="tabcontent" style="display: block;">
         <p>@Model.Description</p>
+        
         <a href="#" class="btnRight">Edit</a>
+        
     </div>
 
+    <!-- Attachments TAB -->
     <div id="attachments" class="tabcontent">
-        <p>attachments is the capital of France.</p>
+
+
+
+
+                @if (Model.Attachments.Any())
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>
+                                    @Html.DisplayNameFor(model => model.Title)
+                                </th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Attachments)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.IsImage)
+                                        {
+                                            <a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                        }
+                                        else
+                                        {
+                                            <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p><em>There are no attachments to display.</em></p>
+                }
+        
+                
+        
+                   <br />
+                <h3>Upload</h3>
+
+                <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+                    <div class="form-group formDragAndDrop">
+                        @*<p>Upload one or more attachments:</p>*@
+                        <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
+                    </div>
+
+                    <input type="submit" value="Upload" class="btn btn-default" />
+                </form>
+
+
     </div>
 
+
+    <!-- Gallery TAB -->
     <div id="gallery" class="tabcontent">
         <p>Gallery is the capital of Japan.</p>
     </div>
 
 
+    <!-- Location TAB -->
     <div id="location" class="tabcontent">
         <p>Location is the capital of Japan.</p>
+
+        <div id="googleMap" style="height:400px; width: 100%;"></div>
+
+        <script>
+            function myMap() {
+                var mapProp = {
+                    center: new google.maps.LatLng(51.508742, -0.120850),
+                    zoom: 5,
+                };
+                var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
+            }
+        </script>
+
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
     </div>
 
 </div>
 
     <div id="bottomEventNav">
-        <button class="btnMain btnLeft uppercase"><i class="leftArrow"></i>Pre-event Name</button>
-        <button class="btnMain btnCenter uppercase">Delete</button>
-        <button class="btnMain btnRight uppercase">Post-event Name<i class="rightArrow"></i></button>
-
+        <div class="btnContainer">
+            <button class="btnMain uppercase"><i class="leftArrow"></i>  Pre-event Name</button>
+            <button class="btnMain uppercase">Delete</button>
+            <button class="btnMain uppercase">Post-event Name  <i class="rightArrow"></i></button>
+        </div>
     </div>
 
 

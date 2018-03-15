@@ -45,6 +45,10 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
 
+            
+            ViewBag.EventId = eventId;
+
+
             return View(timelineEvent);
         }
 

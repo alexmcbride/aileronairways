@@ -16,9 +16,7 @@
     float: left;
 }
 
-.tablinks {
-    padding: 0 0 0 0;
-}
+
 
 
 .tab {
@@ -40,7 +38,9 @@
         cursor: pointer;
         /*transition: 0.3s;*/
         font-size: 15px;
-        border-bottom: 2px solid #ddd
+        border-bottom: 2px solid #ddd;
+        margin-right: -2px;
+        margin-left: -2px;
     }
 
         /* Change background color of buttons on hover */
@@ -69,7 +69,8 @@
         .tab button {
             width: 100%;
             display: block;
-            border-bottom: 0px solid #ddd
+            border-bottom: 0px solid #ddd;
+            padding-bottom: 14px;
         }
         .tab button:hover {
             background-color: #ddd;
@@ -84,6 +85,16 @@
             border-bottom: 0px solid #0D1B2E;
             padding-bottom: 14px;
         }
+
+
+    .tabLinksContainer {
+        padding-top: 0;
+        padding-bottom: 50px;
+
+    }
+
+
+   
 }
 
 
@@ -92,15 +103,16 @@
 
 
 /* Style the tab content */
+
+
+
 .tabcontent {
     display: none;
     width: 80%;
-    min-height: 300px;
-    padding: 120px 10% 50px 10%;
+    min-height: 450px;
+    padding: 150px 10% 50px 10%;
     border-top: none;
-    margin: 0 auto;
-
-    border-bottom: .1px solid #ddd;
+    margin: 120px auto 0 auto;
 }
 
 
@@ -149,15 +161,41 @@
     height: auto;
     padding: 10px 0;
     border-bottom: .1px solid #ddd;
+    border-top: .1px solid #ddd;
+
 }
 
-.btnLeft {
-    left: 0;
-}
-.btnRight {
-    margin-right: 0;
-}
-.btnCenter {
-    margin: 0 auto;
+.btnContainer {
+    width: 80%;
+    padding: 0 10%;
 }
 
+@media all and (max-width: 600px) {
+    /* Tab Content */
+    .tabcontent {
+        width: 96%;
+        padding: 150px 2% 50px 2%;
+    }
+}
+
+
+
+
+
+
+/* ----- drag and drop -------*/
+.formDragAndDrop {
+    width: 100%;
+    min-height: 250px;
+}
+
+input.dragAndDrop[type=file] {
+    width: 100%;
+    border-width: thick;
+    padding: 100px 10px;
+    border-style: dashed;
+    align-content: center;
+
+
+
+}
