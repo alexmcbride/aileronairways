@@ -4,17 +4,19 @@
     ViewData["Title"] = "Timeline Register";
 }
 
-<h2>@ViewData["Title"]</h2>
 
-<div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
+<div class="container body-content">
+    <h2>@ViewData["Title"]</h2>
+
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
         </div>
     </div>
-</div>
 
-<p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
+    <p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
 
 <hr>
 <div>
@@ -24,17 +26,18 @@
 <hr />
 <br />
 
-<div style="margin-right: auto; margin-left: auto; width:100%" @*class="col-lg-9 col-md-12" *@>
-    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
-        <thead>
-            <tr>
-                <th style="max-width:65%">Title</th>
-                <th style="width:20%">Date Created</th>
-                <th style="width:15%">Link</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div style="margin-right: auto; margin-left: auto; width:100%" @*class="col-lg-9 col-md-12" *@>
+        <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
+            <thead>
+                <tr>
+                    <th style="max-width:65%">Title</th>
+                    <th style="width:20%">Date Created</th>
+                    <th style="width:15%">Link</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 </div>
 
 @section scripts {
