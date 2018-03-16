@@ -25,12 +25,21 @@
 #qrCode {
     margin: 15px;
 }
+#timelinecontents {
+    width: 80%;
+}
+
+}
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
     /* Hide captions */
     .carousel-caption {
         display: none;
+    }
+/*mie added*/
+#timelinecontents{
+        width:100%;
     }
 }
 
@@ -45,4 +54,8 @@
 
 .navbar-custom .navbar-brand {
     color: #fff;
+}
+
+@media screen and (max-width: 375px) {
+    
 }

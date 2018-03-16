@@ -18,7 +18,7 @@
 
 <p><a href="javascript:void(0);" id="addEventBtn" class="modal-link-create-timeline btn btn-primary">&#43;</a></p>
 
-<div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+<div id="timelinecontents"style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
     <div class="row">
         <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12">@ViewData["Title"]</h3>
         <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@">
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display responsive nowrap"style="width:100%">
         <thead>
             <tr>
                 <th style="max-width:65%">Title</th>
