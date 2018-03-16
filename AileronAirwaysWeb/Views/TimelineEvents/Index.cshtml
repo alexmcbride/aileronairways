@@ -4,170 +4,172 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+<div class="container body-content">
+    <button id="addEventBtn" title="Add Event">&#43;</button>
 
-<button id="addEventBtn" title="Add Event">&#43;</button>
+    @*Side Panel - Will Display all Headings*@
 
-@*Side Panel - Will Display all Headings*@
-
-<div id="mainSidePanel">
-    @*<div class="container body-content">
-        </div>*@
-    <div class="headerSection">
-        <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
-        <hr class="headerHR" />
-        <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
-    </div>
-
-
-    <hr />
-
-
-
-
-
-    <!-- Side Nav Content -->
-    <div id="mySidenav" class="sidenav">
-        <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
-        -->
-        <!-- Searching for Events -->
-        <div id="sideNavArrows" onclick="openNav()">
-            <div" id="arrowsSidePanel"><i id="arrowChange" class="rightArrow"></i></div">
+    <div id="mainSidePanel">
+        @*<div class="container body-content">
+            </div>*@
+        <div class="headerSection">
+            <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
+            <hr class="headerHR" />
+            <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
         </div>
 
-        <br /><br />
+
+        <hr />
 
 
 
 
-        <div id="sideNavContent" style="visibility: hidden;">
-            <!--
-            <hr class="sidPanelHR" />
 
-                      <div id="searchBox">
-                          &nbsp; Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
-                      </div> -->
-            <div id="searchBox">
-                <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
-                
+        <!-- Side Nav Content -->
+        <div id="mySidenav" class="sidenav">
+            <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
+            -->
+            <!-- Searching for Events -->
+            <div id="sideNavArrows" onclick="openNav()">
+                <div" id="arrowsSidePanel"><i id="arrowChange" class="rightArrow"></i></div">
             </div>
 
-            <div id="eventNameList">
+            <br /><br />
 
-                @{
-                    int i = 0;
-                    foreach (var item in Model)
-                    {
-                        i = i + 1;
-                        <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+
+
+
+            <div id="sideNavContent" style="visibility: hidden;">
+                <!--
+                <hr class="sidPanelHR" />
+
+                          <div id="searchBox">
+                              &nbsp; Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
+                          </div> -->
+                <div id="searchBox">
+                    <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
+                </div>
+
+                <div id="eventNameList">
+
+                    @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i = i + 1;
+                            <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+                        }
                     }
-                }
+                </div>
             </div>
         </div>
-    </div>
 
 
 
-    @*-----------------------------------------------------------------------------*@
+        @*-----------------------------------------------------------------------------*@
 
 
-    <div class="timeline">
+        <div class="timeline">
 
 
-        @{
-            int eventCount = -1;
-            string cssClassIdentifier = "";
+            @{
+                int eventCount = -1;
+                string cssClassIdentifier = "";
 
 
-            foreach (var item in Model)
-            {
-                eventCount += 1;
+                foreach (var item in Model)
+                {
+                    eventCount += 1;
 
-                if (eventCount % 2 == 0)
-                { cssClassIdentifier = "left"; }
-                else
-                { cssClassIdentifier = "right"; }
+                    if (eventCount % 2 == 0)
+                    { cssClassIdentifier = "left"; }
+                    else
+                    { cssClassIdentifier = "right"; }
 
-                <div id="eventLink-@item.Id" style="padding: 25px 0"></div>
+                    <div id="eventLink-@item.Id" style="padding: 25px 0"></div>
 
-                <div class="containerTimeline @cssClassIdentifier">
+                    <div class="containerTimeline @cssClassIdentifier">
 
-                    <div class="eventContent">
-                        <div class="eventDateSection">
-                            <div class="eventDateTime">
-                                <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
-                                <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
+                        <div class="eventContent">
+                            <div class="eventDateSection">
+                                <div class="eventDateTime">
+                                    <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
+                                    <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
+                                </div>
+                                <div class="eventIconDisplay">
+                                    <div class="col-md-4 iconSection">
+                                        @if (item.Location != null)
+                                        {
+                                            <i class="fas fa-map-marker"></i>
+                                        }
+                                        <div class="eventIcon"></div>
+                                    </div>
+                                    <div class="col-md-4 iconSection">
+                                        <i class="eventIcon fas fa-paperclip"></i>
+                                        <div class="eventIcon">@item.AttachmentFilesCount</div>
+                                    </div>
+                                    <div class="col-md-4 iconSection">
+                                        <i class="far fa-image"></i>
+                                        <div class="eventIcon">@item.AttachmentImagesCount</div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="eventIconDisplay">
-                                <div class="col-md-4 iconSection">
-                                    @if (item.Location != null)
-                                    {
-                                        <i class="fas fa-map-marker"></i>
-                                    }
-                                    <div class="eventIcon"></div>
-                                </div>
-                                <div class="col-md-4 iconSection">
-                                    <i class="eventIcon fas fa-paperclip"></i>
-                                    <div class="eventIcon">@item.AttachmentFilesCount</div>
-                                </div>
-                                <div class="col-md-4 iconSection">
-                                    <i class="far fa-image"></i>
-                                    <div class="eventIcon">@item.AttachmentImagesCount</div>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="eventBodySection">
-                            <div class="eventContentPadding">
-                                <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
-                                <p>
-                                    @if (item.Description != null && item.Description.Length >= 150)
-                                    {
-                                        @item.Description.Substring(1, 150)
-                                    }
-                                    else
-                                    {
-                                        @item.Description
-                                    }
-                                </p>
-                                <p class="editDelete">
-                                    <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
-                                    /
-                                    <a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>
-                                </p>
+                            <div class="eventBodySection">
+                                <div class="eventContentPadding">
+                                    <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
+                                    <p>
+                                        @if (item.Description != null && item.Description.Length >= 150)
+                                        {
+                                            @item.Description.Substring(1, 150)
+                                        }
+                                        else
+                                        {
+                                            @item.Description
+                                        }
+                                    </p>
+                                    <p class="editDelete">
+                                        <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
+                                        /
+                                        <a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div style="padding: 20px 0">
+                    <div style="padding: 20px 0">
 
-                </div>
-                <hr />
+                    </div>
+                    <hr />
+                }
             }
-        }
 
+
+        </div>
+        <div class="backToTopContainer" onclick="topFunction()">
+
+
+            <span><i class="backToTop"></i></span>
+
+        </div>
 
     </div>
-    <div class="backToTopContainer" onclick="topFunction()">
 
 
-        <span><i class="backToTop"></i></span>
-
-    </div>
-
-</div>
-
-
-<div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
         </div>
     </div>
 </div>
 
-@section Scripts{
-    <script>
+
+
+    @section Scripts{
+        <script>
 
     /* Filetring Event Titles */
     function filterEventTitles() {
@@ -334,6 +336,6 @@
         $('.flash-messages').css('margin-left', '20px');
     });
 
-    </script>
+        </script>
 
-}
+    }
