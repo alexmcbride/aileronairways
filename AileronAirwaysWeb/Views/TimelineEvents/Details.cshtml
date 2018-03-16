@@ -5,7 +5,7 @@
 }
 
 
-
+<div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
 
@@ -28,7 +28,7 @@
 
 
 
-            <!-- Tab Section Start -->
+<!-- Tab Section Start -->
 <div class="bgColor">
     <div>
         <div class="tabLinksContainer">
@@ -50,9 +50,9 @@
     <!-- Overview TAB -->
     <div id="overview" class="tabcontent" style="display: block;">
         <p>@Model.Description</p>
-        
+
         <a href="#" class="btnRight">Edit</a>
-        
+
     </div>
 
     <!-- Attachments TAB -->
@@ -61,57 +61,63 @@
 
 
 
-                @if (Model.Attachments.Any())
-                {
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Title)
-                                </th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Attachments)
+        @if (Model.Attachments.Any())
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Attachments)
+                    {
+                        <tr>
+                            @if (!item.IsImage)
                             {
-                                <tr>
-                                    <td>
-                                        @if (item.IsImage)
-                                        {
-                                            <a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>
-                                        }
-                                        else
-                                        {
-                                            <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
-                                        }
-                                    </td>
-                                    <td>
-                                        @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
-                                    </td>
-                                </tr>
+                                <td>
+                                    <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+
+                                </td>
+                                @*<a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>*@
                             }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <p><em>There are no attachments to display.</em></p>
-                }
-        
-                
-        
-                   <br />
-                <h3>Upload</h3>
+                                
 
-                <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
-                    <div class="form-group formDragAndDrop">
-                        @*<p>Upload one or more attachments:</p>*@
-                        <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
-                    </div>
+                         
+                            @if (!item.IsImage)
+                            {
+                                <td>
+                                    @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
 
-                    <input type="submit" value="Upload" class="btn btn-default" />
-                </form>
+                                </td>                                
+                            }
+                           
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p><em>There are no attachments to display.</em></p>
+        }
+
+
+
+        <br />
+    
+
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+            <div class="form-group formDragAndDrop">
+                @*<p>Upload one or more attachments:</p>*@
+                <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
+            </div>
+
+            <input type="submit" value="Upload" class="btn btn-default" />
+        </form>
 
 
     </div>
@@ -119,7 +125,104 @@
 
     <!-- Gallery TAB -->
     <div id="gallery" class="tabcontent">
-        <p>Gallery is the capital of Japan.</p>
+    
+
+
+
+        <div class="row">
+            <div class="column">
+                <div class="imgContainer"> 
+                    
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" 
+                         class="image hover-shadow cursor">
+               
+                    <div class="imgInfoOverlay" onclick="openModal();currentSlide(1)">
+                        <p class="trashCan" onclick="return confirm('Are you sure you want to delete this item?'); ">
+                            <i class="trashDeleteIcon far fa-trash-alt"  style="color: white;"></i>
+                        </p>
+
+
+
+                        <i class="fas fa-search" style="color: white;"></i>
+
+                        <div class="imgText text-uppercase">
+                            Awesome Collision
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="column">
+                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(2)" class="hover-shadow cursor">
+            </div>
+            <div class="column">
+                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(3)" class="hover-shadow cursor">
+            </div>
+            <div class="column">
+                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(4)" class="hover-shadow cursor">
+            </div>
+        </div>
+
+        <div id="myModal" class="modal">
+            <span class="close cursor" onclick="closeModal()">&times;</span>
+            <div class="modal-content">
+
+                <div class="mySlides">
+                    <div class="numbertext">1 / 4</div>
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <div class="numbertext">2 / 4</div>
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <div class="numbertext">3 / 4</div>
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
+                </div>
+
+                <div class="mySlides">
+                    <div class="numbertext">4 / 4</div>
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
+                </div>
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+                <div class="caption-container">
+                    <p id="caption"></p>
+                </div>
+
+
+                <div class="column">
+                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(1)" alt="Nature and sunrise">
+                </div>
+                <div class="column">
+                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(2)" alt="Trolltunga, Norway">
+                </div>
+                <div class="column">
+                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
+                </div>
+                <div class="column">
+                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <br />
+
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+            <div class="form-group formDragAndDrop">
+                @*<p>Upload one or more attachments:</p>*@
+                <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
+            </div>
+
+            <input type="submit" value="Upload" class="btn btn-default" />
+        </form>
     </div>
 
 
@@ -144,46 +247,95 @@
 
 </div>
 
-    <div id="bottomEventNav">
-        <div class="btnContainer">
-            <button class="btnMain uppercase"><i class="leftArrow"></i>  Pre-event Name</button>
-            <button class="btnMain uppercase">Delete</button>
-            <button class="btnMain uppercase">Post-event Name  <i class="rightArrow"></i></button>
-        </div>
+<div id="bottomEventNav">
+    <div class="btnContainer">
+        <button class="btnMain uppercase"><i class="leftArrow"></i>  Pre-event Name</button>
+        <button class="btnMain uppercase">Delete</button>
+        <button class="btnMain uppercase">Post-event Name  <i class="rightArrow"></i></button>
     </div>
+</div>
 
 
 
 
-    @*<p>Location: @Model.Location</p>
-        <p>DescriptiSon: @Model.Description</p>
+@*<p>Location: @Model.Location</p>
+    <p>DescriptiSon: @Model.Description</p>
 
 
-        <p>
-            <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
-            <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-            <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
-        </p>*@
+    <p>
+        <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
+        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
+        <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
+    </p>*@
 
 
 
 
-    <script>
-        function goBack() {
-            window.history.back();
+<script>
+    function goBack() {
+        window.history.back();
+    }
+
+    function openTab(evt, tabName) {
+        var i, tabcontent, tablinks;
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
         }
-
-        function openTab(evt, tabName) {
-            var i, tabcontent, tablinks;
-            tabcontent = document.getElementsByClassName("tabcontent");
-            for (i = 0; i < tabcontent.length; i++) {
-                tabcontent[i].style.display = "none";
-            }
-            tablinks = document.getElementsByClassName("tablinks");
-            for (i = 0; i < tablinks.length; i++) {
-                tablinks[i].className = tablinks[i].className.replace(" active", "");
-            }
-            document.getElementById(tabName).style.display = "block";
-            evt.currentTarget.className += " active";
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
         }
-    </script>
+        document.getElementById(tabName).style.display = "block";
+        evt.currentTarget.className += " active";
+    }
+</script>
+
+
+<!-- Image Gallery Scripts -->
+<script>
+
+    function deleteImage() {
+        document.getElementById('superAwesomeTester').style.display = "block";
+
+    }
+
+
+
+    function openModal() {
+        document.getElementById('myModal').style.display = "block";
+    }
+
+    function closeModal() {
+        document.getElementById('myModal').style.display = "none";
+    }
+
+    var slideIndex = 1;
+    showSlides(slideIndex);
+
+    function plusSlides(n) {
+        showSlides(slideIndex += n);
+    }
+
+    function currentSlide(n) {
+        showSlides(slideIndex = n);
+    }
+
+    function showSlides(n) {
+        var i;
+        var slides = document.getElementsByClassName("mySlides");
+        var dots = document.getElementsByClassName("demo");
+        var captionText = document.getElementById("caption");
+        if (n > slides.length) { slideIndex = 1 }
+        if (n < 1) { slideIndex = slides.length }
+        for (i = 0; i < slides.length; i++) {
+            slides[i].style.display = "none";
+        }
+        for (i = 0; i < dots.length; i++) {
+            dots[i].className = dots[i].className.replace(" active", "");
+        }
+        slides[slideIndex - 1].style.display = "block";
+        dots[slideIndex - 1].className += " active";
+        captionText.innerHTML = dots[slideIndex - 1].alt;
+    }
+</script>
