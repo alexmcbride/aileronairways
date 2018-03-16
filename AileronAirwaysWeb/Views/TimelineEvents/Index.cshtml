@@ -26,13 +26,14 @@
 
 
     <!-- Side Nav Content -->
-    <div id="mySidenav" class="sidenav" onclick="openNav()">
+    <div id="mySidenav" class="sidenav" @*onclick="openNav()*@">
         <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
         -->
         <!-- Searching for Events -->
         <div id="sideNavArrows" onclick="openNav()">
             <div" id="arrowsSidePanel"><i id="arrowChange" class="rightArrow"></i></div">
         </div>
+
 
         <br /><br />
 
@@ -48,7 +49,6 @@
                       </div> -->
             <div id="searchBox">
                 <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
-                
             </div>
 
             <div id="eventNameList">
@@ -167,11 +167,8 @@
 </div>
 
 @section Scripts{
-    <script>
-
 
     <script>
-
     /* Filetring Event Titles */
     function filterEventTitles() {
         var input, filter, table, tr, td, i;
@@ -212,7 +209,6 @@
         document.getElementById("sideNavArrows").removeEventListener("click", openNav);
         document.getElementById("sideNavArrows").addEventListener("click", closeNav);
 
-
         document.getElementById("arrowChange").classList.remove("rightArrow");
         document.getElementById("arrowChange").classList.add("leftArrow");
 
@@ -228,7 +224,6 @@
     function closeNav() {
         document.getElementById("mySidenav").style.width = "20px";
         document.getElementById("mainSidePanel").style.marginLeft = "20px";
-
 
         // side panel content GONE! - It's Magic
         document.getElementById("sideNavContent").style.visibility = 'hidden';

@@ -1,10 +1,12 @@
 ﻿@model IEnumerable<Timeline>
 
 @{
-    ViewData["Title"] = "Timeline Register";
+    ViewData["Title"] = "Manage Timeline";
 }
 
-<h2>@ViewData["Title"]</h2>
+@*<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>*@
+
+
 
 <div id='myModal' class='modal'>
     <div class="modal-dialog">
@@ -14,18 +16,26 @@
     </div>
 </div>
 
-<p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
+<p><a href="javascript:void(0);" id="addEventBtn" class="modal-link-create-timeline btn btn-primary">&#43;</a></p>
 
-<hr>
-<div>
-    <label for="myInput1">Date from</label><input type="text" class="myInput" id="myInput1" placeholder="Search for any input value.." title="Type in a name">
-    <label for="myInput2">Date to</label><input type="text" class="myInput" id="myInput2" placeholder="Search for any input value.." title="Type in a name">
-</div>
-<hr />
-<br />
+<div style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+    <div class="row">
+        <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12">@ViewData["Title"]</h3>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
+            <label for="myInput1">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="Search period start date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
+            <label for="myInput2">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="Search period end date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
 
-<div style="margin-right: auto; margin-left: auto; width:100%" @*class="col-lg-9 col-md-12" *@>
-    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@">
         <thead>
             <tr>
                 <th style="max-width:65%">Title</th>
@@ -100,7 +110,9 @@ function updateTable(jsondata) {
                             var date = new Date(row.creationTimeStamp);
                             var day = date.getDate();
                             var month = date.getMonth() + 1;
-                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                            var hrs = date.getHours();
+                            var min = date.getMinutes()
+                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + (hrs > 10 ? hrs : "0" + hrs) + ":" + (min > 10 ? min : "0" + min);
                         }
                     },
                     {
@@ -113,8 +125,8 @@ function updateTable(jsondata) {
               });
 
             // Event listener to the two range filtering inputs to redraw on input
-            $('#myInput1, #myInput2').keyup(function () {
-                timelinetable.draw();
+            $('#myInput1, #myInput2, .myInput, #tbltimelines').on('change input keyup mouseover',function () {
+                 timelinetable.draw();
             });
         }
         /* Mie updated this Custom filtering function which will search data in column four between two values */
@@ -134,7 +146,7 @@ function updateTable(jsondata) {
                 return false;
             }
         );
-        
+
 
         function displayCreateModal(data) {
             $('#myModalContent').html(data);
@@ -231,6 +243,26 @@ function updateTable(jsondata) {
 
         $("#closbtn").click(function () {
             $('#myModal').modal('hide');
+        });
+    </script>
+
+    @*<link rel="stylesheet" hhref="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+            crossorigin="anonymous"></script>
+    <script>
+        $('#myInput1, #myInput2').datepicker({ dateFormat: 'dd/mm/yy' });
+    </script>*@
+    <script>
+        $(function () {
+            $('#eventDateTime1').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+        $(function () {
+            $('#eventDateTime2').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
         });
     </script>
 }
