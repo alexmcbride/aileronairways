@@ -4,7 +4,7 @@
     ViewData["Title"] = "Manage Timeline";
 }
 
-@*<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>*@
+<button id="addTimelineBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
 
 
 
@@ -16,9 +16,9 @@
     </div>
 </div>
 
-<p><a href="javascript:void(0);" id="addEventBtn" class="modal-link-create-timeline btn btn-primary">&#43;</a></p>
+@*<a href="javascript:void(0);" id="addTimelinebtn" class="modal-link-create-timeline">&#43;</a>*@
 
-<div id="timelinecontents"style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+<div id="timelinecontents" style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
     <div class="row">
         <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12">@ViewData["Title"]</h3>
         <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display responsive nowrap"style="width:100%">
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display responsive nowrap" style="width:100%">
         <thead>
             <tr>
                 <th style="max-width:65%">Title</th>
@@ -247,12 +247,12 @@ function updateTable(jsondata) {
     </script>
 
     @*<link rel="stylesheet" hhref="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
-    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-            integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-            crossorigin="anonymous"></script>
-    <script>
-        $('#myInput1, #myInput2').datepicker({ dateFormat: 'dd/mm/yy' });
-    </script>*@
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
+                integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+                crossorigin="anonymous"></script>
+        <script>
+            $('#myInput1, #myInput2').datepicker({ dateFormat: 'dd/mm/yy' });
+        </script>*@
     <script>
         $(function () {
             $('#eventDateTime1').datetimepicker({

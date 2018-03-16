@@ -29,7 +29,30 @@
     width: 80%;
 }
 
+/*Static Button -------------------------*/
+
+#addTimelineBtn {
+    /*display: block;*/
+    position: absolute;
+    top: 50px;
+    right: 20px;
+    z-index: 99;
+    font-size: 22px;
+    font-weight:bold;
+    border:none;
+    outline: none;
+    background-color: #b722d8;
+    color: white;
+    cursor: pointer;
+    padding: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
 }
+
+    #addTimelineBtn:hover {
+        background-color: #9503a5;
+    }
 
 /* Hide/rearrange for smaller screens */
 @media screen and (max-width: 767px) {
