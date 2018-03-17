@@ -167,19 +167,21 @@
     padding: 10px 0;
     border-bottom: .1px solid #ddd;
     border-top: .1px solid #ddd;
-
 }
 
 .btnContainer {
     width: 80%;
     padding: 0 10%;
+    margin: 0 auto;
+    text-align: center;
+
 }
 
 @media all and (max-width: 600px) {
     /* Tab Content */
     .tabcontent {
-        width: 96%;
-        padding: 150px 2% 50px 2%;
+        width: 90%;
+        padding: 150px 5% 50px 5%;
     }
 }
 
@@ -405,4 +407,39 @@ img.hover-shadow {
 
 
 
+
+
+
+.button {
+    background-color: #0D1B2E;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+}
+
+.btnEvent {
+    background-color: white;
+    color: black;
+    border: 1px solid #0D1B2E;
+}
+
+    .btnEvent:hover {
+        background-color: #0D1B2E;
+        color: white;
+    }
+
+@media all and (max-width: 720px) {
+    .btnEvent {
+        width: 100%;
+
+    }
+}
 

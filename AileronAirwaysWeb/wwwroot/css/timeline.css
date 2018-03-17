@@ -8,6 +8,10 @@ body {
     background-color: white;
     /*padding-top: 50px;
     padding-bottom: 20px;*/
+    
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
 }
 
 
@@ -512,7 +516,7 @@ i {
 
 .backToTopContainer {
     width: 100%;
-    padding: 40px 10px 10px 10px;
+    padding: 40px 10px 40px 10px;
     text-align: center;
     cursor: pointer;
 }
@@ -560,7 +564,13 @@ i {
 
 /* ---------------- Footer --------------------- */
 footer {
-    position: relative;
+    flex-shrink: 0;
+    font-size: .8em;
+    width: 100%;
+    padding: 20px 0;
+
+
+    /*position: relative;
 
     text-align: center;
     float: left;
@@ -569,12 +579,10 @@ footer {
     width: 100%;
     padding: 20px 0;
 
-
-    bottom: 0;
+*/
     z-index: 1;
 }
 
     footer p {
-        display: inline;
         color: gray;
     }
