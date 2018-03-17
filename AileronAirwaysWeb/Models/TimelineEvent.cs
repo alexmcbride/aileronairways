@@ -27,6 +27,18 @@ namespace AileronAirwaysWeb.Models
 
         public virtual List<Attachment> Attachments { get; set; }
      
+        [JsonIgnore]
+        public IEnumerable<Attachment> ImageAttachments
+        {
+            get { return Attachments.Where(a => a.IsImage); }
+        }
+
+        [JsonIgnore]
+        public IEnumerable<Attachment> FileAttachments
+        {
+            get { return Attachments.Where(a => !a.IsImage); }
+        }
+
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
         {
             return CreateAsync(api, Guid.NewGuid().ToString(), title, description, eventDateTime, location);
@@ -162,8 +174,8 @@ namespace AileronAirwaysWeb.Models
 
         public void UpdateAttachmentCounts()
         {
-            AttachmentFilesCount = Attachments.Where(a => !a.IsImage).Count();
-            AttachmentImagesCount = Attachments.Where(a => a.IsImage).Count();
+            AttachmentFilesCount = FileAttachments.Count();
+            AttachmentImagesCount = ImageAttachments.Count();
         }
     }
 }
