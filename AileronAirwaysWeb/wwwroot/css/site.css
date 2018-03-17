@@ -184,6 +184,9 @@
 .dataTables_length label {
     color: #734EA6;
 }
+.dataTables_filter label {
+    color: #734EA6;
+}
 
 /*Static Button -------------------------*/
 .mt-purple-circle-btn{
