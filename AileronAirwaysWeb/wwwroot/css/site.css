@@ -188,12 +188,33 @@
     color: #734EA6;
 }
 
+/*.dataTables_wrapper .dataTables_paginate .paginate_button {
+    border-color: #734EA6;
+    background: #fff ;
+}*/
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    border-color: #734EA6;
+    background: #fff /*linear-gradient(to bottom, #fff 0%, #734EA6 100%)*/;
+}
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+        border-color: #0D63AC;
+        color: #fff !important;
+        background: #0D63AC;
+    }
+
+    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+        border-color: #0D63AC;
+        color: #fff !important;
+        background: #0D63AC;
+    }
 /*Static Button -------------------------*/
-.mt-purple-circle-btn{
-z-index: 99;
+.mt-purple-circle-btn {
+    z-index: 99;
     font-size: 22px;
-    font-weight:bold;
-    border:none;
+    font-weight: bold;
+    border: none;
     outline: none;
     background-color: rgba(115,78,166,1) /*#b722d8*/;
     color: white;
