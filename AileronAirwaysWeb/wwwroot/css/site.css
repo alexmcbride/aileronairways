@@ -26,6 +26,14 @@
     margin: 15px;
 }
 
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+
 /*custum navbar of purple to replace with navbar-inverse*/
 .mt-navbar-custom {
     background-color: #734EA6;
@@ -231,8 +239,15 @@
 #addTimelineBtn {
     position: absolute;
     top: 50px;
-    right: 20px;
+    right: 40px;
     
+}
+
+@media screen and (max-width: 327px) {
+    #addTimelineBtn {
+    right: 20px;
+    }
+       
 }
 
 .mt-purpule-color {
@@ -240,17 +255,7 @@
 }
 
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-    /* Hide captions */
-    .carousel-caption {
-        display: none;
-    }
-/*mie added*/
-#timelinecontents{
-        width:100%;
-    }
-}
+
 
 /* Custom Bootstrap colours */
 /*.navbar-custom {
@@ -265,6 +270,16 @@
     color: #fff;
 }*/
 
-@media screen and (max-width: 375px) {
-    
-}
+/*@media screen and (max-width: 480px) {
+    #timelinecontents td {
+        word-wrap: break-word;
+        min-width:40px;
+    }
+    #timelinecontents thead tr th:nth-child(0) {
+        min-width: 50px;
+        word-wrap: break-word;
+    }
+    #timelinecontents thead tr th:nth-child(1) {
+        min-width: 50px;
+    }
+}*/
