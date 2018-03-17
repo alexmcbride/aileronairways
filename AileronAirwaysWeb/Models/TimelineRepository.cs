@@ -94,6 +94,22 @@ namespace AileronAirwaysWeb.Models
             return _context.TimelineEvents.Include(e => e.Attachments).SingleOrDefault(e => e.Id == id);
         }
 
+        public Task<TimelineEvent> GetNextEventAsync(TimelineEvent @event)
+        {
+            return _context.TimelineEvents
+                .OrderBy(t => t.EventDateTime)
+                .Where(e => e.EventDateTime > @event.EventDateTime)
+                .FirstOrDefaultAsync();
+        }
+
+        public Task<TimelineEvent> GetPreviousEventAsync(TimelineEvent @event)
+        {
+            return _context.TimelineEvents
+                .OrderBy(t => t.EventDateTime)
+                .Where(e => e.EventDateTime < @event.EventDateTime)
+                .LastOrDefaultAsync();
+        }
+
         public async Task<TimelineEvent> CreateTimelineEventAsync(string title, string description, DateTime eventDateTime, string location, string timelineId)
         {
             var timelineEvent = await TimelineEvent.CreateAndLinkAsync(_api, title, description, eventDateTime, location, timelineId);
@@ -134,7 +150,7 @@ namespace AileronAirwaysWeb.Models
             // Set relation and update event attachment counters.
             var @event = await _context.TimelineEvents.FindAsync(eventId);
             attachment.TimelineEvent = @event;
-            
+
             if (attachment.IsImage)
             {
                 @event.AttachmentImagesCount++;

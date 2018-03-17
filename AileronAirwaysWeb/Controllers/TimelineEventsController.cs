@@ -37,17 +37,18 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
-        public ActionResult Details(string timelineId, string eventId)
+        public async Task<ActionResult> Details(string timelineId, string eventId)
         {
             Timeline timeline = _repo.GetTimelineWithEvents(timelineId);
             TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
 
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
-
-            
             ViewBag.EventId = eventId;
 
+            // Get next and previous events
+            ViewBag.NextEvent = await _repo.GetNextEventAsync(timelineEvent);
+            ViewBag.PreviousEvent = await _repo.GetPreviousEventAsync(timelineEvent);
 
             return View(timelineEvent);
         }

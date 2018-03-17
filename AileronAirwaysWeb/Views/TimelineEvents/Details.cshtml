@@ -84,17 +84,17 @@
                                 </td>
                                 @*<a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>*@
                             }
-                                
 
-                         
+
+
                             @if (!item.IsImage)
                             {
                                 <td>
                                     @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
 
-                                </td>                                
+                                </td>
                             }
-                           
+
                         </tr>
                     }
                 </tbody>
@@ -108,7 +108,7 @@
 
 
         <br />
-    
+
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
@@ -125,20 +125,20 @@
 
     <!-- Gallery TAB -->
     <div id="gallery" class="tabcontent">
-    
+
 
 
 
         <div class="row">
             <div class="column">
-                <div class="imgContainer"> 
-                    
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" 
+                <div class="imgContainer">
+
+                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%"
                          class="image hover-shadow cursor">
-               
+
                     <div class="imgInfoOverlay" onclick="openModal();currentSlide(1)">
                         <p class="trashCan" onclick="return confirm('Are you sure you want to delete this item?'); ">
-                            <i class="trashDeleteIcon far fa-trash-alt"  style="color: white;"></i>
+                            <i class="trashDeleteIcon far fa-trash-alt" style="color: white;"></i>
                         </p>
 
 
@@ -249,9 +249,21 @@
 
 <div id="bottomEventNav">
     <div class="btnContainer">
-        <button class="btnMain uppercase"><i class="leftArrow"></i>  Pre-event Name</button>
-        <button class="btnMain uppercase">Delete</button>
-        <button class="btnMain uppercase">Post-event Name  <i class="rightArrow"></i></button>
+        @if (@ViewBag.PreviousEvent != null)
+        {
+            <a class="btnMain uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
+                <i class="leftArrow"></i> @ViewBag.PreviousEvent.Title
+            </a>
+        }
+
+        <a class="btnMain uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
+
+        @if (@ViewBag.NextEvent != null)
+        {
+            <a class="btnMain uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
+                @ViewBag.NextEvent.Title <i class="rightArrow"></i>
+            </a>
+        }
     </div>
 </div>
 
