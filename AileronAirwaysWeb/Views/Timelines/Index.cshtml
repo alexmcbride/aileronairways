@@ -118,7 +118,7 @@ function updateTable(jsondata) {
                     {
                         mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
-                                '<a href="/timelines/delete/' + row.id + '">Delete</a>';
+                                '<a href="javascript:void(0);" /*href="/timelines/delete/' + row.id + '"*/ onclick="deleteTimeline(\'' + row.id + '\')">Delete</a>';
                         }, sortable: false
                     }
                 ]
@@ -127,7 +127,7 @@ function updateTable(jsondata) {
                // Event listener to the two range filtering inputs to redraw on input
             $('#myInput1, #myInput2, .input-group, input').on('dp.change keyup',function () {
                  timelinetable.draw();
-            }); 
+            });
         }
         /*.div.bootstrap-datetimepicker-widget dropdown-menu usetwntyfour bottom pull-right .day*/
 
@@ -190,10 +190,6 @@ function updateTable(jsondata) {
                 });
             });
 
-            $("#closbtn").click(function () {
-                $('#myModal').modal('hide');
-            });
-
             $.ajax({
                 url: "@Url.Action("get", "timelines", new { Area = "api" })",
                 method: 'GET',
@@ -203,6 +199,11 @@ function updateTable(jsondata) {
                 success: updateTable
             });
         });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+       
 
         function editTimeline(id) {
             $.ajax({
@@ -243,18 +244,48 @@ function updateTable(jsondata) {
             });
         }
 
-        $("#closbtn").click(function () {
-            $('#myModal').modal('hide');
-        });
+
+        function deleteTimeline(id) {
+            $.ajax({
+                type: "GET",
+                url: "timelines/delete/" + id,
+                contentType: "application/html; charset=utf-8",
+                datatype: "html",
+                success: function (data) {
+                    displayDeleteModal(data, id); },
+                error: function () {
+                    alert("Error - look in console.log");
+                    console.log('Status: ' + status);
+                    console.log('Error: ' + error);
+                }
+            });
+        }
+
+                function displayDeleteModal(data, id) {
+            $('#myModalContent').html(data);
+            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal('show');
+
+            $('#delete-form').on('submit', function (e) {
+                e.preventDefault();
+
+            var data = $('#delete-form').serialize();
+            $.post("timelines/delete/" + id, data, function (response) {
+                // If delete was successful post returns with OK
+                if (response.startsWith('OK')) {
+                    location.href = "@Url.Action("index", "timelines")"; // Redirect here instead of on server-side
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    // Otherwise redisplay form.
+                    displayDeleteModal(response, id);
+                }
+            }, 'html');
+            });
+        }
+
     </script>
 
-    @*<link rel="stylesheet" hhref="https://code.jquery.com/ui/1.12.1/themes/ui-lightness/jquery-ui.css">
-        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"
-                integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
-                crossorigin="anonymous"></script>
-        <script>
-            $('#myInput1, #myInput2').datepicker({ dateFormat: 'dd/mm/yy' });
-        </script>*@
     <script>
         $(function () {
             $('#eventDateTime1').datetimepicker({

@@ -3,36 +3,48 @@
 @{
     ViewData["Title"] = "Delete Timeline Event";
 }
+<div id="modal-container">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" style="color:#3A87AD">
+            Delete
+        </h4>
+    </div>
 
-<h2>Delete</h2>
+    <div class="modal-body">
 
-<h3>Are you sure you want to delete this event?</h3>
-<div>
-    <h4>@Html.DisplayFor(model => model.Title)</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.EventDateTime)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.EventDateTime)
-        </dd>
-        <dt>
-            @Html.DisplayNameFor(model => model.Location)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Location)
-        </dd>
-    </dl>
-    
-    <form asp-action="Delete" asp-route-timelineId="@Model.TimelineId" asp-route-eventId="@Model.Id">
-        <input type="submit" value="Delete" class="btn btn-default" /> |
-        <a asp-action="Index" asp-route-timelineId="@Model.TimelineId">Back to List</a>
-    </form>
+        <h3>Are you sure you want to delete this event?</h3>
+        <h4>@Html.DisplayFor(model => model.Title)</h4>
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.EventDateTime)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.EventDateTime)
+            </dd>
+            <dt>
+                @Html.DisplayNameFor(model => model.Location)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.Location)
+            </dd>
+        </dl>
+
+    </div>
+    <div class="modal-footer">
+        <form asp-antiforgery="true" id="delete-event-form">
+            <input type="submit" class="btn btn-default" value="Delete" />
+        </form>
+    </div>
+
 </div>
+@*<form asp-action="Delete" asp-route-timelineId="@Model.TimelineId" asp-route-eventId="@Model.Id"
+    <input type="submit" value="Delete" class="btn btn-default" /> |
+      <a asp-action="Index" asp-route-timelineId="@Model.TimelineId">Back to List</a>>*@

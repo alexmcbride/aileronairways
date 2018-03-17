@@ -132,7 +132,8 @@
                                 <p class="editDelete">
                                     <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
                                     /
-                                    <a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>
+                                    @*<a asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">delete</a>*@
+                                    <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id">delete</a>
                                 </p>
                             </div>
                         </div>
@@ -168,7 +169,7 @@
 
 @section Scripts{
 
-    <script>
+<script>
     /* Filetring Event Titles */
     function filterEventTitles() {
         var input, filter, table, tr, td, i;
@@ -196,7 +197,7 @@
 
 
 
-    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
+
 
     function openNav() {
         document.getElementById("mySidenav").style.width = "230px";
@@ -243,6 +244,7 @@
     function topFunction() {
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
+    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
 
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
@@ -328,10 +330,50 @@
             $('#myModal').modal('hide');
         });
 
+        $(".modal-link-delete").click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "GET",
+                url: "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Delete",
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    displayDeleteModal(data, id);
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        function displayDeleteModal(data, id) {
+        $('#myModalContent').html(data);
+        $('#myModal').modal({ "backdrop": "static", keyboard: true });
+        $('#myModal').modal('show');
+
+        // Hook event to edit view form.
+        $('#delete-event-form').on('submit', function (e) {
+            e.preventDefault();
+
+            var data = $('#delete-event-form').serialize();
+            $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
+                console.log(response);
+                if (response.startsWith('OK')) {
+                    var eventId = response.split(' ')[1];
+                    location.href = '/timelines/@ViewBag.TimelineId/evens';
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    displayDeleteModal(response, id);
+                }
+            }, 'html');
+        });
+    }
+
         // Hack to make flash message appear correctly when side bar is shown.
         $('.flash-messages').css('margin-left', '20px');
     });
 
-    </script>
+</script>
 
 }

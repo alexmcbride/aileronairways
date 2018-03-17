@@ -125,7 +125,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             TimelineEvent evt = _repo.GetTimelineEvent(eventId);
 
-            return View(new TimelineEventViewModel
+            return PartialView(new TimelineEventViewModel
             {
                 Id = evt.Id,
                 TimelineId = timelineId,
