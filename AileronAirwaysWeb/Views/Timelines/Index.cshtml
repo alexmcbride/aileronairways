@@ -125,9 +125,9 @@ function updateTable(jsondata) {
               });
 
                // Event listener to the two range filtering inputs to redraw on input
-            $('#myInput1, #myInput2, .myInput,#tbltimelines').on('keyup mouseover',function () {
+            $('#myInput1, #myInput2, .input-group, input').on('dp.change keyup',function () {
                  timelinetable.draw();
-            });
+            }); 
         }
         /*.div.bootstrap-datetimepicker-widget dropdown-menu usetwntyfour bottom pull-right .day*/
 
