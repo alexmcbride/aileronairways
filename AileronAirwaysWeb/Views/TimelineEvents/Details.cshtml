@@ -4,7 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+@section AddToHead{
+    <link href="~/css/eventDetailed.css" rel="stylesheet" />
+}
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
@@ -127,90 +129,55 @@
     <div id="gallery" class="tabcontent">
 
 
+        @if (Model.AttachmentImagesCount > 0)
+        {
+            int i = 1;
 
-
-        <div class="row">
-            <div class="column">
-                <div class="imgContainer">
-
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%"
-                         class="image hover-shadow cursor">
-
-                    <div class="imgInfoOverlay" onclick="openModal();currentSlide(1)">
-                        <p class="trashCan" onclick="return confirm('Are you sure you want to delete this item?'); ">
-                            <i class="trashDeleteIcon far fa-trash-alt" style="color: white;"></i>
-                        </p>
-
-
-
-                        <i class="fas fa-search" style="color: white;"></i>
-
-                        <div class="imgText text-uppercase">
-                            Awesome Collision
+            <div class="slideshow-container">
+                @foreach (var item in Model.Attachments)
+                {
+                    @if (item.IsImage)
+                    {
+                        <div class="mySlides">
+                            <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
+                            <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
+                            <div class="text">@item.Title</div>
                         </div>
+                        i++;
+                    }
+                }
 
-                    </div>
-                </div>
-            </div>
 
-
-            <div class="column">
-                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(2)" class="hover-shadow cursor">
-            </div>
-            <div class="column">
-                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(3)" class="hover-shadow cursor">
-            </div>
-            <div class="column">
-                <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="openModal();currentSlide(4)" class="hover-shadow cursor">
-            </div>
-        </div>
-
-        <div id="myModal" class="modal">
-            <span class="close cursor" onclick="closeModal()">&times;</span>
-            <div class="modal-content">
-
-                <div class="mySlides">
-                    <div class="numbertext">1 / 4</div>
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
-                </div>
-
-                <div class="mySlides">
-                    <div class="numbertext">2 / 4</div>
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
-                </div>
-
-                <div class="mySlides">
-                    <div class="numbertext">3 / 4</div>
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
-                </div>
-
-                <div class="mySlides">
-                    <div class="numbertext">4 / 4</div>
-                    <img src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%">
-                </div>
 
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
-                <div class="caption-container">
-                    <p id="caption"></p>
-                </div>
-
-
-                <div class="column">
-                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(1)" alt="Nature and sunrise">
-                </div>
-                <div class="column">
-                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(2)" alt="Trolltunga, Norway">
-                </div>
-                <div class="column">
-                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(3)" alt="Mountains and fjords">
-                </div>
-                <div class="column">
-                    <img class="demo cursor" src="~/cache/65c78afe-3815-49d1-bb87-e5d31681d8cf.png" style="width:100%" onclick="currentSlide(4)" alt="Northern Lights">
-                </div>
             </div>
-        </div>
+            <br>
+            <div style="text-align:center">
+
+                @if (Model.AttachmentImagesCount > 0)
+                {
+                    int j = 1;
+                    foreach (var item in Model.Attachments)
+                    {
+
+                        if (item.IsImage)
+                        {
+
+
+                            <span class="dot" onclick="currentSlide(@j)"></span>
+
+
+                            j++;
+                        }
+
+                    }
+
+                }
+            </div>
+        }
+
 
         <br />
         <br />
@@ -251,36 +218,15 @@
     <div class="btnContainer">
         @if (@ViewBag.PreviousEvent != null)
         {
-            <a class="btnMain uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
-                <i class="leftArrow"></i> @ViewBag.PreviousEvent.Title
-            </a>
+            <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id"><i style="color: white;" class="leftArrow"></i>  @ViewBag.PreviousEvent.Title</a>
         }
-
-        <a class="btnMain uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
-
+        <a class="button btnEvent uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
         @if (@ViewBag.NextEvent != null)
         {
-            <a class="btnMain uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
-                @ViewBag.NextEvent.Title <i class="rightArrow"></i>
-            </a>
+            <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">@ViewBag.NextEvent.Title  <i class="rightArrow"></i></a>
         }
     </div>
 </div>
-
-
-
-
-@*<p>Location: @Model.Location</p>
-    <p>DescriptiSon: @Model.Description</p>
-
-
-    <p>
-        <a asp-action="index" asp-controller="attachments" asp-route-eventId="@Model.Id" asp-route-timelineId="@ViewBag.TimelineId">Attachments</a> |
-        <a asp-action="Delete" asp-route-id="@Model.Id">Delete</a> |
-        <a asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId">Back to timeline</a>
-    </p>*@
-
-
 
 
 <script>
@@ -306,22 +252,6 @@
 
 <!-- Image Gallery Scripts -->
 <script>
-
-    function deleteImage() {
-        document.getElementById('superAwesomeTester').style.display = "block";
-
-    }
-
-
-
-    function openModal() {
-        document.getElementById('myModal').style.display = "block";
-    }
-
-    function closeModal() {
-        document.getElementById('myModal').style.display = "none";
-    }
-
     var slideIndex = 1;
     showSlides(slideIndex);
 
@@ -336,8 +266,7 @@
     function showSlides(n) {
         var i;
         var slides = document.getElementsByClassName("mySlides");
-        var dots = document.getElementsByClassName("demo");
-        var captionText = document.getElementById("caption");
+        var dots = document.getElementsByClassName("dot");
         if (n > slides.length) { slideIndex = 1 }
         if (n < 1) { slideIndex = slides.length }
         for (i = 0; i < slides.length; i++) {
@@ -348,6 +277,5 @@
         }
         slides[slideIndex - 1].style.display = "block";
         dots[slideIndex - 1].className += " active";
-        captionText.innerHTML = dots[slideIndex - 1].alt;
     }
 </script>

@@ -12,7 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\css\eventDetails.css" />
+    <Content Remove="wwwroot\css\eventDetailed.css" />
     <Content Remove="wwwroot\css\timeline.css" />
   </ItemGroup>
 
@@ -31,7 +31,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\css\eventDetails.css" />
+    <None Include="wwwroot\css\eventDetailed.css" />
     <None Include="wwwroot\css\timeline.css" />
   </ItemGroup>
 
