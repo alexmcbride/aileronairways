@@ -13,7 +13,7 @@
         <link href="~/css/timeline.css" rel="stylesheet" />
 
 
-        <link href="~/css/eventDetails.css" rel="stylesheet" />
+        <link href="~/css/eventDetailed.css" rel="stylesheet" />
 
 
         <!-- Font Awesome -->
@@ -26,7 +26,7 @@
         <link rel="stylesheet" href="~/css/site.css" />
         <link href="~/css/timeline.css" rel="stylesheet" />
 
-        <link href="~/css/eventDetails.css" rel="stylesheet" />
+        <link href="~/css/eventDetailed.css" rel="stylesheet" />
 
     </environment>
    
@@ -49,7 +49,7 @@
     @*Use tag helper to display flash messages.*@
     <flash-messages />
 
-    <div>
+    <div style="flex: 1 0 auto;">
         @*class="container body-content"*@
         @RenderBody()
 
@@ -57,7 +57,7 @@
     <footer class="small text-center text-muted">
         <p>&copy; @DateTime.Now.Year - Aileron Airways</p>
     </footer>
-    
+
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>

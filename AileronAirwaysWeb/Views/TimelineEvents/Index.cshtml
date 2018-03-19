@@ -121,7 +121,7 @@
                                     <p>
                                         @if (item.Description != null && item.Description.Length >= 150)
                                         {
-                                            @item.Description.Substring(1, 150)
+                                            @item.Description.Substring(0, 150)
                                         }
                                         else
                                         {
@@ -149,11 +149,10 @@
         </div>
         <div class="backToTopContainer" onclick="topFunction()">
 
-
             <span><i class="backToTop"></i></span>
 
         </div>
-
+        <br /><br /><br /><br /><br /><br />
     </div>
 
 
