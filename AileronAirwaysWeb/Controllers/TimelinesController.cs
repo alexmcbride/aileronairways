@@ -99,7 +99,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             Timeline timeline = _repo.GetTimelineWithEvents(id);
 
-            return View(new TimelineViewModel
+            return PartialView(new TimelineViewModel
             {
                 Id = timeline.Id,
                 CreationTimeStamp = timeline.CreationTimeStamp,

@@ -130,7 +130,7 @@ namespace AileronAirwaysWeb.Controllers
         {
             TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
 
-            return View(new TimelineEventViewModel
+            return PartialView(new TimelineEventViewModel
             {
                 Id = evt.Id,
                 TimelineId = timelineId,

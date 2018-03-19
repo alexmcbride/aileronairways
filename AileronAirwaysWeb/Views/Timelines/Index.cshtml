@@ -1,43 +1,50 @@
 ﻿@model IEnumerable<Timeline>
 
 @{
-    ViewData["Title"] = "Timeline Register";
+    ViewData["Title"] = "Manage Timeline";
 }
 
+<button id="addTimelineBtn" class="modal-link-create-timeline mt-purple-circle-btn" title="Create New Timeline">&#43;</button>
 
-<div class="container body-content">
-    <h2>@ViewData["Title"]</h2>
 
-    <div id='myModal' class='modal'>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div id='myModalContent'></div>
-            </div>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
+
+@*<a href="javascript:void(0);" id="addTimelinebtn" class="modal-link-create-timeline">&#43;</a>*@
+
+<div id="timelinecontents" style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+    <div class="row">
+        <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-purpule-color">@ViewData["Title"]</h3>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
+            <label for="myInput1" class="mt-purpule-color">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="Search period start date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
+            <label for="myInput2" class="mt-purpule-color">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="Search period end date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
         </div>
     </div>
 
-    <p><a href="javascript:void(0);" class="modal-link-create-timeline btn btn-primary">Create New Timeline</a></p>
-
-<hr>
-<div>
-    <label for="myInput1">Date from</label><input type="text" class="myInput" id="myInput1" placeholder="Search for any input value.." title="Type in a name">
-    <label for="myInput2">Date to</label><input type="text" class="myInput" id="myInput2" placeholder="Search for any input value.." title="Type in a name">
-</div>
-<hr />
-<br />
-
-    <div style="margin-right: auto; margin-left: auto; width:100%" @*class="col-lg-9 col-md-12" *@>
-        <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" @*style="width:100%" *@>
-            <thead>
-                <tr>
-                    <th style="max-width:65%">Title</th>
-                    <th style="width:20%">Date Created</th>
-                    <th style="width:15%">Link</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" style="width:100%">
+        <thead>
+            <tr class="mt-purpule-color">
+                <th style="max-width:65%">Title</th>
+                <th style="width:20%">Date Created</th>
+                <th style="width:15%">Link</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 @section scripts {
@@ -103,23 +110,27 @@ function updateTable(jsondata) {
                             var date = new Date(row.creationTimeStamp);
                             var day = date.getDate();
                             var month = date.getMonth() + 1;
-                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
+                            var hrs = date.getHours();
+                            var min = date.getMinutes()
+                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + (hrs > 10 ? hrs : "0" + hrs) + ":" + (min > 10 ? min : "0" + min);
                         }
                     },
                     {
                         mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
-                                '<a href="/timelines/delete/' + row.id + '">Delete</a>';
+                                '<a href="javascript:void(0);" /*href="/timelines/delete/' + row.id + '"*/ onclick="deleteTimeline(\'' + row.id + '\')">Delete</a>';
                         }, sortable: false
                     }
                 ]
               });
 
-            // Event listener to the two range filtering inputs to redraw on input
-            $('#myInput1, #myInput2').keyup(function () {
-                timelinetable.draw();
+               // Event listener to the two range filtering inputs to redraw on input
+            $('#myInput1, #myInput2, .input-group, input').on('dp.change keyup',function () {
+                 timelinetable.draw();
             });
         }
+        /*.div.bootstrap-datetimepicker-widget dropdown-menu usetwntyfour bottom pull-right .day*/
+
         /* Mie updated this Custom filtering function which will search data in column four between two values */
         $.fn.dataTable.ext.search.push(
             function (settings, data, dataIndex) {
@@ -137,7 +148,7 @@ function updateTable(jsondata) {
                 return false;
             }
         );
-        
+
 
         function displayCreateModal(data) {
             $('#myModalContent').html(data);
@@ -179,10 +190,6 @@ function updateTable(jsondata) {
                 });
             });
 
-            $("#closbtn").click(function () {
-                $('#myModal').modal('hide');
-            });
-
             $.ajax({
                 url: "@Url.Action("get", "timelines", new { Area = "api" })",
                 method: 'GET',
@@ -192,6 +199,11 @@ function updateTable(jsondata) {
                 success: updateTable
             });
         });
+
+        $("#closbtn").click(function () {
+            $('#myModal').modal('hide');
+        });
+       
 
         function editTimeline(id) {
             $.ajax({
@@ -232,8 +244,58 @@ function updateTable(jsondata) {
             });
         }
 
-        $("#closbtn").click(function () {
-            $('#myModal').modal('hide');
+
+        function deleteTimeline(id) {
+            $.ajax({
+                type: "GET",
+                url: "timelines/delete/" + id,
+                contentType: "application/html; charset=utf-8",
+                datatype: "html",
+                success: function (data) {
+                    displayDeleteModal(data, id); },
+                error: function () {
+                    alert("Error - look in console.log");
+                    console.log('Status: ' + status);
+                    console.log('Error: ' + error);
+                }
+            });
+        }
+
+                function displayDeleteModal(data, id) {
+            $('#myModalContent').html(data);
+            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal('show');
+
+            $('#delete-form').on('submit', function (e) {
+                e.preventDefault();
+
+            var data = $('#delete-form').serialize();
+            $.post("timelines/delete/" + id, data, function (response) {
+                // If delete was successful post returns with OK
+                if (response.startsWith('OK')) {
+                    location.href = "@Url.Action("index", "timelines")"; // Redirect here instead of on server-side
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    // Otherwise redisplay form.
+                    displayDeleteModal(response, id);
+                }
+            }, 'html');
+            });
+        }
+
+    </script>
+
+    <script>
+        $(function () {
+            $('#eventDateTime1').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+        $(function () {
+            $('#eventDateTime2').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
         });
     </script>
 }

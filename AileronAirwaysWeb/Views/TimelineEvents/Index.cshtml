@@ -198,7 +198,7 @@
 
 
 
-    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
+
 
     function openNav() {
         document.getElementById("mySidenav").style.width = "230px";
@@ -211,7 +211,6 @@
         document.getElementById("sideNavArrows").removeEventListener("click", openNav);
         document.getElementById("sideNavArrows").addEventListener("click", closeNav);
 
-
         document.getElementById("arrowChange").classList.remove("rightArrow");
         document.getElementById("arrowChange").classList.add("leftArrow");
 
@@ -222,7 +221,6 @@
     function closeNav() {
         document.getElementById("mySidenav").style.width = "20px";
         document.getElementById("mainSidePanel").style.marginLeft = "20px";
-
 
         // side panel content GONE! - It's Magic
         document.getElementById("sideNavContent").style.visibility = 'hidden';
@@ -242,6 +240,7 @@
     function topFunction() {
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
+    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
 
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
@@ -327,10 +326,49 @@
             $('#myModal').modal('hide');
         });
 
+        $(".modal-link-delete").click(function () {
+            var id = $(this).attr('data-id');
+            $.ajax({
+                type: "GET",
+                url: "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Delete",
+                contentType: "application/json; charset=utf-8",
+                datatype: "json",
+                success: function (data) {
+                    displayDeleteModal(data, id);
+                },
+                error: function () {
+                    alert("Dynamic content load failed.");
+                }
+            });
+        });
+
+        function displayDeleteModal(data, id) {
+        $('#myModalContent').html(data);
+        $('#myModal').modal({ "backdrop": "static", keyboard: true });
+        $('#myModal').modal('show');
+
+        // Hook event to edit view form.
+        $('#delete-event-form').on('submit', function (e) {
+            e.preventDefault();
+
+            var data = $('#delete-event-form').serialize();
+            $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
+                console.log(response);
+                if (response.startsWith('OK')) {
+                    var eventId = response.split(' ')[1];
+                    location.href = '/timelines/@ViewBag.TimelineId/evens';
+                    $('#myModal').modal('hide');
+                }
+                else {
+                    displayDeleteModal(response, id);
+                }
+            }, 'html');
+        });
+    }
+
         // Hack to make flash message appear correctly when side bar is shown.
         $('.flash-messages').css('margin-left', '20px');
     });
 
-    </script>
-}
+</script>
 
