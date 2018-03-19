@@ -359,7 +359,7 @@ li {
     /* z-index: 1;*/
     top: 0px;
     left: 0px;
-    background-color: #f0e8eb;
+    background-color: /*f0e8eb*/#FAFAFA;
     overflow-x: hidden;
     overflow-y: hidden;
     transition: 0.5s;
