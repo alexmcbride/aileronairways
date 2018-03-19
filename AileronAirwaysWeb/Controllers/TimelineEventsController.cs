@@ -151,7 +151,7 @@ namespace AileronAirwaysWeb.Controllers
 
             _flash.Message("Deleted timeline event");
 
-            return RedirectToAction(nameof(Index));
+            return Ok("OK " + eventId);
         }
     }
 }
