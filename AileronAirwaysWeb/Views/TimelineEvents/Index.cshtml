@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+@section AddToHead{
+<link href="~/css/timeline.css" rel="stylesheet" />
+}
 <div class="container body-content">
     <button id="addEventBtn" title="Add Event">&#43;</button>
 
@@ -370,6 +373,6 @@
         $('.flash-messages').css('margin-left', '20px');
     });
 
-</script>
+    </script>
 
 }
