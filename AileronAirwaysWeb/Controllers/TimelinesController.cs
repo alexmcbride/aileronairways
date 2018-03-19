@@ -116,7 +116,7 @@ namespace AileronAirwaysWeb.Controllers
 
             _flash.Message("Timeline has been deleted!");
 
-            return RedirectToAction(nameof(Index));
+            return Ok("OK " + id);
         }
 
         public IActionResult Error()
