@@ -194,5 +194,12 @@ namespace AileronAirwaysWeb.Models
             _context.Entry(@event).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task EditDescriptionAsync(TimelineEvent @event)
+        {
+            await @event.EditDescriptionAsync(_api);
+            _context.Entry(@event).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
     }
 }

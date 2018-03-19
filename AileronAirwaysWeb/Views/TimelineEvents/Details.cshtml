@@ -51,10 +51,9 @@
     <!-- Tabs/Headings -->
     <!-- Overview TAB -->
     <div id="overview" class="tabcontent" style="display: block;">
-        <p>@Model.Description</p>
-
-        <a href="#" class="btnRight">Edit</a>
-
+        <div id="descriptionContent">
+            @Html.Partial("Description", Model)
+        </div>
     </div>
 
     <!-- Attachments TAB -->
@@ -279,3 +278,45 @@
         dots[slideIndex - 1].className += " active";
     }
 </script>
+
+@section scripts {
+    <script>
+        function handleEditDescriptionCancel(id) {
+            $('#cancelEditDescriptionBtn').click(function (evt) {
+                $.get('/TimelineEvents/Description/' + id, function (data) {
+                    $('#descriptionContent').html(data);
+                    handleEditDescription();
+                });
+            });
+        }
+
+        function handleEditDescription() {
+            $('#editDescriptionLink').click(function (evt) {
+                evt.preventDefault();
+
+                var id = $('#editDescriptionLink').attr('data-id');
+                $.get('/TimelineEvents/DescriptionEdit/' + id, function (data) {
+                    $('#descriptionContent').html(data);
+
+                    $('#editDescriptionForm').on('submit', function (evt) {
+                        evt.preventDefault();
+
+                        var data = $('#editDescriptionForm').serialize();
+                        $.post('/TimelineEvents/DescriptionEditPost/' + id, data, function (data) {
+                            $('#descriptionContent').html(data);
+                            handleEditDescriptionCancel(id);
+                            handleEditDescription();
+                        });
+                    });
+
+                    handleEditDescriptionCancel(id);
+
+                });
+            });
+        }
+
+        $(function () {
+            handleEditDescription();
+        });
+    </script>
+}

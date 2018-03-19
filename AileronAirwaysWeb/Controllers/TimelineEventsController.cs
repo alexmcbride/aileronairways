@@ -153,5 +153,40 @@ namespace AileronAirwaysWeb.Controllers
 
             return Ok("OK " + eventId);
         }
+
+        [HttpGet]
+        public ActionResult Description(string id)
+        {
+            TimelineEvent @event = _repo.GetTimelineEvent(id);
+
+            return PartialView("Description", @event);
+        }
+
+        [HttpGet]
+        public ActionResult DescriptionEdit(string id)
+        {
+            TimelineEvent @event = _repo.GetTimelineEvent(id);
+
+            return PartialView("DescriptionEdit", new EditDescriptionViewModel
+            {
+                Id = @event.Id,
+                Description = @event.Description
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> DescriptionEditPost(string id,[Bind("Id,Description")] EditDescriptionViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                TimelineEvent @event = _repo.GetTimelineEvent(id);
+                @event.Description = vm.Description;
+                await _repo.EditDescriptionAsync(@event);
+                return PartialView("Description", @event);
+            }
+
+            return PartialView("DescriptionEdit", vm);
+        }
     }
 }
