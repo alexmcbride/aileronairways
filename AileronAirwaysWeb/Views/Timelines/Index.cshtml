@@ -1,101 +1,58 @@
 ﻿@model IEnumerable<Timeline>
 
-    @{
+@{
     ViewData["Title"] = "Manage Timeline";
-    }
+}
 
+@section AddToHead{
+    <script src="~/js/site.js"></script>
+}
 
-    <button id="addTimelineBtn" class="modal-link-create-timeline mt-purple-circle-btn" title="Create New Timeline">&#43;</button>
+<button id="addTimelineBtn" class="modal-link-create-timeline mt-purple-circle-btn" title="Create New Timeline">&#43;</button>
 
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
 
+@*<a href="javascript:void(0);" id="addTimelinebtn" class="modal-link-create-timeline">&#43;</a>*@
 
-    <div id='myModal' class='modal'>
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div id='myModalContent'></div>
-            </div>
+<div id="timelinecontents" style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
+    <div class="row">
+        <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-purpule-color">@ViewData["Title"]</h3>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
+            <label for="myInput1" class="mt-purpule-color">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="Search period start date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
+            <label for="myInput2" class="mt-purpule-color">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="Search period end date" title="Type in a name">
+            <span class="input-group-addon myInput">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
         </div>
     </div>
 
-    @*<a href="javascript:void(0);" id="addTimelinebtn" class="modal-link-create-timeline">&#43;</a>*@
+    <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" style="width:100%">
+        <thead>
+            <tr class="mt-purpule-color">
+                <th style="max-width:65%">Title</th>
+                <th style="width:20%">Date Created</th>
+                <th style="width:15%">Link</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
 
-    <div id="timelinecontents" style="margin-right: auto; margin-left: auto; width:80%" @*class="col-lg-9 col-md-12" *@>
-        <div class="row">
-            <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-purpule-color">@ViewData["Title"]</h3>
-            <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
-                <label for="myInput1" class="mt-purpule-color">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="Search period start date" title="Type in a name">
-                <span class="input-group-addon myInput">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-            <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
-                <label for="myInput2" class="mt-purpule-color">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="Search period end date" title="Type in a name">
-                <span class="input-group-addon myInput">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-            </div>
-        </div>
-
-        <table data-order='[[ 1, "des" ]]' id="tbltimelines" class="display @*responsive nowrap*@" style="width:100%">
-            <thead>
-                <tr class="mt-purpule-color">
-                    <th style="max-width:65%">Title</th>
-                    <th style="width:20%">Date Created</th>
-                    <th style="width:15%">Link</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    @section scripts {
+@section scripts {
     <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
 
     <script>
-        ////mie updated this
-        // $(document).ready(function () {
-        //     $.ajax({
-        //         /**/
-        //         url: "api/timelines",
-        //         method: 'GET',
-        //         datatype: 'json',
-        //         contentType: "application/json; charset=utf-8",
-        //         table: '#tbltimelines',
-        //         //idSrc: 'id',
-        //         //rowId: 'id',
-        //         success: function (jsondata) {
-        //             //debugger;
-        //             var timelinetable = $('#tbltimelines').DataTable({
-        //                 data: jsondata,
-        //                 columns: [
-        //                 { mRender: function (data, type, row) { return '<a href="/Timelines/' + row.id + '/Events/">' + row.title + '</a> ' } },
-        //                 //{ data: 'creationTimeStamp' },
-        //                 {
-        //                     mRender: function (data, type, row) {
-        //                         var date = new Date(row.creationTimeStamp);
-        //                         var month = date.getDate();
-        //                         var day = date.getMonth() + 1;
-        //                         return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes();
-        //                     }
-        //                 },
-        //                 {
-        //                     // this is Actions Column
-        //                     mRender: function (data, type, row) {
-
-        //                         return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> ' +
-        //                             '<a href="/Timelines/Delete/' + row.id + '" onclick="return confirm(\'Are you sure you wish to delete this event?\');">Delete</a>';
-        //                     }
-        //                 }
-        //                         ]
-        //         });
-        //     // Event listener to the two range filtering inputs to redraw on input
-        //     $('#myInput1, #myInput2').keyup(function () {
-        //         timelinetable.draw();
-        //     });
-        //     console.log(jsondata);
-        // }
-        //              });
-        // });
         function updateTable(jsondata) {
             var timelinetable = $('#tbltimelines').DataTable({
                 data: jsondata,
@@ -105,7 +62,6 @@
                             return '<a href="/timelines/' + row.id + '/events/">' + row.title + '</a> '
                         }
                     },
-                    //{ data: 'creationTimeStamp' },
                     {
                         mRender: function (data, type, row) {
                             var date = new Date(row.creationTimeStamp);
@@ -130,26 +86,20 @@
                 timelinetable.draw();
             });
         }
-        /*.div.bootstrap-datetimepicker-widget dropdown-menu usetwntyfour bottom pull-right .day*/
 
-        /* Mie updated this Custom filtering function which will search data in column four between two values */
-        $.fn.dataTable.ext.search.push(
-            function (settings, data, dataIndex) {
+        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+            var min = new Date(($('#myInput1').val().split(/\W/)[2]), ($('#myInput1').val().split('/')[1] - 1), $('#myInput1').val().split('/')[0]);
+            var max = new Date(($('#myInput2').val().split(/\W/)[2]), ($('#myInput2').val().split('/')[1] - 1), $('#myInput2').val().split('/')[0]);
+            var date = new Date((data[1].split(/\W/)[2]), data[1].split('/')[1] - 1, data[1].split('/')[0]) || 0;
 
-                var min = new Date(($('#myInput1').val().split(/\W/)[2]), ($('#myInput1').val().split('/')[1] - 1), $('#myInput1').val().split('/')[0]);
-                var max = new Date(($('#myInput2').val().split(/\W/)[2]), ($('#myInput2').val().split('/')[1] - 1), $('#myInput2').val().split('/')[0]);
-                var date = new Date((data[1].split(/\W/)[2]), data[1].split('/')[1] - 1, data[1].split('/')[0]) || 0;
-
-                if ((isNaN(min) && isNaN(max)) ||
-                    (isNaN(min) && date <= max) ||
-                    (min <= date && isNaN(max)) ||
-                    (min <= date && date <= max)) {
-                    return true;
-                }
-                return false;
+            if ((isNaN(min) && isNaN(max)) ||
+                (isNaN(min) && date <= max) ||
+                (min <= date && isNaN(max)) ||
+                (min <= date && date <= max)) {
+                return true;
             }
-        );
-
+            return false;
+        });
 
         function displayCreateModal(data) {
             $('#myModalContent').html(data);
@@ -158,6 +108,8 @@
 
             $('#create-form').on('submit', function (e) {
                 e.preventDefault();
+
+                disableFormElement('#btnSave', true);
 
                 var data = $('#create-form').serialize();
                 $.post('timelines/create', data, function (response) {
@@ -169,6 +121,9 @@
                     else {
                         displayCreateModal(response);
                     }
+
+                    disableFormElement('#btnSave', false);
+
                 }, 'html');
             });
         }
@@ -205,7 +160,6 @@
             $('#myModal').modal('hide');
         });
 
-
         function editTimeline(id) {
             $.ajax({
                 type: "GET",
@@ -231,6 +185,8 @@
             $('#edit-form').on('submit', function (e) {
                 e.preventDefault();
 
+                disableFormElement('#btnSave', true);
+
                 var data = $('#edit-form').serialize();
                 $.post("timelines/edit/" + id, data, function (response) {
                     // If edit was successful post returns with OK
@@ -242,6 +198,8 @@
                         // Otherwise redisplay form.
                         displayEditModal(response, id);
                     }
+
+                    disableFormElement('#btnSave', false);
                 }, 'html');
             });
         }
@@ -272,6 +230,8 @@
             $('#delete-form').on('submit', function (e) {
                 e.preventDefault();
 
+                disableFormElement('#btnSave', true);
+
                 var data = $('#delete-form').serialize();
                 $.post("timelines/delete/" + id, data, function (response) {
                     // If delete was successful post returns with OK
@@ -283,6 +243,8 @@
                         // Otherwise redisplay form.
                         displayDeleteModal(response, id);
                     }
+
+                    disableFormElement('#btnSave', false);
                 }, 'html');
             });
         }
@@ -301,4 +263,4 @@
             });
         });
     </script>
-    }
+}

@@ -4,9 +4,12 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
 }
+
 @section AddToHead{
-<link href="~/css/timeline.css" rel="stylesheet" />
+    <link href="~/css/timeline.css" rel="stylesheet" />
+    <script src="~/js/site.js"></script>
 }
+
 <div class="container body-content">
     <button id="addEventBtn" title="Add Event">&#43;</button>
 
@@ -254,9 +257,10 @@
         $('#create-event-form').on('submit', function (e) {
             e.preventDefault();
 
+            disableFormElement('#btnSave', true);
+
             var data = $('#create-event-form').serialize();
             $.post(url, data, function (response) {
-                console.log(response);
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
                     location.href = '/timelines/@ViewBag.TimelineId/events/' + eventId;
@@ -265,6 +269,8 @@
                 else {
                     displayCreateModal(response);
                 }
+
+                disableFormElement('#btnSave', false);
             }, 'html');
         });
     }
@@ -278,6 +284,8 @@
         $('#edit-event-form').on('submit', function (e) {
             e.preventDefault();
 
+            disableFormElement('#btnSave', true);
+
             var data = $('#edit-event-form').serialize();
             $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/edit', data, function (response) {
                 console.log(response);
@@ -289,6 +297,8 @@
                 else {
                     displayEditModal(response, id);
                 }
+
+                disableFormElement('#btnSave', false);
             }, 'html');
         });
     }
@@ -345,7 +355,7 @@
             });
         });
 
-        function displayDeleteModal(data, id) {
+    function displayDeleteModal(data, id) {
         $('#myModalContent').html(data);
         $('#myModal').modal({ "backdrop": "static", keyboard: true });
         $('#myModal').modal('show');
@@ -354,9 +364,10 @@
         $('#delete-event-form').on('submit', function (e) {
             e.preventDefault();
 
+            disableFormElement('#btnSave', true);
+
             var data = $('#delete-event-form').serialize();
             $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
-                console.log(response);
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
                     location.href = '/timelines/@ViewBag.TimelineId/evens';
@@ -365,6 +376,8 @@
                 else {
                     displayDeleteModal(response, id);
                 }
+
+                disableFormElement('#btnSave', false);
             }, 'html');
         });
     }
