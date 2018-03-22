@@ -17,7 +17,6 @@ namespace AileronAirwaysWeb.Models
         public bool IsDeleted { get; set; }
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
-        public string Location { get; set; }
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
         public string TimelineId { get; set; }
@@ -26,7 +25,7 @@ namespace AileronAirwaysWeb.Models
         public virtual Timeline Timeline { get; set; }
 
         public virtual List<Attachment> Attachments { get; set; }
-     
+
         [JsonIgnore]
         public IEnumerable<Attachment> ImageAttachments
         {
@@ -37,6 +36,32 @@ namespace AileronAirwaysWeb.Models
         public IEnumerable<Attachment> FileAttachments
         {
             get { return Attachments.Where(a => !a.IsImage); }
+        }
+
+        [JsonIgnore]
+        public double Longitude { get; set; }
+
+        [JsonIgnore]
+        public double Latitude { get; set; }
+
+        public string Location
+        {
+            get
+            {
+                string json = JsonConvert.SerializeObject(new Location {
+                    Longitude = Longitude,
+                    Latitude = Latitude
+                });
+                return JsonConvert.SerializeObject(json);
+            }
+
+            set
+            {
+                string json = JsonConvert.DeserializeObject(value).ToString();
+                Location location = JsonConvert.DeserializeObject<Location>(json);
+                Longitude = location.Longitude;
+                Latitude = location.Latitude;
+            }
         }
 
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)
