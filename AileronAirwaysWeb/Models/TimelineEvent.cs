@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -39,28 +40,27 @@ namespace AileronAirwaysWeb.Models
         }
 
         [JsonIgnore]
+        [NotMapped]
         public double Longitude { get; set; }
 
+        [NotMapped]
         [JsonIgnore]
         public double Latitude { get; set; }
 
         public string Location
         {
-            get
-            {
-                string json = JsonConvert.SerializeObject(new Location {
-                    Longitude = Longitude,
-                    Latitude = Latitude
-                });
-                return JsonConvert.SerializeObject(json);
-            }
+            get { return string.Format("{0},{1}", Latitude, Longitude); }
 
             set
             {
-                string json = JsonConvert.DeserializeObject(value).ToString();
-                Location location = JsonConvert.DeserializeObject<Location>(json);
-                Longitude = location.Longitude;
-                Latitude = location.Latitude;
+                string[] tokens = value.Split(',');
+                if (tokens.Length == 2 && 
+                    double.TryParse(tokens[0], out double latitude) && 
+                    double.TryParse(tokens[1], out double longitude))
+                {
+                    Latitude = latitude;
+                    Longitude = longitude;
+                }
             }
         }
 
