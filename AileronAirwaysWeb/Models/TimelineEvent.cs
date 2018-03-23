@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +18,6 @@ namespace AileronAirwaysWeb.Models
         public bool IsDeleted { get; set; }
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime EventDateTime { get; set; }
-        public string Location { get; set; }
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
         public string TimelineId { get; set; }
@@ -26,7 +26,7 @@ namespace AileronAirwaysWeb.Models
         public virtual Timeline Timeline { get; set; }
 
         public virtual List<Attachment> Attachments { get; set; }
-     
+
         [JsonIgnore]
         public IEnumerable<Attachment> ImageAttachments
         {
@@ -37,6 +37,31 @@ namespace AileronAirwaysWeb.Models
         public IEnumerable<Attachment> FileAttachments
         {
             get { return Attachments.Where(a => !a.IsImage); }
+        }
+
+        [JsonIgnore]
+        [NotMapped]
+        public double Longitude { get; set; }
+
+        [NotMapped]
+        [JsonIgnore]
+        public double Latitude { get; set; }
+
+        public string Location
+        {
+            get { return string.Format("{0},{1}", Latitude, Longitude); }
+
+            set
+            {
+                string[] tokens = value.Split(',');
+                if (tokens.Length == 2 && 
+                    double.TryParse(tokens[0], out double latitude) && 
+                    double.TryParse(tokens[1], out double longitude))
+                {
+                    Latitude = latitude;
+                    Longitude = longitude;
+                }
+            }
         }
 
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)

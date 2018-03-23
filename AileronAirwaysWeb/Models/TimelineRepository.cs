@@ -126,6 +126,13 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        public async Task EditEventLocationAsync(TimelineEvent evt)
+        {
+            await evt.EditLocationAsync(_api);
+            _context.Entry(evt).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteTimelineEventAsync(TimelineEvent evt)
         {
             await TimelineEvent.UnlinkAndDeleteAsync(_api, evt.TimelineId, evt.Id);

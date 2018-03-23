@@ -253,5 +253,18 @@ namespace AileronAirwaysWebTests.Models
             Assert.IsTrue(events[1].IsDeleted);
         }
 
+        [TestMethod]
+        public void TestLocationJson()
+        {
+            var e = new TimelineEvent();
+            e.Longitude = 1.123;
+            e.Latitude = 1.123;
+
+            var json = e.Location;
+            e.Location = json;
+
+            Assert.AreEqual(e.Longitude, 1.123);
+            Assert.AreEqual(e.Latitude, 1.123);
+        }
     }
 }
