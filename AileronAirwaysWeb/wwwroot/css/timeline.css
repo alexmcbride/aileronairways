@@ -30,10 +30,13 @@ a:hover {
 /*Navigation ------------------------------------------------------------- */
 
 /* mie disabled to stop this overrriding mt-navbar-custom's purple background color 
-    .navbar {
+  
+    
+    */
+.navbar {
     
     background-color: #0D1B2E;
-}*/
+}
 
 .navList {
     width: 100%;

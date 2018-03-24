@@ -185,10 +185,10 @@
         color: #b722d8;
     }
 
-/*for timeline table responsiveness*/
+/*for timeline table responsiveness
 #timelinecontents {
     width: 80%;
-}
+}*/
 .dataTables_length label {
     color: #734EA6;
 }
