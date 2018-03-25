@@ -10,14 +10,15 @@
     left: 0;
     background-color: #FAFAFA;
     overflow-x: hidden;
-    padding: 60px 10px 10px 10px;
+    padding: 110px 15px 10px 15px;
     border-right: 1px solid #0D1B2E;
+
+    display: block;
 }
 
 .timelineContentwt {
-    margin-left: 230px;
-    width: 80%;
     padding: 0 10%;
+    margin: 0 0 0 0;
 }
 
 .timelineTable {
@@ -33,6 +34,8 @@
 }
 
 
-#tbltimelines {
-    width: 100%;
+
+.thWidth {
+    width: 33%;
 }
+

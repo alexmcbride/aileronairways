@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Timeline>
 
 @{
-    ViewData["Title"] = "Manage Timeline";
+    ViewData["Title"] = "Timeline Register";
 }
 
 @section AddToHead{
@@ -12,26 +12,67 @@
 
 
 <!-- Side Nav Content -->
-<div class="indexSideNav">
+@*<div class="indexSideNav">*@
+
+<div id="sideNavContent" style="visibility: hidden;">
+    <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
+        <label for="myInput1" class="mt-purpule-color">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="start date" title="Type in a name">
+        <span class="input-group-addon myInput">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+    <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
+        <label for="myInput2" class="mt-purpule-color">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="end date" title="Type in a name">
+        <span class="input-group-addon myInput">
+            <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+    </div>
+</div>
+@*
+    </div>*@
 
 
 
 
-    <div id="sideNavContent">
-        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime1'>
-            <label for="myInput1" class="mt-purpule-color">Date from: &nbsp;</label><input type="text" class="myInput" id="myInput1" placeholder="start date" title="Type in a name">
-            <span class="input-group-addon myInput">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+
+
+<div class="timelineContentwt">
+    <div class="">
+        
+        <div class="row">
+            <h3 class="padding:0; col-lg-4 col-md-6 col-sm-6 col-xs-12"><b>@ViewData["Title"]</b></h3>
+
         </div>
-        <div class='input-group date col-lg-4 col-md-6 col-sm-6 col-xs-12' id='eventDateTime2'>
-            <label for="myInput2" class="mt-purpule-color">Date to : &nbsp;</label><input type="text" class="myInput" id="myInput2" placeholder="end date" title="Type in a name">
-            <span class="input-group-addon myInput">
-                <span class="glyphicon glyphicon-calendar"></span>
-            </span>
+        <hr />
+        <div class="row" style="overflow-x: scroll">
+            <table class=" display" data-order='[[ 1, "des" ]]' id="tbltimelines">
+                <thead>
+                    <tr class="widthContainer">
+                        <th>Title</th>
+                        <th>Date Created</th>
+                        <th>Link</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+        <br />
 
 
+        <hr />
+    </div>
+</div>
+
+
+
+
+<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
     </div>
 </div>
 
@@ -39,42 +80,15 @@
 
 
 
-   
-<div class="timelineContentwt">
+
+@*-----------------------------------------------------------------------------*@
 
 
 
+@section scripts {
+    <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
 
-
-    <br />
-
-    <div class="row">
-        <h3 class="paddin:0; col-lg-4 col-md-6 col-sm-6 col-xs-12 mt-purple-color"> b @ViewData["Title"]</h3>
-
-    </div>
-
-    <div class="table-responsive">
-        <table class="timelineTable display" data-order='[[ 1, "des" ]]' id="tbltimelines">
-            <thead>
-                <tr class="mt-purpule-color">
-                    <th>Title</th>
-                    <th>Date Created</th>
-                    <th>Link</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-
-
-
-
-
-
-
-        @section scripts {
-            <script src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>
-
-            <script>
+    <script>
         function updateTable(jsondata) {
             var timelinetable = $('#tbltimelines').DataTable({
                 data: jsondata,
@@ -91,7 +105,8 @@
                             var month = date.getMonth() + 1;
                             var hrs = date.getHours();
                             var min = date.getMinutes()
-                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/" + date.getFullYear() + " " + (hrs > 10 ? hrs : "0" + hrs) + ":" + (min > 10 ? min : "0" + min);
+                            return (day > 10 ? day : "0" + day) + "/" + (month > 10 ? month : "0" + month) + "/"
+                                + date.getFullYear() + " " + (hrs > 10 ? hrs : "0" + hrs) + ":" + (min > 10 ? min : "0" + min);
                         }
                     },
                     {
@@ -271,55 +286,18 @@
             });
         }
 
-            </script>
+    </script>
 
-            <script>
-                $(function () {
-                    $('#eventDateTime1').datetimepicker({
-                        format: 'DD/MM/YYYY'
-                    });
-                });
-                $(function () {
-                    $('#eventDateTime2').datetimepicker({
-                        format: 'DD/MM/YYYY'
-                    });
-                });
-            </script>
-        }
-    </div>
-    <br />
-
-    <!-- Declaration of pagination for user accounts -->
-    @*Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-        @Html.PagedListPager(Model, page => Url.Action("Index", new
-        {
-            page,
-            searchStringUserNameOrEmail = ViewBag.searchStringUserNameOrEmail,
-            currentFilter = ViewBag.CurrentFilter
-        }))*@
-
-    <hr />
-</div>
-
-
-
-
-<button id="addEventBtn" class="modal-link-create-timeline mt-purple-circle-btn" title="Create New Timeline">&#43;</button>
-
-<div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
-        </div>
-    </div>
-</div>
-
-
-
-
-
-
-@*-----------------------------------------------------------------------------*@
-
-
+    <script>
+        $(function () {
+            $('#eventDateTime1').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+        $(function () {
+            $('#eventDateTime2').datetimepicker({
+                format: 'DD/MM/YYYY'
+            });
+        });
+    </script>
+}

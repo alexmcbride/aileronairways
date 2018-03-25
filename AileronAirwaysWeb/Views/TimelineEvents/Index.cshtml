@@ -201,6 +201,7 @@
 
     function openNav() {
         document.getElementById("mySidenav").style.width = "230px";
+        document.getElementById("mySidenav").style.marginLeft = "0px";
         document.getElementById("mainSidePanel").style.marginLeft = "230px";
 
         document.getElementById("sideNavContent").style.visibility = 'visible';
@@ -217,13 +218,16 @@
         $('.flash-messages').css({ marginLeft: '230px'});
     }
 
+
     function closeNav() {
-        document.getElementById("mySidenav").style.width = "20px";
+
+        document.getElementById("mySidenav").style.width = "230px";
+        document.getElementById("mySidenav").style.marginLeft = "-210px";
         document.getElementById("mainSidePanel").style.marginLeft = "20px";
 
         // side panel content GONE! - It's Magic
         document.getElementById("sideNavContent").style.visibility = 'hidden';
-        document.getElementById("sideNavArrows").style.paddingLeft = '5px';
+        document.getElementById("sideNavArrows").style.paddingLeft = '215px';
 
 
         document.getElementById("sideNavArrows").removeEventListener("click", closeNav);
