@@ -141,7 +141,7 @@
             });
         }
 
-        function doSearch(data) {
+        function titleFilter(data) {
             var search = $('#search').val();
             if (search == "") {
                 return true;
@@ -149,7 +149,7 @@
             return data[0].toLowerCase().includes(search);
         }
 
-        function doRangeFilter(data) {
+        function dateRangeFilter(data) {
             var startDate = $('#startDateInput').val();
             var endDate = $('#endDateInput').val();
 
@@ -164,9 +164,7 @@
         }
 
         $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-            var search = doSearch(data)
-            var filter = doRangeFilter(data);
-            return search && filter;
+            return titleFilter(data) && dateRangeFilter(data);
         });
 
         function displayCreateModal(data) {
