@@ -8,15 +8,11 @@
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
 }
 
-
-
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
-
         <div id="eventHeader">
             <div id="backArrow">
-                @*asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"*@
                 <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
@@ -24,8 +20,6 @@
                 <hr class="headerHR" />
                 <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
             </div>
-
-
         </div>
     </div>
 </div>
