@@ -13,8 +13,9 @@ namespace AileronAirwaysWeb.Controllers
     {
         private readonly TimelineRepository _repo;
         private readonly IFlashService _flash;
+        
 
-        public TimelineEventsController(TimelineRepository repo, IFlashService flash)
+        public TimelineEventsController(TimelineRepository repo, IFlashService flash, ITimelineService api)
         {
             _repo = repo;
             _flash = flash;
@@ -49,6 +50,10 @@ namespace AileronAirwaysWeb.Controllers
             // Get next and previous events
             ViewBag.NextEvent = await _repo.GetNextEventAsync(timelineEvent);
             ViewBag.PreviousEvent = await _repo.GetPreviousEventAsync(timelineEvent);
+            if (timelineEvent.Location == null)
+            {
+                timelineEvent.Location = "0,0";
+            }
 
             return View(timelineEvent);
         }
@@ -152,6 +157,42 @@ namespace AileronAirwaysWeb.Controllers
             _flash.Message("Deleted timeline event");
 
             return RedirectToAction(nameof(Index));
+        }
+
+        //// GET: Timelines/Events/EditLocation/5
+        //[HttpGet("Timelines/{timelineId}/Events/{eventId}/EditLocation")]
+        //public PartialViewResult EditLocation(string eventId)
+        //{
+        //    TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
+        //    string[] arrlocation = { timelineEvent.Location.Split(",")[0], timelineEvent.Location.Split(",")[1] };
+        //    var vm = new TimelineEventLocationViewModel
+        //    {
+        //        Latitude = arrlocation[0],
+        //        Longitude = arrlocation[1],
+        //    };
+        //    ViewBag.lon = vm.Latitude;
+        //    ViewBag.lan = vm.Longitude;
+        //    return PartialView(vm);
+        //}
+
+        //POST: Timelines/Edit/5
+        [HttpPost("Timelines/{timelineId}/Events/{eventId}/EditEventLocation")]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> EditEventLocation(string eventId, [Bind("Location")]  TimelineEventLocationViewModel vm)
+        {
+            if (ModelState.IsValid)
+            {
+                TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
+                evt.Location = vm.Location;
+                await _repo.EditEventLocationAsync(evt);
+
+
+                _flash.Message($"Event location edited!");
+
+                return Ok("OK " + evt.Id);
+            }
+
+            return PartialView(vm);
         }
     }
 }
