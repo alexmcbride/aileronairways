@@ -208,7 +208,7 @@ li {
     width: 120px;
     height: inherit;
     float: left;
-    background-color: rgba(13,27,46, 0.5); /*rgba(112,112,112,.3);*/
+    background-color: rgba(13,27,46, 0.2); /*rgba(112,112,112,.3);*/
     border: medium solid #0D1B2E;
     border-width: 0 1.5px 0 0;
     text-align: center;
@@ -356,7 +356,7 @@ li {
     height: 100%;
     width: 20px;
     position: fixed;
-    /* z-index: 1;*/
+     z-index: 100;
     top: 0px;
     left: 0px;
     background-color: /*f0e8eb*/#FAFAFA;
