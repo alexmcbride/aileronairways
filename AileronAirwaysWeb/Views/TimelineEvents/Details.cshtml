@@ -38,7 +38,7 @@
                 <button class="tablinks uppercase active" onclick="openTab(event, 'overview')">Overview</button>
                 <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
                 <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'location')">Location</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')">Location</button>
 
             </div>
         </div>
@@ -193,22 +193,34 @@
 
 
     <!-- Location TAB -->
-    <div id="location" class="tabcontent">
-        <p>Location is the capital of Japan.</p>
+    <div id="locationtab" class="tabcontent">
+        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
+            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
+       
+        <p id="geoNonSupport" style="color:red"></p>
+        <p>Location is: <div id="friendlyaddress" ></div></p>
+        
+        <form asp-antiforgery="true" id="edit-location-form">
+            <div class="form-group">
+                @*<label asp-for="Location">Location is </label>*@
+                <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
+                @*<span asp-validation-for="Location" class="text-danger"></span>*@
+            </div>
+
+            <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
+        </form>
+        <div class="form-group">
+            <label>latitude</label>
+            <input type="text" name="longitude" id="curlng" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>longitude</label>
+            <input type="text" name="longitude" id="curlat" class="form-control" />
+        </div>
+
 
         <div id="googleMap" style="height:400px; width: 100%;"></div>
 
-        <script>
-            function myMap() {
-                var mapProp = {
-                    center: new google.maps.LatLng(51.508742, -0.120850),
-                    zoom: 5,
-                };
-                var map = new google.maps.Map(document.getElementById("googleMap"), mapProp);
-            }
-        </script>
-
-        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
     </div>
 
 </div>
@@ -224,43 +236,176 @@
         {
             <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">@ViewBag.NextEvent.Title  <i class="rightArrow"></i></a>
         }
+        <p id="geoNonSupport" style="color:red;"></p>
     </div>
 </div>
 
 
-<script>
-    function goBack() {
-        window.history.back();
-    }
+@section Scripts{
 
-    function openTab(evt, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
+<script>
+    function myMap() {
+        var loc = "@Model.Location"@*!= null ? @Model.Location.Split()[0] : null*@;
+        var lat = "55.873543";
+        var lng = "-4.289058";
+        debugger;
+        if (loc == "0,0") {
+            var options = { enableHighAccuracy: true, };
+            if (navigator.geolocation) {
+                function error(err) {
+                    document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
+                    console.warn(`ERROR(${err.code}): ${err.message}`);
+                }
+                function showPosition(position) {
+                    lat = String(position.coords.longitude);
+                    lng = String(position.coords.longitude);
+                    loc = lat.concat(",", lng);
+                    document.getElementById("curlat").setAttribute("value", lat);
+                    document.getElementById("curlng").setAttribute("value", lng);
+                    document.forms['edit-location-form']['locationaddress'].value = loc;
+                }
+                navigator.geolocation.getCurrentPosition(showPosition, error, options);
+            }
         }
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        else if (@Model.Location != null) {
+            lat = "@Model.Location.Split(",")[0]";
+            lng = "@Model.Location.Split(",")[1]";
+            loc = lat.concat(",", lng);
+            document.getElementById("curlat").setAttribute("value", "@Model.Location.Split(",")[0]");
+            document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
+            document.forms['edit-location-form']['locationaddress'].value = loc;
         }
-        document.getElementById(tabName).style.display = "block";
-        evt.currentTarget.className += " active";
-    }
+        var latlng = new google.maps.LatLng(lat, lng);
+        var mapOptions = {
+            zoom: 10,
+            center: latlng
+        }
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+
+        var marker = new google.maps.Marker({
+            position: latlng,
+            title: 'Set lat/lon values for this property',
+            map: map,
+            draggable: true
+        });
+        marker.setMap(map);
+
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            var dglat = document.getElementById("curlat").value = String(this.getPosition().lat());
+            var dglng = document.getElementById("curlng").value = String(this.getPosition().lng());
+            var dgloc = dglat.concat(",", dglng);
+            document.forms['edit-location-form']['locationaddress'].value = dgloc;
+        });
+
+    //    google.maps.event.addListner(marker, 'dragend', function () {
+    //        var input = document.forms['edit-location-form']['locationaddress'].value;
+    //        var latlngStr = input.split(',', 2);
+    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
+    //            if (status === 'OK') {
+    //                if (results[0]) {
+    //                    map.setZoom(11);
+    //                    var marker = new google.maps.Marker({
+    //                    position: latlng,
+    //                    map: map
+    //                    });
+    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
+    //                } else {
+    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
+    //                }
+    //            } else {
+    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
+    //            }
+    //        });
+    //    });
+
+    //    document.addEventListener("DOMContentLoaded", function () {
+    //        geocodeLatLng(geocoder, map/*, infowindow*/);
+    //    });
+
+    //}
+    //    function geocodeLatLng(geocoder, map/*, infowindow*/) {
+    //        var input = document.forms['edit-location-form']['locationaddress'].value;
+    //        var latlngStr = input.split(',', 2);
+    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
+    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
+    //            if (status === 'OK') {
+    //                if (results[0]) {
+    //                    map.setZoom(11);
+    //                    var marker = new google.maps.Marker({
+    //                    position: latlng,
+    //                    map: map
+    //                    });
+    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
+    //                    //infowindow.setContent(results[0].formatted_address);
+    //                    //infowindow.open(map, marker);
+    //                } else {
+    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
+    //                }
+    //            } else {
+    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
+    //            }
+    //        });
+    //    }
+    
+
 </script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
 
-<!-- Image Gallery Scripts -->
-<script>
-    var slideIndex = 1;
-    showSlides(slideIndex);
+    <script>
 
-    function plusSlides(n) {
-        showSlides(slideIndex += n);
+    $('#edit-location-form').on('submit', function (e) {
+    e.preventDefault();
+    var data = $('#edit-location-form').serialize();
+    $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+    // If edit was successful post returns with OK
+    if (response.startsWith('OK')) {
+    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
+    // Hack to make flash message appear correctly when side bar is shown.
+    $('.flash-messages').css('margin-left', '20px');
     }
-
-    function currentSlide(n) {
-        showSlides(slideIndex = n);
+    else {
+    // Otherwise redisplay form.
+    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
     }
+    }, 'html');
+
+    });
+    </script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tabcontent");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].style.display = "none";
+            }
+            tablinks = document.getElementsByClassName("tablinks");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].className = tablinks[i].className.replace(" active", "");
+            }
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+    </script>
+
+
+    <!-- Image Gallery Scripts -->
+    <script>
+        var slideIndex = 1;
+        showSlides(slideIndex);
+
+        function plusSlides(n) {
+            showSlides(slideIndex += n);
+        }
+
+        function currentSlide(n) {
+            showSlides(slideIndex = n);
+        }
 
     function showSlides(n) {
         var i;

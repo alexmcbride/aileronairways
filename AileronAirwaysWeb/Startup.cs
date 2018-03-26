@@ -3,7 +3,10 @@ using AileronAirwaysWeb.Models;
 using AileronAirwaysWeb.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
@@ -52,6 +55,11 @@ namespace AileronAirwaysWeb
             });
 
             _env = env;
+            ////to redirect connection to https
+            //var options = new RewriteOptions()
+            //.AddRedirectToHttps(StatusCodes.Status301MovedPermanently, 44346);
+
+            //app.UseRewriter(options);
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -67,8 +75,24 @@ namespace AileronAirwaysWeb
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
-            //allows temp data use
-            services.AddMvc().AddSessionStateTempDataProvider();
+            //options is for https connection allows temp data use
+            services.AddMvc(
+                //options =>
+                //{
+                //    options.SslPort = 44346;
+                //    options.Filters.Add(new RequireHttpsAttribute());
+                //}
+            ).AddSessionStateTempDataProvider();
+            //for https connection
+            //services.AddAntiforgery(
+            // options =>
+            //    {
+            //    options.Cookie.Name = "_af";
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+            //    options.HeaderName = "X-XSRF-TOKEN";
+            //    }
+            //);
 
             services.AddSession();
 

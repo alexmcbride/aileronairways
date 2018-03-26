@@ -24,5 +24,13 @@ namespace AileronAirwaysWeb.ViewModels
 
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
+
+        
+    }
+
+    public class TimelineEventLocationViewModel
+    {
+        [Required]    
+        public string Location { get; set; }
     }
 }

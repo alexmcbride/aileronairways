@@ -22,6 +22,9 @@ namespace AileronAirwaysWeb.Models
         public int AttachmentImagesCount { get; set; }
         public string TimelineId { get; set; }
 
+        //public string Latitude { get; set; }
+        //public string Longitude { get; set; }
+
         [JsonIgnore]
         public virtual Timeline Timeline { get; set; }
 
