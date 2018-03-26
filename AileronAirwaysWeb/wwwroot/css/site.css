@@ -104,6 +104,7 @@
     }
 
 @media (max-width: 767px) {
+     
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .dropdown-header {
         border-color: #734EA6;
     }
@@ -185,15 +186,15 @@
         color: #b722d8;
     }
 
-/*for timeline table responsiveness*/
+/*for timeline table responsiveness
 #timelinecontents {
     width: 80%;
-}
+}*/
 .dataTables_length label {
-    color: #734EA6;
+    /*color: #734EA6;*/
 }
 .dataTables_filter label {
-    color: #734EA6;
+    /*color: #734EA6;*/
 }
 
 /*.dataTables_wrapper .dataTables_paginate .paginate_button {
@@ -212,11 +213,12 @@
         background: #0D63AC;
     }
 
-    .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
-        border-color: #0D63AC;
-        color: #fff !important;
-        background: #0D63AC;
-    }
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover 
+ {
+    border-color: #0D63AC;
+    color: #fff !important;
+    background: #0D63AC;
+}
 /*Static Button -------------------------*/
 .mt-purple-circle-btn {
     z-index: 99;
@@ -245,15 +247,40 @@
 
 @media screen and (max-width: 327px) {
     #addTimelineBtn {
-    right: 20px;
+        right: 20px;
     }
-       
 }
 
 .mt-purpule-color {
     color: #734EA6
 }
 
+
+
 .modal-dialog {
-    width: 500px;
+    margin-top: 30px;
+    width: 50%;
 }
+
+
+
+@media (max-width: 767px) {
+    .modal-dialog {
+        margin-top: 30px;
+        width: 70%;
+        margin: 0 15%;
+    }
+
+}
+@media (max-width: 380px) {
+    .modal-dialog {
+        margin-top: 30px;
+        width: 90%;
+        margin: 0 5%;
+    }
+}
+
+.widthContainer{
+    width: 100%;
+}
+

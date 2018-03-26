@@ -1,0 +1,41 @@
+﻿
+
+
+.indexSideNav {
+    height: 100%;
+    width: 230px;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #FAFAFA;
+    overflow-x: hidden;
+    padding: 110px 15px 10px 15px;
+    border-right: 1px solid #0D1B2E;
+
+    display: block;
+}
+
+.timelineContentwt {
+    padding: 0 10%;
+    margin: 0 0 0 0;
+}
+
+.timelineTable {
+    width: 100%;
+
+
+
+}
+
+
+.sidenav a:hover {
+    color: #0D1B2E;
+}
+
+
+
+.thWidth {
+    width: 33%;
+}
+

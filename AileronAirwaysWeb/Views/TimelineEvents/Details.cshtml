@@ -7,6 +7,9 @@
 @section AddToHead{
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
 }
+
+
+
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
@@ -14,7 +17,7 @@
         <div id="eventHeader">
             <div id="backArrow">
 
-                <a class="arrowLink" onclick="goBack()" @*asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId" *@><i class="fas fa-arrow-left"></i></a>
+                <a class="arrowLink" @*onclick="goBack()"*@ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
@@ -229,12 +232,16 @@
     <div class="btnContainer">
         @if (@ViewBag.PreviousEvent != null)
         {
-            <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id"><i style="color: white;" class="leftArrow"></i>  @ViewBag.PreviousEvent.Title</a>
+            <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
+                <i class="fas fa-arrow-left xl"></i>   @ViewBag.PreviousEvent.Title
+            </a>
         }
         <a class="button btnEvent uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
         @if (@ViewBag.NextEvent != null)
         {
-            <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">@ViewBag.NextEvent.Title  <i class="rightArrow"></i></a>
+            <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
+                @ViewBag.NextEvent.Title  <i class="fas fa-arrow-right"></i>
+            </a>
         }
         <p id="geoNonSupport" style="color:red;"></p>
     </div>

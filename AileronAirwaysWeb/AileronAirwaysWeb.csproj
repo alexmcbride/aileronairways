@@ -15,6 +15,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\css\eventDetailed.css" />
     <Content Remove="wwwroot\css\timeline.css" />
+    <Content Remove="wwwroot\css\timelineIndex.css" />
   </ItemGroup>
 
 
@@ -33,6 +34,7 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\eventDetailed.css" />
+    <None Include="wwwroot\css\timelineIndex.css" />
     <None Include="wwwroot\css\timeline.css" />
   </ItemGroup>
 
