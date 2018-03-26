@@ -56,13 +56,16 @@ namespace AileronAirwaysWeb.Models
 
             set
             {
-                string[] tokens = value.Split(',');
-                if (tokens.Length == 2 && 
-                    double.TryParse(tokens[0], out double latitude) && 
-                    double.TryParse(tokens[1], out double longitude))
+                if (!string.IsNullOrEmpty(value))
                 {
-                    Latitude = latitude;
-                    Longitude = longitude;
+                    string[] tokens = value.Split(',');
+                    if (tokens.Length == 2 &&
+                        double.TryParse(tokens[0], out double latitude) &&
+                        double.TryParse(tokens[1], out double longitude))
+                    {
+                        Latitude = latitude;
+                        Longitude = longitude;
+                    }
                 }
             }
         }

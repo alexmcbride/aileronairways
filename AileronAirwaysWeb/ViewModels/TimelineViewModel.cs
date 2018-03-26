@@ -17,7 +17,12 @@ namespace AileronAirwaysWeb.ViewModels
 
         public string Created
         {
-            get { return CreationTimeStamp.ToShortDateString() + " " + CreationTimeStamp.ToShortTimeString(); }
+            get { return CreationTimeStamp.ToString("o"); }
+        }
+
+        public string CreatedPretty
+        {
+            get { return $"{CreationTimeStamp.ToShortDateString()} {CreationTimeStamp.ToShortTimeString()}"; }
         }
 
         public bool IsDeleted { get; set; }
