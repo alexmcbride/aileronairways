@@ -78,18 +78,9 @@
                             {
                                 <td>
                                     <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
-
                                 </td>
-                                @*<a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>*@
-                            }
-
-
-
-                            @if (!item.IsImage)
-                            {
                                 <td>
                                     @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
-
                                 </td>
                             }
 
@@ -98,19 +89,12 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <p><em>There are no attachments to display.</em></p>
-        }
-
-
 
         <br />
 
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
-                @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
 
@@ -143,15 +127,12 @@
                     }
                 }
 
-
-
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
             </div>
             <br>
             <div style="text-align:center">
-
                 @if (Model.AttachmentImagesCount > 0)
                 {
                     int j = 1;
@@ -160,23 +141,15 @@
 
                         if (item.IsImage)
                         {
-
-
                             <span class="dot" onclick="currentSlide(@j)"></span>
-
-
                             j++;
                         }
-
                     }
-
                 }
             </div>
         }
 
-
-        <br />
-        <br />
+        <br>
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
