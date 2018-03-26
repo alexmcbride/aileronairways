@@ -287,11 +287,14 @@
 
     $('#edit-location-form').on('submit', function (e) {
         e.preventDefault();
+        
         var data = $('#edit-location-form').serialize();
+        disableFormElement($('#btnSave'), true);
         $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
         // If edit was successful post returns with OK
         if (response.startsWith('OK')) {
             location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
+
             // Hack to make flash message appear correctly when side bar is shown.
              $('.flash-messages').css('margin-left', '20px');
         }
