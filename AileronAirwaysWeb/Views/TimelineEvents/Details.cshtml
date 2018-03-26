@@ -16,8 +16,8 @@
 
         <div id="eventHeader">
             <div id="backArrow">
-
-                <a class="arrowLink" @*onclick="goBack()"*@ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>
+                @*asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"*@
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
