@@ -13,6 +13,7 @@
     background-color: white;
     position: relative;
     border: 1px solid #0D1B2E;
+    margin-top: 20px;
     padding-bottom: 0;
     /*-left: 70px;
     padding-right: 25px;*/
@@ -98,22 +99,21 @@
 
 
 
-#btnClick {
-    text-align: center;
-    background-color: #0D1B2E; /* Green */
-    color: white;
+#btnPartialToggle {
+    background-color: white; /* Green */
+    color: #0D1B2E;
+    border: #0D1B2E solid medium;
     padding: 10px 24px;
     text-align: center;
     text-decoration: none;
     display: block;
     align-content: center;
     font-size: 14px;
-    border: #0D1B2E solid medium;
 }
 
 
-    #btnClick:hover {
-        background-color: honeydew; /* Green */
-        color: #0D1B2E;
+    #btnPartialToggle:hover {
+        background-color: #0D1B2E; /* Green */
+        color: white;
         border: #0D1B2E solid medium;
     }

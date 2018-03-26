@@ -347,14 +347,15 @@ li {
 
 #mainSidePanel {
     transition: margin-left .5s;
-
+    margin-left: 20px;
 }
 
 
 
 .sidenav {
     height: 100%;
-    width: 20px;
+    width: 230px;
+    margin-left: -210px;
     position: fixed;
      z-index: 100;
     top: 0px;
@@ -385,7 +386,7 @@ li {
 
     width: 100%;
     padding-top: 65px;
-    padding-left: 5px;
+    padding-left: 215px;
     display: block;
     cursor: pointer;
 }
@@ -408,7 +409,7 @@ li {
 
 
 
-#eventNameList {
+#eventNameList, #eventNameListPartial {
     height: 70%;
     width: 90%;
     position: absolute;
@@ -417,11 +418,11 @@ li {
     overflow-y: auto;
     left: 10px;
     right: -15px;
-
 }
 
 
-    #eventNameList a {
+
+    #eventNameList a, #eventNameListPartial a {
         padding: 4px;
         text-decoration: none;
         font-size: 12px;

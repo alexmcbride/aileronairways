@@ -1,10 +1,10 @@
 
 
 <div class="partialContent">
-    
+
     @foreach (var item in Model)
     {
-    <div class="timelineContent">
+    <div class="timelineContent" id="eventLinks-@item.Id">
         @*<h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>*@
         <button class="wAccordion">
 
@@ -43,10 +43,9 @@
             <div class="container33">
                 <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id"><i class="fas fa-times fa-lg" style="color: #0D1B2E;"></i></a>
             </div>
-            
+
         </div>
     </div>
-
 
     }
 

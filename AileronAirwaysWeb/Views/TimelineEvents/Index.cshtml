@@ -59,8 +59,11 @@
 
 
                  @if (Model.Any())
-                 {                        
-                     <div id="eventNameList">
+                    {   <!-- Zoomed In View - Default -->
+
+
+                    <div id="timelinePartial_In_Links" style="visibility: visible;">
+                          <div id="eventNameList">
 
                             @{
                                 int i = 0;
@@ -70,8 +73,24 @@
                                     <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
                                 }
                             }
-                       
+
+                        </div>
                     </div>
+                    <div id="timelinePartial_Out_Links" style="display: none;">
+                          <div id="eventNameListPartial">
+
+                            @{
+                                int j = 0;
+                                foreach (var item in Model)
+                                {
+                                    j = j + 1;
+                                    <a class="eventTitlesFilter uppercase" href="#eventLinks-@item.Id">@j: @item.Title</a>
+                                }
+                            }
+
+                    </div>
+                    </div>
+                    
                 }
                 else
                 {
@@ -91,7 +110,7 @@
         {
 
             @*--------------------------------------------------<i class="fas fa-search"></i>---------------------------*@
-            <button id="btnClick" onclick="togglePartial()">Zoomed View</button>
+            <button id="btnPartialToggle" onclick="togglePartial()" style="text-align: center; margin-left: auto; margin-right: auto;">Zoomed View</button>
             <br /><br /><br />
             <!-- Zoomed In View - Default -->
             <div id="timelinePartial_In" style="visibility: visible;">
@@ -118,20 +137,32 @@
         <script>
             function togglePartial() {
 
-                var btnClick = document.getElementById("btnClick");
+                var btnClick = document.getElementById("btnPartialToggle");
                 var partial_In = document.getElementById("timelinePartial_In");
                 var partial_Out = document.getElementById("timelinePartial_Out");
 
-                if (btnClick.innerHTML === "Zoomed View") {
+                // Links in side panel
+                var partial_In_Links = document.getElementById("timelinePartial_In_Links");
+                var partial_Out_Links = document.getElementById("timelinePartial_Out_Links");
+
+                if (btnClick.innerHTML === "Zoomed View")
+                {
                     btnClick.innerHTML = "UnZoomed View";
                     partial_In.style.display = "none";
                     partial_Out.style.display = "block";
 
-
-                } else {
+                    // Links in side panel
+                    partial_In_Links.style.display = "none";
+                    partial_Out_Links.style.display = "block";
+                }
+                else {
                     btnClick.innerHTML = "Zoomed View";
                     partial_In.style.display = "block";
                     partial_Out.style.display = "none";
+
+
+                    partial_In_Links.style.display = "block";
+                    partial_Out_Links.style.display = "none";
                 }
 
 
