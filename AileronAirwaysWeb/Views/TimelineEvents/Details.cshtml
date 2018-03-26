@@ -271,8 +271,8 @@
                     console.warn(`ERROR(${err.code}): ${err.message}`);
                 }
                 function showPosition(position) {
-                    lat = String(position.coords.longitude);
-                    lng = String(position.coords.longitude);
+                    lat = String(position.coords.latitude.toFixed(6));
+                    lng = String(position.coords.longitude.toFixed(6));
                     loc = lat.concat(",", lng);
                     document.getElementById("curlat").setAttribute("value", lat);
                     document.getElementById("curlng").setAttribute("value", lng);
@@ -312,58 +312,6 @@
         });
     }
 
-    //    google.maps.event.addListner(marker, 'dragend', function () {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    });
-
-    //    document.addEventListener("DOMContentLoaded", function () {
-    //        geocodeLatLng(geocoder, map/*, infowindow*/);
-    //    });
-
-    //}
-    //    function geocodeLatLng(geocoder, map/*, infowindow*/) {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                    //infowindow.setContent(results[0].formatted_address);
-    //                    //infowindow.open(map, marker);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    }
-    
-
 </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
@@ -371,19 +319,19 @@
     <script>
 
     $('#edit-location-form').on('submit', function (e) {
-    e.preventDefault();
-    var data = $('#edit-location-form').serialize();
-    $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
-    // If edit was successful post returns with OK
-    if (response.startsWith('OK')) {
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
-    // Hack to make flash message appear correctly when side bar is shown.
-    $('.flash-messages').css('margin-left', '20px');
-    }
-    else {
-    // Otherwise redisplay form.
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
-    }
+        e.preventDefault();
+        var data = $('#edit-location-form').serialize();
+        $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+        // If edit was successful post returns with OK
+        if (response.startsWith('OK')) {
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
+            // Hack to make flash message appear correctly when side bar is shown.
+             $('.flash-messages').css('margin-left', '20px');
+        }
+        else {
+            // Otherwise redisplay form.
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
+        }
     }, 'html');
 
     });
