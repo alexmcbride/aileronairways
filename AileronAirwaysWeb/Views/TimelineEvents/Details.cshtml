@@ -196,31 +196,38 @@
 
 
     <!-- Location TAB -->
-    <div id="locationtab" class="tabcontent">
-        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
-       
-        <p id="geoNonSupport" style="color:red"></p>
-        <p>Location is: <div id="friendlyaddress" ></div></p>
-        
-        <form asp-antiforgery="true" id="edit-location-form">
-            <div class="form-group">
-                @*<label asp-for="Location">Location is </label>*@
-                <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
-                @*<span asp-validation-for="Location" class="text-danger"></span>*@
+    <div id="locationtab" class="tabcontent">       
+        <span id="geoNonSupport" style="color:red"></span>
+
+        <form asp-antiforgery="true" id="edit-location-form" class="form-horizontal col-sm-offset-2">
+            <input type="hidden" id="locationaddress" asp-for="Location" />
+
+            <div class="row">
+                <div class="col-sm-4">
+                    <label class="control-label" for="curlng">Latitude</label>
+                </div>
+                <div class="col-sm-4">
+                    <label class="control-label" for="curlat">Longitude</label>
+                </div>
+                <div class="col-sm-2">
+                </div>
             </div>
-
-            <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
+            <div class="row">
+                <div class="col-sm-4">
+                    <input type="text" name="longitude" id="curlng" class="form-control">
+                </div>
+                <div class="col-sm-4">
+                    <input type="text" name="longitude" id="curlat" class="form-control">
+                </div>
+                <div class="col-sm-2">
+                    <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i> Save</button>
+                </div>
+            </div>
         </form>
-        <div class="form-group">
-            <label>latitude</label>
-            <input type="text" name="longitude" id="curlng" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label>longitude</label>
-            <input type="text" name="longitude" id="curlat" class="form-control" />
-        </div>
 
+        <br>
+
+        <p class="text-center text-muted"><em>Or select a location using the map below...</em></p>
 
         <div id="googleMap" style="height:400px; width: 100%;"></div>
 
