@@ -6,6 +6,8 @@
 }
 
 @section AddToHead{
+
+    <link href="~/css/partialViewCSS.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 }
 
@@ -16,7 +18,7 @@
 
     <div id="mainSidePanel">
         @*<div class="container body-content">
-            </div>*@
+        </div>*@
         <div class="headerSection">
             <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
             <hr class="headerHR" />
@@ -33,7 +35,7 @@
         <!-- Side Nav Content -->
         <div id="mySidenav" class="sidenav">
             <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
-            -->
+        -->
             <!-- Searching for Events -->
             <div id="sideNavArrows" onclick="openNav()">
                 <div" id="arrowsSidePanel"><i id="arrowChange" class="rightArrow"></i></div">
@@ -46,113 +48,104 @@
 
             <div id="sideNavContent" style="visibility: hidden;">
                 <!--
-                <hr class="sidPanelHR" />
+            <hr class="sidPanelHR" />
 
-                          <div id="searchBox">
-                              &nbsp; Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
-                          </div> -->
+                      <div id="searchBox">
+                          &nbsp; Html.TextBox("searchStringUserNameOrEmail", ViewBag.CurrentFilter as string, new { placeholder = "Search..." })
+                      </div> -->
                 <div id="searchBox">
                     <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
                 </div>
 
-                <div id="eventNameList">
 
-                    @{
-                        int i = 0;
-                        foreach (var item in Model)
-                        {
-                            i = i + 1;
-                            <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
-                        }
-                    }
-                </div>
+                 @if (Model.Any())
+                 {                        
+                     <div id="eventNameList">
+
+                            @{
+                                int i = 0;
+                                foreach (var item in Model)
+                                {
+                                    i = i + 1;
+                                    <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+                                }
+                            }
+                       
+                    </div>
+                }
+                else
+                {
+                    <p>No Events Yet</p>
+
+                }
             </div>
         </div>
 
 
 
-        @*-----------------------------------------------------------------------------*@
 
 
-        <div class="timeline">
 
 
-            @{
-                int eventCount = -1;
-                string cssClassIdentifier = "";
+        @if (Model.Any())
+        {
+
+            @*--------------------------------------------------<i class="fas fa-search"></i>---------------------------*@
+            <button id="btnClick" onclick="togglePartial()">Zoomed View</button>
+            <br /><br /><br />
+            <!-- Zoomed In View - Default -->
+            <div id="timelinePartial_In" style="visibility: visible;">
+                @Html.Partial("_TimelineZoomedIn")
+            </div>
+            <div id="timelinePartial_Out" style="display: none;">
+                @Html.Partial("_TimelineZoomedOut")
+            </div>
+
+        }
+        else
+        {
+            <p class="text-center">Maybe create an event dipshot. </p>
+            <br /><br /><br />
+
+        }
 
 
-                foreach (var item in Model)
-                {
-                    eventCount += 1;
 
-                    if (eventCount % 2 == 0)
-                    { cssClassIdentifier = "left"; }
-                    else
-                    { cssClassIdentifier = "right"; }
 
-                    <div id="eventLink-@item.Id" style="padding: 25px 0"></div>
 
-                    <div class="containerTimeline @cssClassIdentifier">
 
-                        <div class="eventContent">
-                            <div class="eventDateSection">
-                                <div class="eventDateTime">
-                                    <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
-                                    <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
-                                </div>
-                                <div class="eventIconDisplay">
-                                    <div class="col-md-4 iconSection">
-                                        @if (item.Location != null)
-                                        {
-                                            <i class="fas fa-map-marker"></i>
-                                        }
-                                        <div class="eventIcon"></div>
-                                    </div>
-                                    <div class="col-md-4 iconSection">
-                                        <i class="eventIcon fas fa-paperclip"></i>
-                                        <div class="eventIcon">@item.AttachmentFilesCount</div>
-                                    </div>
-                                    <div class="col-md-4 iconSection">
-                                        <i class="far fa-image"></i>
-                                        <div class="eventIcon">@item.AttachmentImagesCount</div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="eventBodySection">
-                                <div class="eventContentPadding">
-                                    <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
-                                    <p>
-                                        @if (item.Description != null && item.Description.Length >= 150)
-                                        {
-                                            @item.Description.Substring(0, 150)
-                                        }
-                                        else
-                                        {
-                                            @item.Description
-                                        }
-                                    </p>
-                                    <p class="editDelete">
-                                        <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
-                                        /
-                                        <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id">delete</a>
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+        <script>
+            function togglePartial() {
 
-                    <div style="padding: 20px 0">
+                var btnClick = document.getElementById("btnClick");
+                var partial_In = document.getElementById("timelinePartial_In");
+                var partial_Out = document.getElementById("timelinePartial_Out");
 
-                    </div>
-                    <hr />
+                if (btnClick.innerHTML === "Zoomed View") {
+                    btnClick.innerHTML = "UnZoomed View";
+                    partial_In.style.display = "none";
+                    partial_Out.style.display = "block";
+
+
+                } else {
+                    btnClick.innerHTML = "Zoomed View";
+                    partial_In.style.display = "block";
+                    partial_Out.style.display = "none";
                 }
+
+
+
+
             }
 
+        </script>
 
 
-        </div>
+
+
+
+
         <div class="backToTopContainer" onclick="topFunction()">
 
             <span><i class="backToTop"></i></span>

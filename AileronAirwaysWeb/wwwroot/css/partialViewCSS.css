@@ -1,0 +1,119 @@
+﻿
+
+.partialContent {
+    margin: 0px auto 0 auto;
+    width: 100%;
+}
+
+
+
+/* The actual content */
+.timelineContent {
+    /*padding: 10px 20px;*/
+    background-color: white;
+    position: relative;
+    border: 1px solid #0D1B2E;
+    padding-bottom: 0;
+    /*-left: 70px;
+    padding-right: 25px;*/
+    width: 80%;
+    margin: 0 auto;
+    margin-bottom: 5px;
+}
+
+
+/* timeline/event zoomed out tab functionality  */
+.wAccordion {
+    background-color: #fafafa;
+    color: #444;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+    transition: 0.4s;
+}
+
+    .wActive, .wAccordion:hover {
+        background-color: #eee;
+    }
+
+
+
+       
+.iconRight {
+    float: right;
+    margin-left: 5px;
+    
+}
+
+
+@media screen and (max-height: 450px) {
+
+    .iconRight {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+
+
+
+.wPanel {
+    padding: 10px 18px 8px 18px;
+    display: none;
+    background-color: white;
+    overflow: hidden;
+    border: #fafafa solid medium;
+    border-top: none;
+    border-right: none;
+    border-bottom: none;
+    border-left: none;
+    transition: max-height 0.2s ease-out;
+}
+
+
+.iconSetContainer {
+    padding-left: 10px;
+    padding-right: 10px;
+    display: inline;
+}
+
+.container33 {
+    text-align: center;
+    width: 33%;
+    float: left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#btnClick {
+    text-align: center;
+    background-color: #0D1B2E; /* Green */
+    color: white;
+    padding: 10px 24px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    align-content: center;
+    font-size: 14px;
+    border: #0D1B2E solid medium;
+}
+
+
+    #btnClick:hover {
+        background-color: honeydew; /* Green */
+        color: #0D1B2E;
+        border: #0D1B2E solid medium;
+    }

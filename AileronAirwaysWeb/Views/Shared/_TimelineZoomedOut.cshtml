@@ -1,0 +1,78 @@
+
+
+<div class="partialContent">
+    
+    @foreach (var item in Model)
+    {
+    <div class="timelineContent">
+        @*<h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>*@
+        <button class="wAccordion">
+
+            <strong asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</strong>: @item.EventDateTime.ToString("dd MMMM yyy")
+            <div class="iconRight">
+                @if (item.Location != null)
+                {
+                <div class="iconSetContainer">
+                    <i class="fas fa-map-marker"></i>
+                    <span class="eventIcon"></span>
+                </div>
+                }
+                <div class="iconSetContainer">
+                    <i class="fas fa-paperclip"></i>
+                    <span class="eventIcon">@item.AttachmentFilesCount</span>
+                </div>
+                <div class="iconSetContainer">
+                    <i class="far fa-image"></i>
+                    <span class="eventIcon">@item.AttachmentImagesCount</span>
+                </div>
+            </div>
+        </button>
+
+
+
+        <div class="wPanel">
+
+            <div class="container33">
+                <a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">
+                    <i class="fas fa-eye fa-lg" style="color: #0D1B2E;"></i>
+                </a>
+            </div>
+            <div class="container33">
+                <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id"><i class="fas fa-edit fa-lg" style="color: #0D1B2E;"></i></a>
+            </div>
+            <div class="container33">
+                <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id"><i class="fas fa-times fa-lg" style="color: #0D1B2E;"></i></a>
+            </div>
+            
+        </div>
+    </div>
+
+
+    }
+
+</div>
+
+
+
+
+    <!-- Each milestone is in a tabd/accordian section.  -->
+    <script>
+    var acc = document.getElementsByClassName("wAccordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function() {
+            this.classList.toggle("wActive");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+    </script>
+
+
+
+
