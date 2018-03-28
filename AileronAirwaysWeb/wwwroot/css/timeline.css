@@ -208,7 +208,7 @@ li {
     width: 120px;
     height: inherit;
     float: left;
-    background-color: rgba(13,27,46, 0.2); /*rgba(112,112,112,.3);*/
+    background-color: #fafafa; /*rgba(13,27,46, 0.2); rgba(112,112,112,.3);*/
     border: medium solid #0D1B2E;
     border-width: 0 1.5px 0 0;
     text-align: center;
@@ -347,14 +347,16 @@ li {
 
 #mainSidePanel {
     transition: margin-left .5s;
-
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 
 
 .sidenav {
     height: 100%;
-    width: 20px;
+    width: 230px;
+    margin-left: -210px;
     position: fixed;
      z-index: 100;
     top: 0px;
@@ -382,10 +384,9 @@ li {
 
 
 #sideNavArrows {
-
     width: 100%;
     padding-top: 65px;
-    padding-left: 5px;
+    padding-left: 215px;
     display: block;
     cursor: pointer;
 }
@@ -406,9 +407,16 @@ li {
     overflow: hidden;
 }
 
+#topNavContent {
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
 
 
-#eventNameList {
+
+#eventNameList, #eventNameListPartial,
+#eventNameListTop, #eventNameListTopPartial {
     height: 70%;
     width: 90%;
     position: absolute;
@@ -417,11 +425,12 @@ li {
     overflow-y: auto;
     left: 10px;
     right: -15px;
-
 }
 
 
-    #eventNameList a {
+
+    #eventNameList a, #eventNameListPartial a,
+    #eventNameListTop a, #eventNameListTopPartial a {
         padding: 4px;
         text-decoration: none;
         font-size: 12px;
@@ -456,7 +465,7 @@ h3.eventDate {
 }
 
 
-@media screen and (max-height: 450px) {
+/*@media screen and (max-height: 450px) {
     .sidenav {
         padding-top: 15px;
     }
@@ -464,7 +473,7 @@ h3.eventDate {
         .sidenav a {
             font-size: 18px;
         }
-}
+}*/
 
 
 
@@ -513,6 +522,10 @@ i {
     -webkit-transform: rotate(-135deg);
 }
 
+.downArrow {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
 
 
 
@@ -562,6 +575,82 @@ i {
 
 
 
+/* -----------------Top Panel ----------------*/
+
+.topPanel {
+    color: #f1f1f1;
+    z-index: 100000;
+    margin-top: 0;
+    background-color: /*f0e8eb*/ #FAFAFA;
+    font-size: 14px;
+    border-bottom: 1px solid #0D1B2E;
+    display: none;
+    /**?*/
+  
+    height: 20px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transition: 0.5s;
+
+}
+
+
+
+.sticky {
+    position: fixed;
+    top: 50px;
+    width: 100%;
+}
+
+    .sticky + .timelineContainer {
+        padding-top: 352px;
+    }
+
+
+
+#topNavArrows {
+    height: 5px;
+    cursor: pointer;
+}
+
+
+@media only screen and (max-width: 555px) {
+    .sidenav, #sideNavArrows, #sideNavContent {
+        visibility: hidden !important;
+        display:none;
+    }
+    
+
+    /* Remove mainSidePanel's margins. They were set to push out the main content from the side panel, 
+        but the sidePanel is gone. 
+    */
+    #mainSidePanel {
+        margin-left: 0px !important;
+        margin-right: 0px;
+    }
+
+   
+}
+
+@media only screen and (max-width: 550px) {
+
+ 
+    .topPanel {
+       
+        display: block;
+    }
+    #topNavContent {
+        visibility: visible;
+    }
+    
+
+        
+}
+
+
+
+
+
 
 
 /* ---------------- Footer --------------------- */
@@ -571,17 +660,6 @@ footer {
     width: 100%;
     padding: 20px 0;
 
-
-    /*position: relative;
-
-    text-align: center;
-    float: left;
-
-    font-size: .8em;
-    width: 100%;
-    padding: 20px 0;
-
-*/
     z-index: 1;
 }
 
