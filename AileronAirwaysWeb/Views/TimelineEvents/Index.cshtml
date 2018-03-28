@@ -58,12 +58,12 @@
                 </div>
 
 
-                 @if (Model.Any())
-                    {   <!-- Zoomed In View - Default -->
+                @if (Model.Any())
+                {<!-- Zoomed In View - Default -->
 
 
                     <div id="timelinePartial_In_Links" style="visibility: visible;">
-                          <div id="eventNameList">
+                        <div id="eventNameList">
 
                             @{
                                 int i = 0;
@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     <div id="timelinePartial_Out_Links" style="display: none;">
-                          <div id="eventNameListPartial">
+                        <div id="eventNameListPartial">
 
                             @{
                                 int j = 0;
@@ -88,9 +88,9 @@
                                 }
                             }
 
+                        </div>
                     </div>
-                    </div>
-                    
+
                 }
                 else
                 {
@@ -110,8 +110,13 @@
         {
 
             @*--------------------------------------------------<i class="fas fa-search"></i>---------------------------*@
-            <button id="btnPartialToggle" onclick="togglePartial()" style="text-align: center; margin-left: auto; margin-right: auto;">Zoomed View</button>
+            <div class="text-center">
+                <button id="btnPartialToggle" class="activeToggleButton" onclick="togglePartial()">DETAILED</button>
+                <button id="btnPartialToggled" onclick="togglePartials()">OVERVIEW</button>
+            </div>
+
             <br /><br /><br />
+
             <!-- Zoomed In View - Default -->
             <div id="timelinePartial_In" style="visibility: visible;">
                 @Html.Partial("_TimelineZoomedIn")
@@ -137,7 +142,51 @@
         <script>
             function togglePartial() {
 
-                var btnClick = document.getElementById("btnPartialToggle");
+
+                // Detailed button - shows detailed/default view
+                var detailed = document.getElementById("btnPartialToggle");
+
+                // overview button - shows overview view 
+                var overview = document.getElementById("btnPartialToggled");
+
+
+
+                var partial_In = document.getElementById("timelinePartial_In");
+                var partial_Out = document.getElementById("timelinePartial_Out");
+
+                // If no already active then set value
+                if (!detailed.classList.contains("activeToggleButton")) {
+                    detailed.classList.add("activeToggleButton");
+                }
+                if (overview.classList.contains("activeToggleButton")) {
+                    overview.classList.remove("activeToggleButton");
+                }
+
+                // Links in side panel
+                var partial_In_Links = document.getElementById("timelinePartial_In_Links");
+                var partial_Out_Links = document.getElementById("timelinePartial_Out_Links");
+
+                //btnClick.innerHTML = "Detailed";
+                partial_In.style.display = "block";
+                partial_Out.style.display = "none";
+
+
+                partial_In_Links.style.display = "block";
+                partial_Out_Links.style.display = "none";
+                
+
+            }
+            function togglePartials() {
+
+                // Detailed button - shows detailed/default view
+                var detailed = document.getElementById("btnPartialToggled");
+ 
+                // overview button - shows overview view
+                var overview = document.getElementById("btnPartialToggle");
+
+
+
+
                 var partial_In = document.getElementById("timelinePartial_In");
                 var partial_Out = document.getElementById("timelinePartial_Out");
 
@@ -145,25 +194,20 @@
                 var partial_In_Links = document.getElementById("timelinePartial_In_Links");
                 var partial_Out_Links = document.getElementById("timelinePartial_Out_Links");
 
-                if (btnClick.innerHTML === "Zoomed View")
-                {
-                    btnClick.innerHTML = "UnZoomed View";
-                    partial_In.style.display = "none";
-                    partial_Out.style.display = "block";
-
-                    // Links in side panel
-                    partial_In_Links.style.display = "none";
-                    partial_Out_Links.style.display = "block";
+                if (!detailed.classList.contains("activeToggleButton")) {
+                    detailed.classList.add("activeToggleButton");
                 }
-                else {
-                    btnClick.innerHTML = "Zoomed View";
-                    partial_In.style.display = "block";
-                    partial_Out.style.display = "none";
-
-
-                    partial_In_Links.style.display = "block";
-                    partial_Out_Links.style.display = "none";
+                if (overview.classList.contains("activeToggleButton")) {
+                    overview.classList.remove("activeToggleButton");
                 }
+
+                //btnClick.innerHTML = "Overview";
+                partial_In.style.display = "none";
+                partial_Out.style.display = "block";
+
+                // Links in side panel
+                partial_In_Links.style.display = "none";
+                partial_Out_Links.style.display = "block";
 
 
 
