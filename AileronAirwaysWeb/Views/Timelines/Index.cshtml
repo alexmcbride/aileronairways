@@ -6,49 +6,14 @@
 
 @section AddToHead{
     <link href="~/css/timelineIndex.css" rel="stylesheet" />
+    <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
-
-    <style>
-        #sidebar {
-            border-right: 1px solid #ccc;
-            background-color: #FAFAFA;
-            height: 100vh;
-            width: 320px;
-            padding: 0;
-            float: left;
-        }
-
-        .sidebar-content {
-            padding: 40px;
-            padding-top: 80px;
-        }
-
-        #sidebar .filter-dates {
-            margin-top: 40px;
-        }
-
-        /* Hides data table search box. */
-        .dataTables_wrapper .dataTables_filter {
-            display: none;
-        }
-
-        .toggle-sidebar {
-            float: right;
-            background-color: #f5f0f0;
-            height: 100%;
-            cursor: pointer;
-        }
-
-        .toggle-sidebar #sidebar-arrow {
-            margin-top:20px;
-        }
-    </style>
 }
 
-<!-- Side Nav Content -->
-    <div id="sidebar">
-        <div class="toggle-sidebar">
-            <span class="glyphicon glyphicon-forward" id="sidebar-arrow"></span>
+<div class="content-wrapper">
+    <div class="sidebar-wrapper">
+        <div class="sidebar-toggle text-right">
+            <span class="glyphicon glyphicon-backward" id="sidebar-arrow"></span>
         </div>
 
         <div class="sidebar-content">
@@ -98,7 +63,7 @@
         </div>
     </div>
 
-    <div id="timelinecontents" style="float: left; margin-left: 40px;">
+    <div class="main-content">
         <h3>@ViewData["Title"]</h3>
         <hr />
         <table class="display" data-order='[[ 1, "des" ]]' id="tbltimelines" style="width: 100%">
@@ -114,12 +79,13 @@
         </table>
     </div>
 
-<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
+    <button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
 
-<div id='myModal' class='modal'>
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div id='myModalContent'></div>
+    <div id='myModal' class='modal'>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
+            </div>
         </div>
     </div>
 </div>
@@ -363,17 +329,21 @@
                 format: 'YYYY-MM-DD'
             });
 
-            $('#sidebar').css({ marginLeft: '-300px' });
-            $('.toggle-sidebar').click(function (evt) {
-                if ($('#sidebar').css('marginLeft') == '-300px') {
-                    $('#sidebar').animate({ marginLeft: '0' }, 'fast');
-                    $('#sidebar-arrow').addClass('glyphicon-backward');
+            var sidebarCollapsed = false;
+            $('#sidebar-arrow').click(function (evt) {
+                if (sidebarCollapsed) {
+                    sidebarCollapsed = false;
+                    $('.sidebar-wrapper').animate({ left: '0px' }, 'fast');
+                    $('.main-content').animate({ marginLeft: '240px' }, 'fast');
                     $('#sidebar-arrow').removeClass('glyphicon-forward');
+                    $('#sidebar-arrow').addClass('glyphicon-backward');
                 }
                 else {
-                    $('#sidebar').animate({ marginLeft: '-300px' }, 'fast');
-                    $('#sidebar-arrow').addClass('glyphicon-forward');
+                    sidebarCollapsed = true;
+                    $('.sidebar-wrapper').animate({ left: '-220px' }, 'fast');
+                    $('.main-content').animate({ marginLeft: '20px' }, 'fast');
                     $('#sidebar-arrow').removeClass('glyphicon-backward');
+                    $('#sidebar-arrow').addClass('glyphicon-forward');
                 }
             });
         });
