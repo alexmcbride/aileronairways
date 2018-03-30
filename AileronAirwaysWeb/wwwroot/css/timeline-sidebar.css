@@ -3,6 +3,7 @@
     left: 0px;
     background-color: #fafafa;
     overflow-x: hidden;
+    border-right: 1px solid #808080;
 }
 
 .sidebar-content {
@@ -14,11 +15,11 @@
 }
 
 .sidebar-toggle {
-    padding: 4px;
+    padding: 6px;
 }
 
 .main-content {
-    padding: 0px 10px;
+    padding: 0px 20px;
 }
 
 /* Hides data table search box. */

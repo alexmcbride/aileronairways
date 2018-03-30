@@ -333,17 +333,21 @@
             $('#sidebar-arrow').click(function (evt) {
                 if (sidebarCollapsed) {
                     sidebarCollapsed = false;
-                    $('.sidebar-wrapper').animate({ left: '0px' }, 'fast');
-                    $('.main-content').animate({ marginLeft: '240px' }, 'fast');
-                    $('#sidebar-arrow').removeClass('glyphicon-forward');
-                    $('#sidebar-arrow').addClass('glyphicon-backward');
+                    $('.sidebar-wrapper').animate({ left: '0px' }, 'fast', function () {
+                        $('#sidebar-arrow').removeClass('glyphicon-forward');
+                        $('#sidebar-arrow').addClass('glyphicon-backward');
+                    });
+                    $('.main-content').animate({ marginLeft: '280px' }, 'fast');
+                    $('.sidebar-content').css({ 'display': 'block' });
                 }
                 else {
                     sidebarCollapsed = true;
-                    $('.sidebar-wrapper').animate({ left: '-220px' }, 'fast');
+                    $('.sidebar-wrapper').animate({ left: '-250px' }, 'fast', function () {
+                        $('.sidebar-content').css({ 'display': 'none' });
+                        $('#sidebar-arrow').removeClass('glyphicon-backward');
+                        $('#sidebar-arrow').addClass('glyphicon-forward');
+                    });
                     $('.main-content').animate({ marginLeft: '20px' }, 'fast');
-                    $('#sidebar-arrow').removeClass('glyphicon-backward');
-                    $('#sidebar-arrow').addClass('glyphicon-forward');
                 }
             });
 
@@ -356,9 +360,9 @@
                     $('.main-content').css({ marginLeft: '10px' });
                 }
                 else {
-                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '240px', height: '100%' });
+                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '280px', height: '100%' });
                     $('.sidebar-toggle').css({ display: 'block' });
-                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '240px' });
+                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '280px' });
                 }
             } 
             mql.addListener(handleScreenSizeChange);
