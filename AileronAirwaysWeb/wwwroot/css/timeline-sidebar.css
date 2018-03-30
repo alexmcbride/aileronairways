@@ -1,13 +1,8 @@
 ﻿.sidebar-wrapper {
-    height: 100%;
-    width: 240px;
-    position: fixed;
     z-index: 2; /* Stop footer overlaying sidebar */
-    top: 50px;
     left: 0px;
     background-color: #fafafa;
     overflow-x: hidden;
-    padding-top: 20px;
 }
 
 .sidebar-content {
@@ -23,29 +18,10 @@
 }
 
 .main-content {
-    margin-left: 240px;
     padding: 0px 10px;
 }
 
 /* Hides data table search box. */
 .dataTables_wrapper .dataTables_filter {
     display: none;
-}
-
-@media screen and (max-width: 640px) {
-    .sidebar-wrapper {
-        position: inherit;
-        top: 0px;
-        width: 100%;
-        height: auto;
-    }
-
-    .sidebar-toggle {
-        display: none;
-    }
-
-    .main-content {
-        margin-left: 10px;
-        padding: 0px 10px;
-    }
 }

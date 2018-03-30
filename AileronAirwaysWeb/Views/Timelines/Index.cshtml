@@ -346,6 +346,23 @@
                     $('#sidebar-arrow').addClass('glyphicon-forward');
                 }
             });
+
+            // Handle media query change with jQuery
+            var mql = window.matchMedia("(max-width: 640px)");
+            function handleScreenSizeChange(evt) {
+                if (evt.matches) {
+                    $('.sidebar-wrapper').css({ position: 'inherit', top: '0px', width: '100%', height: 'auto' });
+                    $('.sidebar-toggle').css({ display: 'none' });
+                    $('.main-content').css({ marginLeft: '10px' });
+                }
+                else {
+                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '240px', height: '100%' });
+                    $('.sidebar-toggle').css({ display: 'block' });
+                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '240px' });
+                }
+            } 
+            mql.addListener(handleScreenSizeChange);
+            handleScreenSizeChange(mql); // Call to set right styles on startup.
         });
     </script>
 }
