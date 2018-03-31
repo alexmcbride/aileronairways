@@ -197,31 +197,43 @@
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
         @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
-       
+        @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
+
         <p id="geoNonSupport" style="color:red"></p>
-        <p>Location is: <div id="friendlyaddress" ></div></p>
-        
-        <form asp-antiforgery="true" id="edit-location-form">
-            <div class="form-group">
-                @*<label asp-for="Location">Location is </label>*@
-                <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
-                @*<span asp-validation-for="Location" class="text-danger"></span>*@
+        <p>Drag map marker to record the location <div id="friendlyaddress"></div></p>
+        <div class="row">
+
+            <div class="form-group col-xs-4">
+                <label>latitude</label>
+                <input type="text" name="longitude" id="curlng" class="form-control" disabled />
             </div>
+            <div class="form-group col-xs-4">
+                <label>longitude</label>
+                <input type="text" name="longitude" id="curlat" class="form-control" disabled />
+            </div>
+            
+            <form asp-antiforgery="true" id="edit-location-form" class="col-xs-4">
+                <div class="form-group col-xs-4">
+                    @*<label asp-for="Location">Location is </label>*@
+                    <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
+                    @*<span asp-validation-for="Location" class="text-danger"></span>*@
+                </div>
 
-            <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
-        </form>
-        <div class="form-group">
-            <label>latitude</label>
-            <input type="text" name="longitude" id="curlng" class="form-control" />
+                <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
+            </form>
         </div>
-        <div class="form-group">
-            <label>longitude</label>
-            <input type="text" name="longitude" id="curlat" class="form-control" />
+        <div class="pac-card" id="pac-card">
+            <div id="pac-container">
+                <input id="pac-input" type="text"
+                       placeholder="Enter a location">
+            </div>
         </div>
-
-
         <div id="googleMap" style="height:400px; width: 100%;"></div>
+         <div id="infowindow-content">
+      <img src="" width="16" height="16" id="place-icon">
+      <span id="place-name"  class="title"></span><br>
+      <span id="place-address"></span>
+    </div>
 
     </div>
 
@@ -245,12 +257,13 @@
 
 @section Scripts{
 
-<script>
-    function myMap() {
+    <script>
+
+        function initAutocomplete() {
         var loc = "@Model.Location"@*!= null ? @Model.Location.Split()[0] : null*@;
         var lat = "55.873543";
         var lng = "-4.289058";
-        debugger;
+        //debugger;
         if (loc == "0,0") {
             var options = { enableHighAccuracy: true, };
             if (navigator.geolocation) {
@@ -279,18 +292,87 @@
         }
         var latlng = new google.maps.LatLng(lat, lng);
         var mapOptions = {
-            zoom: 10,
-            center: latlng
+            zoom: 15,
+            center: latlng,
+            mapTypeId: 'roadmap'
         }
         var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
 
+       
+
+;
+        //debugger;
+        var card = document.getElementById('pac-card');
+        var input = document.getElementById('pac-input');
+        //var types = document.getElementById('type-selector');
+        var strictBounds = document.getElementById('strict-bounds-selector');
+
+        map.controls[google.maps.ControlPosition.TOP_RIGHT].push(card);
+
+        var autocomplete = new google.maps.places.Autocomplete(input);
+
+        // Bind the map's bounds (viewport) property to the autocomplete object,
+        // so that the autocomplete requests use the current map bounds for the
+        // bounds option in the request.
+        autocomplete.bindTo('bounds', map);
+
+        var infowindow = new google.maps.InfoWindow();
+        var infowindowContent = document.getElementById('infowindow-content');
+        infowindow.setContent(infowindowContent);
         var marker = new google.maps.Marker({
             position: latlng,
             title: 'Set lat/lon values for this property',
+            anchorPoint: new google.maps.Point(0, -29),
             map: map,
             draggable: true
         });
         marker.setMap(map);
+        //var marker = new google.maps.Marker({
+        //    map: map,
+        //    anchorPoint: new google.maps.Point(0, -29),
+        //    draggable:true
+
+        //});
+
+        autocomplete.addListener('place_changed', function () {
+            infowindow.close();
+            marker.setVisible(false);
+            var place = autocomplete.getPlace();
+            if (!place.geometry) {
+                // User entered the name of a Place that was not suggested and
+                // pressed the Enter key, or the Place Details request failed.
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+
+            // If the place has a geometry, then present it on a map.
+            if (place.geometry.viewport) {
+                map.fitBounds(place.geometry.viewport);
+            } else {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);  // Why 17? Because it looks good.
+            }
+            marker.setPosition(place.geometry.location);
+            marker.setVisible(true);
+            var dglat = document.getElementById("curlat").value = String(place.geometry.location.getPosition().lat());
+            var dglng = document.getElementById("curlng").value = String(place.geometry.location.getPosition().lng());
+            var dgloc = dglat.concat(",", dglng);
+            document.forms['edit-location-form']['locationaddress'].value = dgloc;
+
+            var address = '';
+            if (place.address_components) {
+                address = [
+                    (place.address_components[0] && place.address_components[0].short_name || ''),
+                    (place.address_components[1] && place.address_components[1].short_name || ''),
+                    (place.address_components[2] && place.address_components[2].short_name || '')
+                ].join(' ');
+            }
+
+            infowindowContent.children['place-icon'].src = place.icon;
+            infowindowContent.children['place-name'].textContent = place.name;
+            infowindowContent.children['place-address'].textContent = address;
+            infowindow.open(map, marker);
+        });
 
         google.maps.event.addListener(marker, 'dragend', function (event) {
             var dglat = document.getElementById("curlat").value = String(this.getPosition().lat());
@@ -298,62 +380,13 @@
             var dgloc = dglat.concat(",", dglng);
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
         });
+    }
 
-    //    google.maps.event.addListner(marker, 'dragend', function () {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    });
-
-    //    document.addEventListener("DOMContentLoaded", function () {
-    //        geocodeLatLng(geocoder, map/*, infowindow*/);
-    //    });
-
-    //}
-    //    function geocodeLatLng(geocoder, map/*, infowindow*/) {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                    //infowindow.setContent(results[0].formatted_address);
-    //                    //infowindow.open(map, marker);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    }
-    
-
-</script>
-
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
+    </script>
+    @*<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback&libraries=places&callback=initAutocomplete"
+            async defer></script>
+    <script src="http://maps.google.com/maps/api/js?sensor=true&libraries=places" type="text/javascript"></script>*@
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&libraries=places&callback=initAutocomplete"></script>
 
     <script>
 
