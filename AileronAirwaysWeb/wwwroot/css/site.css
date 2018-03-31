@@ -1,6 +1,7 @@
 ﻿body {
     padding-top: 50px;
     padding-bottom: 20px;
+    
 }
 
 /* Wrapping element */
@@ -193,16 +194,16 @@
     width: 80%;
 }
 .dataTables_length label {
-    /*color: #734EA6;*/
+    color: #734EA6;
 }
 .dataTables_filter label {
-    /*color: #734EA6;*/
+    color: #734EA6;
 }
 
-/*.dataTables_wrapper .dataTables_paginate .paginate_button {
+.dataTables_wrapper .dataTables_paginate .paginate_button {
     border-color: #734EA6;
     background: #fff ;
-}*/
+}
 
 .dataTables_wrapper .dataTables_paginate .paginate_button.current {
     border-color: #734EA6;
@@ -240,15 +241,14 @@
     .mt-purple-circle-btn:hover {
         background-color: #b722d8;
     }
-#addTimelineBtn {
+#addEventBtn {
     position: absolute;
     top: 50px;
     right: 40px;
-    
 }
 
 @media screen and (max-width: 327px) {
-    #addTimelineBtn {
+    #addEventBtn {
         right: 20px;
     }
 }
@@ -285,4 +285,64 @@
 .widthContainer{
     width: 100%;
 }
+
+#description {
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+}
+
+#infowindow-content .title {
+    font-weight: bold;
+}
+
+#infowindow-content {
+    display: none;
+}
+
+#googleMap #infowindow-content {
+    display: inline;
+}
+
+.pac-card {
+    margin: 10px 10px 0 0;
+    border-radius: 2px 0 0 2px;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    outline: none;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    background-color: #fff;
+    font-family: Roboto;
+}
+
+#pac-container {
+    margin-right: 12px;
+}
+
+.pac-controls {
+    display: inline-block;
+    padding: 5px 11px;
+}
+
+    .pac-controls label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+    }
+
+#pac-input {
+    background-color: #fff;
+    font-family: Roboto;
+    font-size: 15px;
+    font-weight: 300;
+    margin: 5px;
+    padding: 5px;
+    text-overflow: ellipsis;
+    width: 100%;
+    min-width: 100px;
+}
+
+    #pac-input:focus {
+        border-color: #4d90fe;
+    }
 
