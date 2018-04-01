@@ -99,6 +99,7 @@ namespace AileronAirwaysWeb.Models
             return _context.TimelineEvents
                 .OrderBy(t => t.EventDateTime)
                 .Where(e => e.EventDateTime > @event.EventDateTime)
+                .Where(e => e.TimelineId == @event.TimelineId)
                 .FirstOrDefaultAsync();
         }
 
@@ -107,6 +108,7 @@ namespace AileronAirwaysWeb.Models
             return _context.TimelineEvents
                 .OrderBy(t => t.EventDateTime)
                 .Where(e => e.EventDateTime < @event.EventDateTime)
+                .Where(e => e.TimelineId == @event.TimelineId)
                 .LastOrDefaultAsync();
         }
 
