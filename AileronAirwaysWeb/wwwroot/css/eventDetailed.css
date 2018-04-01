@@ -349,6 +349,7 @@ img {
 
     .slideshow-container {
         height: auto;
+        margin-top: 100px;
     }
 }
 

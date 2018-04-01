@@ -71,7 +71,7 @@
     // open top nav - only option when window width = 450px or less
     function openTopNav() {
         document.getElementById("myTopPanel").style.height = "180px";
-
+        
         document.getElementById("topNavArrow").removeEventListener("click", openTopNav);
         document.getElementById("topNavArrow").addEventListener("click", closeTopNav);
 
@@ -85,7 +85,7 @@
 
         document.getElementById("myTopPanel").style.height = "20px";
 
-        document.getElementById("arrowChangeTop").style.paddingTop = '5px';
+        
 
 
         document.getElementById("topNavArrow").removeEventListener("click", closeTopNav);
