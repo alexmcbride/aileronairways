@@ -21,6 +21,7 @@ namespace AileronAirwaysWeb.Models
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
         public string TimelineId { get; set; }
+        public string Location { get; set; }
 
         //public string Latitude { get; set; }
         //public string Longitude { get; set; }
@@ -40,34 +41,6 @@ namespace AileronAirwaysWeb.Models
         public IEnumerable<Attachment> FileAttachments
         {
             get { return Attachments.Where(a => !a.IsImage); }
-        }
-
-        [JsonIgnore]
-        [NotMapped]
-        public double Longitude { get; set; }
-
-        [NotMapped]
-        [JsonIgnore]
-        public double Latitude { get; set; }
-
-        public string Location
-        {
-            get { return string.Format("{0},{1}", Latitude, Longitude); }
-
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    string[] tokens = value.Split(',');
-                    if (tokens.Length == 2 &&
-                        double.TryParse(tokens[0], out double latitude) &&
-                        double.TryParse(tokens[1], out double longitude))
-                    {
-                        Latitude = latitude;
-                        Longitude = longitude;
-                    }
-                }
-            }
         }
 
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)

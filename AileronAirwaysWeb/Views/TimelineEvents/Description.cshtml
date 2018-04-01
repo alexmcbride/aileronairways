@@ -1,5 +1,18 @@
-﻿@model TimelineEvent
+﻿@model AileronAirwaysWeb.ViewModels.TimelineEventViewModel
 
-<p>@Model.Description</p>
-
-<p><a href="#" id="editDescriptionLink" data-id="@Model.Id">Edit</a></p>
+@if (Model.Description == null)
+{
+    <div class="panel panel-default">
+        <div class="panel-body text-center" style="font-size: 16pt; padding: 24px;">
+            <a href="#" id="editDescriptionLink" data-id="@Model.Id" style="color: #404040;">
+                <span class="glyphicon glyphicon-edit"></span>
+                Add a description for this event.
+            </a>
+        </div>
+    </div>
+}
+else
+{
+    <p>@Html.Raw(Model.Description.Replace("\n", "<br>"))</p>
+    <p><a href="#" id="editDescriptionLink" data-id="@Model.Id">Edit</a></p>
+}

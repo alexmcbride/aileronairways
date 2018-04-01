@@ -21,7 +21,7 @@
 </head>
 <body>
     <nav class="navbar navbar-inverse navbar-fixed-top mt-navbar-custom">
-        <div class="container">
+        <div class="container-fluid">
             <div class="navbar-header">
                 
                 <a asp-area="" asp-controller="Timelines" asp-action="Index" class="navbar-brand">Aileron Airways</a>
@@ -32,8 +32,7 @@
     @*Use tag helper to display flash messages.*@
     <flash-messages />
 
-    <div style="flex: 1 0 auto;">
-        @*class="container body-content"*@
+    <div>
         @RenderBody()
 
     </div>

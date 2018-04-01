@@ -1,4 +1,6 @@
-﻿using System;
+﻿using AileronAirwaysWeb.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace AileronAirwaysWeb.ViewModels
@@ -20,17 +22,12 @@ namespace AileronAirwaysWeb.ViewModels
         [Required]
         public DateTime EventDateTime { get; set; }
 
+        [Required]
         public string Location { get; set; }
 
         public int AttachmentFilesCount { get; set; }
         public int AttachmentImagesCount { get; set; }
 
-        
-    }
-
-    public class TimelineEventLocationViewModel
-    {
-        [Required]    
-        public string Location { get; set; }
+        public List<Attachment> Attachments { get; set; }
     }
 }

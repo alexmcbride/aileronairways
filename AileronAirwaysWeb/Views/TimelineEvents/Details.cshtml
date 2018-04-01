@@ -1,4 +1,4 @@
-﻿@model TimelineEvent
+﻿@model AileronAirwaysWeb.ViewModels.TimelineEventViewModel
 @{
     ViewData["Title"] = "Event Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -8,24 +8,18 @@
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
 }
 
-
-
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
-
         <div id="eventHeader">
             <div id="backArrow">
-
-                <a class="arrowLink" @*onclick="goBack()"*@ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
                 <hr class="headerHR" />
                 <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -84,18 +78,9 @@
                             {
                                 <td>
                                     <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
-
                                 </td>
-                                @*<a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>*@
-                            }
-
-
-
-                            @if (!item.IsImage)
-                            {
                                 <td>
                                     @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
-
                                 </td>
                             }
 
@@ -104,19 +89,12 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <p><em>There are no attachments to display.</em></p>
-        }
-
-
 
         <br />
 
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
-                @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
 
@@ -149,15 +127,12 @@
                     }
                 }
 
-
-
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
             </div>
             <br>
             <div style="text-align:center">
-
                 @if (Model.AttachmentImagesCount > 0)
                 {
                     int j = 1;
@@ -166,23 +141,15 @@
 
                         if (item.IsImage)
                         {
-
-
                             <span class="dot" onclick="currentSlide(@j)"></span>
-
-
                             j++;
                         }
-
                     }
-
                 }
             </div>
         }
 
-
-        <br />
-        <br />
+        <br>
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
@@ -196,31 +163,14 @@
 
 
     <!-- Location TAB -->
-    <div id="locationtab" class="tabcontent">
-        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
-       
-        <p id="geoNonSupport" style="color:red"></p>
-        <p>Location is: <div id="friendlyaddress" ></div></p>
-        
-        <form asp-antiforgery="true" id="edit-location-form">
-            <div class="form-group">
-                @*<label asp-for="Location">Location is </label>*@
-                <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
-                @*<span asp-validation-for="Location" class="text-danger"></span>*@
-            </div>
+    <div id="locationtab" class="tabcontent">       
+        <span id="geoNonSupport" style="color:red"></span>
 
-            <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
-        </form>
-        <div class="form-group">
-            <label>latitude</label>
-            <input type="text" name="longitude" id="curlng" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label>longitude</label>
-            <input type="text" name="longitude" id="curlat" class="form-control" />
-        </div>
+        @Html.Partial("EditEventLocation", Model)
 
+        <br>
+
+        <p class="text-center text-muted"><em>Or select a location using the map below...</em></p>
 
         <div id="googleMap" style="height:400px; width: 100%;"></div>
 
@@ -264,8 +214,8 @@
                     console.warn(`ERROR(${err.code}): ${err.message}`);
                 }
                 function showPosition(position) {
-                    lat = String(position.coords.longitude);
-                    lng = String(position.coords.longitude);
+                    lat = String(position.coords.latitude.toFixed(6));
+                    lng = String(position.coords.longitude.toFixed(6));
                     loc = lat.concat(",", lng);
                     document.getElementById("curlat").setAttribute("value", lat);
                     document.getElementById("curlng").setAttribute("value", lng);
@@ -305,58 +255,6 @@
         });
     }
 
-    //    google.maps.event.addListner(marker, 'dragend', function () {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    });
-
-    //    document.addEventListener("DOMContentLoaded", function () {
-    //        geocodeLatLng(geocoder, map/*, infowindow*/);
-    //    });
-
-    //}
-    //    function geocodeLatLng(geocoder, map/*, infowindow*/) {
-    //        var input = document.forms['edit-location-form']['locationaddress'].value;
-    //        var latlngStr = input.split(',', 2);
-    //        var latlng = { lat: parseFloat(latlngStr[0]), lng: parseFloat(latlngStr[1]) };
-    //        geocoder.geocode({ 'location': latlng }, function (results, status) {
-    //            if (status === 'OK') {
-    //                if (results[0]) {
-    //                    map.setZoom(11);
-    //                    var marker = new google.maps.Marker({
-    //                    position: latlng,
-    //                    map: map
-    //                    });
-    //                    document.getElementById('friendlyaddress').innerHTML = String(results[0].formatted_address);
-    //                    //infowindow.setContent(results[0].formatted_address);
-    //                    //infowindow.open(map, marker);
-    //                } else {
-    //                    document.getElementById('friendlyaddress').innerHTML = "no Address found";
-    //                }
-    //            } else {
-    //                document.getElementById('friendlyaddress').innerHTML = 'Geocoder failed due to: ' + status;
-    //            }
-    //        });
-    //    }
-    
-
 </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&callback=myMap"></script>
@@ -364,19 +262,22 @@
     <script>
 
     $('#edit-location-form').on('submit', function (e) {
-    e.preventDefault();
-    var data = $('#edit-location-form').serialize();
-    $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
-    // If edit was successful post returns with OK
-    if (response.startsWith('OK')) {
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
-    // Hack to make flash message appear correctly when side bar is shown.
-    $('.flash-messages').css('margin-left', '20px');
-    }
-    else {
-    // Otherwise redisplay form.
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
-    }
+        e.preventDefault();
+        
+        var data = $('#edit-location-form').serialize();
+        disableFormElement($('#btnSave'), true);
+        $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+        // If edit was successful post returns with OK
+        if (response.startsWith('OK')) {
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
+
+            // Hack to make flash message appear correctly when side bar is shown.
+             $('.flash-messages').css('margin-left', '20px');
+        }
+        else {
+            // Otherwise redisplay form.
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
+        }
     }, 'html');
 
     });
