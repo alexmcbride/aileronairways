@@ -4,8 +4,7 @@
 
     @foreach (var item in Model)
     {
-        <span id="eventLinks-@item.Id"></span>
-    <div class="timelineContent">
+    <div class="timelineContent" id="eventLinks-@item.Id">
         @*<h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>*@
         <button class="wAccordion">
 
