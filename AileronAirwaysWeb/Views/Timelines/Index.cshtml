@@ -329,25 +329,33 @@
                 format: 'YYYY-MM-DD'
             });
 
+            function collapseSidebar() {
+                sidebarCollapsed = true;
+                $('.sidebar-wrapper').animate({ left: '-250px' }, 'fast', function () {
+                    $('.sidebar-content').css({ 'display': 'none' });
+                    $('#sidebar-arrow').removeClass('glyphicon-backward');
+                    $('#sidebar-arrow').addClass('glyphicon-forward');
+                });
+                $('.main-content').animate({ marginLeft: '20px' }, 'fast');
+            }
+
+            function expandSidebar() {
+                sidebarCollapsed = false;
+                $('.sidebar-wrapper').animate({ left: '0px' }, 'fast', function () {
+                    $('#sidebar-arrow').removeClass('glyphicon-forward');
+                    $('#sidebar-arrow').addClass('glyphicon-backward');
+                });
+                $('.main-content').animate({ marginLeft: '280px' }, 'fast');
+                $('.sidebar-content').css({ 'display': 'block' });
+            }
+
             var sidebarCollapsed = false;
             $('#sidebar-arrow').click(function (evt) {
                 if (sidebarCollapsed) {
-                    sidebarCollapsed = false;
-                    $('.sidebar-wrapper').animate({ left: '0px' }, 'fast', function () {
-                        $('#sidebar-arrow').removeClass('glyphicon-forward');
-                        $('#sidebar-arrow').addClass('glyphicon-backward');
-                    });
-                    $('.main-content').animate({ marginLeft: '280px' }, 'fast');
-                    $('.sidebar-content').css({ 'display': 'block' });
+                    expandSidebar();
                 }
                 else {
-                    sidebarCollapsed = true;
-                    $('.sidebar-wrapper').animate({ left: '-250px' }, 'fast', function () {
-                        $('.sidebar-content').css({ 'display': 'none' });
-                        $('#sidebar-arrow').removeClass('glyphicon-backward');
-                        $('#sidebar-arrow').addClass('glyphicon-forward');
-                    });
-                    $('.main-content').animate({ marginLeft: '20px' }, 'fast');
+                    collapseSidebar();
                 }
             });
 
