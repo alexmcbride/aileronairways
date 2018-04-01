@@ -1,4 +1,4 @@
-﻿@model TimelineEvent
+﻿@model AileronAirwaysWeb.ViewModels.TimelineEventViewModel
 @{
     ViewData["Title"] = "Event Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -166,36 +166,7 @@
     <div id="locationtab" class="tabcontent">       
         <span id="geoNonSupport" style="color:red"></span>
 
-        <form asp-antiforgery="true" id="edit-location-form" class="form-horizontal col-sm-offset-2">
-            <input type="hidden" id="locationaddress" asp-for="Location" />
-
-            <div class="row">
-                <div class="col-sm-4">
-                    <label class="control-label" for="curlng">Latitude</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" name="longitude" id="curlng" class="form-control">
-                </div>
-                <br />
-                
-                <div class="col-sm-4">
-                    <label class="control-label" for="curlat">Longitude</label>
-                </div>
-                <div class="col-sm-6">
-                    <input type="text" name="longitude" id="curlat" class="form-control">
-                </div>
-
-                <br />
-
-                <div class="col-sm-6">
-                </div>
-                <div class="col-sm-2">
-                    <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i> Save</button>
-                </div>
-
-
-            </div>
-        </form>
+        @Html.Partial("EditEventLocation", Model)
 
         <br>
 
