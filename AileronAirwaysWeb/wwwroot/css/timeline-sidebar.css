@@ -12,6 +12,7 @@
 
 #sidebar-arrow {
     cursor: pointer;
+    margin-top: 16px;
 }
 
 .sidebar-toggle {
