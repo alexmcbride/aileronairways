@@ -6,26 +6,26 @@
 
 @section AddToHead{
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
+
+    <style>
+
+    </style>
 }
-
-
 
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
-
         <div id="eventHeader">
             <div id="backArrow">
 
                 <a class="arrowLink" @*onclick="goBack()" *@ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
                 <hr class="headerHR" />
                 <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
             </div>
-
-
         </div>
     </div>
 </div>
@@ -84,18 +84,9 @@
                             {
                                 <td>
                                     <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
-
                                 </td>
-                                @*<a asp-controller="Attachments" asp-action="Details" asp-route-eventId="@ViewBag.EventId" asp-route-attachmentId="@item.Id">@item.Title</a>*@
-                            }
-
-
-
-                            @if (!item.IsImage)
-                            {
                                 <td>
                                     @Html.ActionLink("Delete", "Delete", new { eventId = ViewBag.EventId, attachmentId = item.Id })
-
                                 </td>
                             }
 
@@ -104,19 +95,12 @@
                 </tbody>
             </table>
         }
-        else
-        {
-            <p><em>There are no attachments to display.</em></p>
-        }
-
-
 
         <br />
 
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
-                @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
 
@@ -149,15 +133,12 @@
                     }
                 }
 
-
-
                 <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
                 <a class="next" onclick="plusSlides(1)">&#10095;</a>
 
             </div>
             <br>
             <div style="text-align:center">
-
                 @if (Model.AttachmentImagesCount > 0)
                 {
                     int j = 1;
@@ -166,23 +147,15 @@
 
                         if (item.IsImage)
                         {
-
-
                             <span class="dot" onclick="currentSlide(@j)"></span>
-
-
                             j++;
                         }
-
                     }
-
                 }
             </div>
         }
 
-
-        <br />
-        <br />
+        <br>
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
             <div class="form-group formDragAndDrop">
@@ -276,8 +249,8 @@
                     console.warn(`ERROR(${err.code}): ${err.message}`);
                 }
                 function showPosition(position) {
-                    lat = String(position.coords.longitude);
-                    lng = String(position.coords.longitude);
+                    lat = String(position.coords.latitude.toFixed(6));
+                    lng = String(position.coords.longitude.toFixed(6));
                     loc = lat.concat(",", lng);
                     document.getElementById("curlat").setAttribute("value", lat);
                     document.getElementById("curlng").setAttribute("value", lng);
@@ -385,19 +358,22 @@
     <script>
 
     $('#edit-location-form').on('submit', function (e) {
-    e.preventDefault();
-    var data = $('#edit-location-form').serialize();
-    $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
-    // If edit was successful post returns with OK
-    if (response.startsWith('OK')) {
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
-    // Hack to make flash message appear correctly when side bar is shown.
-    $('.flash-messages').css('margin-left', '20px');
-    }
-    else {
-    // Otherwise redisplay form.
-    location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
-    }
+        e.preventDefault();
+        
+        var data = $('#edit-location-form').serialize();
+        disableFormElement($('#btnSave'), true);
+        $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+        // If edit was successful post returns with OK
+        if (response.startsWith('OK')) {
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
+
+            // Hack to make flash message appear correctly when side bar is shown.
+             $('.flash-messages').css('margin-left', '20px');
+        }
+        else {
+            // Otherwise redisplay form.
+            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
+        }
     }, 'html');
 
     });

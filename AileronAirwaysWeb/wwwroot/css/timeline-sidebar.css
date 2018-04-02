@@ -1,0 +1,29 @@
+﻿.sidebar-wrapper {
+    z-index: 2; /* Stop footer overlaying sidebar */
+    left: 0px;
+    background-color: #fafafa;
+    overflow-x: hidden;
+    border-right: 1px solid #808080;
+}
+
+.sidebar-content {
+    padding: 20px;
+}
+
+#sidebar-arrow {
+    cursor: pointer;
+    margin-top: 16px;
+}
+
+.sidebar-toggle {
+    padding: 6px;
+}
+
+.main-content {
+    padding: 0px 20px;
+}
+
+/* Hides data table search box. */
+.dataTables_wrapper .dataTables_filter {
+    display: none;
+}
