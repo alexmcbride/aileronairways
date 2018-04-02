@@ -13,7 +13,7 @@
 <div class="content-wrapper">
     <div class="sidebar-wrapper">
         <div class="sidebar-toggle text-right">
-            <span class="glyphicon glyphicon-backward" id="sidebar-arrow"></span>
+            <i class="leftArrow" id="sidebar-arrow"></i>
         </div>
 
         <div class="sidebar-content">
@@ -334,8 +334,8 @@
                 if (sidebarCollapsed) {
                     sidebarCollapsed = false;
                     $('.sidebar-wrapper').animate({ left: '0px' }, 'fast', function () {
-                        $('#sidebar-arrow').removeClass('glyphicon-forward');
-                        $('#sidebar-arrow').addClass('glyphicon-backward');
+                        $('#sidebar-arrow').removeClass('rightArrow');
+                        $('#sidebar-arrow').addClass('leftArrow');
                     });
                     $('.main-content').animate({ marginLeft: '280px' }, 'fast');
                     $('.sidebar-content').css({ 'display': 'block' });
@@ -344,8 +344,8 @@
                     sidebarCollapsed = true;
                     $('.sidebar-wrapper').animate({ left: '-250px' }, 'fast', function () {
                         $('.sidebar-content').css({ 'display': 'none' });
-                        $('#sidebar-arrow').removeClass('glyphicon-backward');
-                        $('#sidebar-arrow').addClass('glyphicon-forward');
+                        $('#sidebar-arrow').removeClass('leftArrow');
+                        $('#sidebar-arrow').addClass('rightArrow');
                     });
                     $('.main-content').animate({ marginLeft: '20px' }, 'fast');
                 }
@@ -360,13 +360,13 @@
                     $('.main-content').css({ marginLeft: '10px' });
                 }
                 else {
-                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '280px', height: '100%' });
+                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '270px', height: '100%' });
                     $('.sidebar-toggle').css({ display: 'block' });
-                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '280px' });
+                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '270px' });
                 }
             }
             mql.addListener(handleScreenSizeChange);
-            handleScreenSizeChange(mql); // Call to set right styles on startup.
+            handleScreenSizeChange(mql); // Set right styles on startup.
         });
     </script>
 }
