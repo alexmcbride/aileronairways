@@ -244,8 +244,8 @@
     /*position: absolute;*/
     display: block;
     position: fixed;
-    top: 50px;
     right: 40px;
+    bottom: 50px;
 }
 
 @media screen and (max-width: 327px) {
