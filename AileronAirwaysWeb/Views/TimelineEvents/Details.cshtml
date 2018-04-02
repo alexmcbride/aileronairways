@@ -6,6 +6,10 @@
 
 @section AddToHead{
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
+
+    <style>
+
+    </style>
 }
 
 <div id="superAwesomeTester" style="display: none;">Banana</div>
@@ -166,36 +170,44 @@
     <div id="locationtab" class="tabcontent">       
         <span id="geoNonSupport" style="color:red"></span>
 
-        <form asp-antiforgery="true" id="edit-location-form" class="form-horizontal col-sm-offset-2">
+        <form asp-antiforgery="true" id="edit-location-form" class="col-lg-offset-2">
             <input type="hidden" id="locationaddress" asp-for="Location" />
 
+
             <div class="row">
-                <div class="col-sm-4">
-                    <label class="control-label" for="curlng">Latitude</label>
+                <div class="col-sm-12 col-md-4 ">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="control-label" for="curlng">Longitude</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="text" name="longitude" id="curlng" class="form-control">
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <input type="text" name="longitude" id="curlng" class="form-control">
+                <div class="col-sm-12 col-md-4">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <label class="control-label" for="curlat">Latitude</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="text" name="latitude" id="curlat" class="form-control">
+                        </div>
+                    </div>
                 </div>
-                <br />
-
-                <div class="col-sm-4">
-                    <label class="control-label" for="curlat">Longitude</label>
+                <div class="col-sm-12 col-md-4">
+                    <div class="row location-button-row">
+                        <div class="col-sm-12">
+                            <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i> Save</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-6">
-                    <input type="text" name="longitude" id="curlat" class="form-control">
-                </div>
-
-                <br />
-
-                <div class="col-sm-6">
-                </div>
-                <div class="col-sm-2">
-                    <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i> Save</button>
-                </div>
-
-
-            </div>
-        </form>
+            </form>
 
         <br>
 

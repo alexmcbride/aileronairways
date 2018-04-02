@@ -353,5 +353,13 @@ img {
     }
 }
 
+/* Little hack to fix margin on location tab save button */
+.location-button-row {
+    margin-top: 24px;
+}
 
-
+@media (max-width: 768px) {
+    .location-button-row {
+        margin-top: 5px;
+    }
+}
