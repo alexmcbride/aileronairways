@@ -29,15 +29,13 @@ a:hover {
 
 /*Navigation ------------------------------------------------------------- */
 
-/* mie disabled to stop this overrriding mt-navbar-custom's purple background color 
-  
+/* mie disabled to stop this overrriding mt-navbar-custom's purple background color   
     
-    */
 .navbar {
     
     background-color: #0D1B2E;
 }
-
+*/
 .navList {
     width: 100%;
     top: 0;
@@ -311,7 +309,7 @@ li {
 
 
 /*Static Button -------------------------*/
-#addEventBtn {
+/*#addEventBtn {
     display: block;
     position: fixed;
     bottom: 60px;
@@ -332,7 +330,7 @@ li {
 #addEventBtn:hover {
     background-color: #008CBA;
     color: #0D1B2E;
-}
+}*/
 
 
 
