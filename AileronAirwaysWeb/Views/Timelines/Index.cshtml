@@ -96,10 +96,10 @@
     </div>
 
 
-    <div id='myModal' class='modal'>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div id='myModalContent'></div>
+                <div id="myModalContent"></div>
             </div>
         </div>
     </div>
@@ -173,7 +173,7 @@
 
         function displayCreateModal(data) {
             $('#myModalContent').html(data);
-            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal({ keyboard: true });
             $('#myModal').modal('show');
 
             $('#create-form').on('submit', function (e) {

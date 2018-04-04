@@ -226,7 +226,7 @@
     </div>
 
 
-    <div id='myModal' class='modal'>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div id='myModalContent'></div>
@@ -437,7 +437,7 @@
 
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
-        $('#myModal').modal({ "backdrop": "static", keyboard: true });
+        $('#myModal').modal({ keyboard: true });
         $('#myModal').modal('show');
 
         // Hook event to Create view form.
@@ -464,7 +464,7 @@
 
     function displayEditModal(data, id) {
         $('#myModalContent').html(data);
-        $('#myModal').modal({ "backdrop": "static", keyboard: true });
+        $('#myModal').modal({ keyboard: true });
         $('#myModal').modal('show');
 
         // Hook event to edit view form.
@@ -492,7 +492,7 @@
 
     function displayDeleteModal(data, id) {
         $('#myModalContent').html(data);
-        $('#myModal').modal({ "backdrop": "static", keyboard: true });
+        $('#myModal').modal({ keyboard: true });
         $('#myModal').modal('show');
 
         // Hook event to edit view form.
