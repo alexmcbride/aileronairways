@@ -64,7 +64,7 @@ li {
     width: 100%;
     text-align: center;
     padding: 80px 0 20px 0;
-    color: purple;
+    color: #0a2263;
 }
 
 
@@ -320,7 +320,7 @@ li {
     font-size: 22px;
     border: none;
     outline: none;
-    background-color: #734EA6;
+    background-color: purple;
     color: white;
     cursor: pointer;
     padding: 15px;
@@ -548,7 +548,7 @@ h3.eventDate {
 
 .topPanel {
     color: #f1f1f1;
-    z-index: 100000;
+    z-index: 100;
     margin-top: 0;
     background-color: /*f0e8eb*/ #FAFAFA;
     font-size: 14px;
@@ -635,3 +635,76 @@ footer {
     footer p {
         color: gray;
     }
+
+
+
+
+.btn-main {
+    background-color: white;
+    color: #734EA6;
+    border: #734EA6 solid thin;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    align-content: center;
+    font-size: 14px;
+    margin-left: 0;
+    margin-right: 0;
+    display: inline;
+    border-radius: 0px;
+}
+
+    .btn-main:hover, #btnPartialToggled:hover {
+        background-color: #734EA6;
+        color: white;
+        border: #734EA6 solid thin;
+    }
+
+.btn-inverted-main {
+    background-color: #734EA6;
+    color: white;
+    border: white solid thin;
+    padding: 8px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    align-content: center;
+    font-size: 14px;
+    margin-left: 0;
+    margin-right: 0;
+    display: inline;
+    border-radius: 0px;
+}
+
+    .btn-inverted-main:hover {
+        background-color: white;
+        color: #734EA6;
+        border: white solid thin;
+    }
+
+
+
+
+
+
+
+
+    .borderRadiusNone {
+        border-radius: 0px;
+    }
+
+
+
+
+
+
+
+.navbar-header {
+    padding-left: 30px;
+}
+
+
+.mainColor {
+    color: #0a2263;
+}

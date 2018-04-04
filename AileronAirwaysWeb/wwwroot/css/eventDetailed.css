@@ -158,11 +158,11 @@
 
 
 .arrowLink {
-    color: #0D1B2E;
+    color: #0a2263;
 }
-.arrowLink:hover {
-    color: #0D1B2E;
-}
+    .arrowLink:hover {
+        color: #0a2263;
+    }
 
 
 #bottomEventNav {

@@ -9,7 +9,7 @@
     <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 }
-<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
+@*<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>*@
 
 <div class="content-wrapper">
     <div class="sidebar-wrapper">
@@ -17,14 +17,15 @@
             <div class="arrow leftArrow" id="sidebar-arrow"></div>
         </div>
 
+
+
         <div class="sidebar-content">
             <div class="search">
                 <h6 class="text-uppercase">Filter Timelines</h6>
 
                 <hr>
-
                 <div class="form-group">
-                    
+
                     <div class="input-group">
                         <input type="text" class="form-control" placeholder="Search..." id="search">
                         <span class="input-group-addon">
@@ -56,18 +57,30 @@
                 <hr>
 
                 <div class="form-group">
-                    <button type="button" class="btn btn-default" id="clearDates">
-                        <span class="glyphicon glyphicon-remove" style="color: #ff0000"></span>
-                        Clear Filters
+                    <button type="button" class="btn btn-main" id="clearDates">
+                        <span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Clear Filters
                     </button>
                 </div>
             </div>
         </div>
     </div>
 
+
+
+
+
+
+
+
+
+
     <div class="main-content">
         <br />
-        <h3 class="mt-purpule-color"><strong>@ViewData["Title"]</strong></h3>
+        <h3 class="mainColor">
+            <strong>@ViewData["Title"]</strong>
+        </h3>
+            <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
+      
         <hr />
         <table class="display" data-order='[[ 1, "des" ]]' id="tbltimelines" style="width: 100%">
             <thead>
@@ -75,7 +88,7 @@
                     <th>Title</th>
                     <th>Created</th>
                     <th></th>
-                    <th></th>
+                    @*<th></th>*@
                 </tr>
             </thead>
             <tbody></tbody>

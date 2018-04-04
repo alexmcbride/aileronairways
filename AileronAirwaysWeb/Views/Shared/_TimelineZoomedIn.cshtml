@@ -28,18 +28,18 @@
                         <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
                     </div>
                     <div class="eventIconDisplay">
-                        <div class="col-md-4 iconSection">
+                        <div class="iconSection">
                             @if (item.Location != null)
-                                        {
+                            {
                             <i class="fas fa-map-marker"></i>
-                                        }
+                            }
                             <div class="eventIcon"></div>
                         </div>
-                        <div class="col-md-4 iconSection">
+                        <div class="iconSection">
                             <i class="eventIcon fas fa-paperclip"></i>
                             <div class="eventIcon">@item.AttachmentFilesCount</div>
                         </div>
-                        <div class="col-md-4 iconSection">
+                        <div class="iconSection">
                             <i class="far fa-image"></i>
                             <div class="eventIcon">@item.AttachmentImagesCount</div>
                         </div>
@@ -58,6 +58,11 @@
                                         {
                             @item.Description
                                         }
+                            @if(item.Description == null)
+                            {
+                                <em>No description created yet. <br /><br /><br /></em>
+
+                            }
                         </p>
                         <p class="editDelete">
                             <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>

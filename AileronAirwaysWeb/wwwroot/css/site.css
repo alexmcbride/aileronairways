@@ -240,8 +240,8 @@
     .mt-purple-circle-btn:hover {
         background-color: #b722d8;
     }
-#addEventBtn {
-    /*position: absolute;*/
+/*#addEventBtn {
+    /*position: absolute;* /
     display: block;
     position: fixed;
     right: 40px;
@@ -252,7 +252,7 @@
     #addEventBtn {
         right: 20px;
     }
-}
+}*/
 
 .mt-purpule-color {
     color: purple

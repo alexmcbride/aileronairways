@@ -104,8 +104,8 @@
 
 #btnPartialToggle, #btnPartialToggled {
     background-color: white;
-    color: #734EA6;
-    border: #734EA6 solid thin;
+    color: purple;
+    border: purple solid thin;
     padding: 8px 20px;
     text-align: center;
     text-decoration: none;
@@ -119,15 +119,15 @@
 
 
     #btnPartialToggle:hover, #btnPartialToggled:hover {
-        background-color: #734EA6;
+        background-color: purple;
         color: white;
-        border: #734EA6 solid thin;
+        border: purple solid thin;
     }
 
 .activeToggleButton {
-    background-color: #734EA6 !important;
+    background-color: purple !important;
     color: white !important;
-    border: #734EA6 solid thin !important;
+    border: purple solid thin !important;
 }
 
 @media only screen and (max-width:450px) {

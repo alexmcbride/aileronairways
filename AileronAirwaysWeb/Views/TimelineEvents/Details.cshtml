@@ -235,16 +235,18 @@
     <div class="btnContainer">
         @if (@ViewBag.PreviousEvent != null)
         {
-            <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
-                <i class="fas fa-arrow-left xl"></i>    @ViewBag.PreviousEvent.Title
-            </a>
+        <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
+            <i class="fas fa-arrow-left xl"></i>&nbsp;&nbsp;&nbsp;@ViewBag.PreviousEvent.Title
+        </a>
         }
         <a class="button btnEvent uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
+        
+        
         @if (@ViewBag.NextEvent != null)
         {
-            <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
-                @ViewBag.NextEvent.Title   <i class="fas fa-arrow-right"></i>
-            </a>
+        <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
+            @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+        </a>
         }
         <p id="geoNonSupport" style="color:red;"></p>
     </div>
