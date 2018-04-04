@@ -680,7 +680,7 @@ footer {
     .btn-inverted-main:hover {
         background-color: white;
         color: #734EA6;
-        border: white solid thin;
+        border: #734EA6 solid thin;
     }
 
 
