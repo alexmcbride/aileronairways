@@ -105,8 +105,8 @@
 #btnPartialToggle, #btnPartialToggled {
     background-color: white;
     color: #734EA6;
-    border: #734EA6 solid medium;
-    padding: 10px 24px;
+    border: #734EA6 solid thin;
+    padding: 8px 20px;
     text-align: center;
     text-decoration: none;
     display: block;
@@ -121,13 +121,13 @@
     #btnPartialToggle:hover, #btnPartialToggled:hover {
         background-color: #734EA6;
         color: white;
-        border: #734EA6 solid medium;
+        border: #734EA6 solid thin;
     }
 
 .activeToggleButton {
     background-color: #734EA6 !important;
     color: white !important;
-    border: #734EA6 solid medium !important;
+    border: #734EA6 solid thin !important;
 }
 
 @media only screen and (max-width:450px) {

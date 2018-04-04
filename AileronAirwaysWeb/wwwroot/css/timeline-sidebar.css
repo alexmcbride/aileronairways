@@ -1,13 +1,19 @@
-﻿.sidebar-wrapper {
+﻿
+
+
+
+
+
+.sidebar-wrapper {
     z-index: 2; /* Stop footer overlaying sidebar */
     left: 0px;
     background-color: #fafafa;
     overflow-x: hidden;
-    border-right: 1px solid #808080;
+    border-right: 1px solid #0D1B2E;
 }
 
 .sidebar-content {
-    padding: 20px;
+    padding: 15px;
 }
 
 #sidebar-arrow {
@@ -20,20 +26,11 @@
 }
 
 .main-content {
-    padding: 0px 20px;
+    width: auto;
+    padding: 15px 5% 0px 5%;
 }
 
 /* Hides data table search box. */
 .dataTables_wrapper .dataTables_filter {
     display: none;
-}
-
-
-@media only screen and (max-width: 554px) {
-
-
-    .main-content {
-        display: block;
-        width: 100%;
-    }
 }
