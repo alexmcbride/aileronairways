@@ -2,8 +2,9 @@
 
 @if (Model.Description == null)
 {
+    <br />
     <div class="panel panel-default">
-        <div class="panel-body text-center" style="font-size: 16pt; padding: 24px;">
+        <div class="panel-body text-center" style="font-size: 10pt; padding: 24px;">
             <a href="#" id="editDescriptionLink" data-id="@Model.Id" style="color: #404040;">
                 <span class="glyphicon glyphicon-edit"></span>
                 Add a description for this event.
@@ -13,6 +14,12 @@
 }
 else
 {
+    
     <p>@Html.Raw(Model.Description.Replace("\n", "<br>"))</p>
-    <p><a href="#" id="editDescriptionLink" data-id="@Model.Id">Edit</a></p>
+
+    <div class="form-group text-right">
+        <p><a href="#" id="editDescriptionLink" class="btn btn-primary" data-id="@Model.Id">Edit</a></p>
+    </div>
+
+
 }
