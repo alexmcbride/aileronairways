@@ -139,17 +139,17 @@
         }
 
         function dateRangeFilter(data) {
-            var startDate = $('#startDateInput').val();
-            var endDate = $('#endDateInput').val();
+            var startDate = $('#startDateInput').val().trim();
+            var endDate = $('#endDateInput').val().trim();
 
-            if (startDate == "" || endDate == "") {
+            if (startDate == "" && endDate == "") {
                 return true;
             }
 
             var min = moment(startDate);
             var max = moment(endDate);
             var date = moment(data[3]);
-            return date.isAfter(min) && date.isBefore(max);
+            return (startDate == "" || date.isAfter(min)) && (endDate == "" || date.isBefore(max));
         }
 
         $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
