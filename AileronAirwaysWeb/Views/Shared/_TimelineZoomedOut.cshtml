@@ -10,7 +10,7 @@
 
             <strong asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</strong>: @item.EventDateTime.ToString("dd MMMM yyy")
             <div class="iconRight">
-                @if (item.Location != null)
+                @if (item.HasLocation)
                 {
                 <div class="iconSetContainer">
                     <i class="fas fa-map-marker"></i>
