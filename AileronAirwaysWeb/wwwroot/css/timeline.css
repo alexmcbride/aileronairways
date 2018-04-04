@@ -496,37 +496,6 @@ h3.eventDate {
 
 
 
-/*Right/left Arrow Icon*/
-i {
-    border: solid black;
-    border-width: 0 2px 2px 0;
-    display: inline-block;
-    padding: 3px;
-}
-
-.rightArrow {
-    transform: rotate(-45deg);
-    -webkit-transform: rotate(-45deg);
-}
-
-.leftArrow {
-    transform: rotate(135deg);
-    -webkit-transform: rotate(135deg);
-}
-
-
-.upArrow {
-    transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
-}
-
-.downArrow {
-    transform: rotate(45deg);
-    -webkit-transform: rotate(45deg);
-}
-
-
-
 .backToTopContainer {
     width: 100%;
     padding: 40px 10px 40px 10px;

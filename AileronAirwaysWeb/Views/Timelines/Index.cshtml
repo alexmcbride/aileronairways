@@ -13,7 +13,7 @@
 <div class="content-wrapper">
     <div class="sidebar-wrapper">
         <div class="sidebar-toggle text-right">
-            <i class="leftArrow" id="sidebar-arrow"></i>
+            <div class="arrow leftArrow" id="sidebar-arrow"></div>
         </div>
 
         <div class="sidebar-content">
@@ -333,21 +333,21 @@
             $('#sidebar-arrow').click(function (evt) {
                 if (sidebarCollapsed) {
                     sidebarCollapsed = false;
-                    $('.sidebar-wrapper').animate({ left: '0px' }, 'fast', function () {
+                    $('.sidebar-wrapper').animate({ left: '0px' }, function () {
                         $('#sidebar-arrow').removeClass('rightArrow');
                         $('#sidebar-arrow').addClass('leftArrow');
                     });
-                    $('.main-content').animate({ marginLeft: '280px' }, 'fast');
+                    $('.main-content').animate({ marginLeft: '280px' });
                     $('.sidebar-content').css({ 'display': 'block' });
                 }
                 else {
                     sidebarCollapsed = true;
-                    $('.sidebar-wrapper').animate({ left: '-250px' }, 'fast', function () {
+                    $('.sidebar-wrapper').animate({ left: '-250px' }, function () {
                         $('.sidebar-content').css({ 'display': 'none' });
                         $('#sidebar-arrow').removeClass('leftArrow');
                         $('#sidebar-arrow').addClass('rightArrow');
                     });
-                    $('.main-content').animate({ marginLeft: '20px' }, 'fast');
+                    $('.main-content').animate({ marginLeft: '20px' });
                 }
             });
 
