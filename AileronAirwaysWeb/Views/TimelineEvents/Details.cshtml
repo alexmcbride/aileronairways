@@ -6,19 +6,14 @@
 
 @section AddToHead{
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
-
-    <style>
-
-    </style>
 }
 
 <div id="superAwesomeTester" style="display: none;">Banana</div>
 <div class="container">
     <div class="col-sm-12">
         <div id="eventHeader">
-            <div id="backArrow">
-
-                <a class="arrowLink" @*onclick="goBack()" *@ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>
+            <div id="backArrow" class="text-center">
+                @*<a class="arrowLink" @*onclick="goBack()" * @ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>*@
                 <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
@@ -95,7 +90,15 @@
                 </tbody>
             </table>
         }
-
+        else
+        {
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
+                    <p>No <strong>Files</strong> Uploaded Yet</p>
+                </div>
+            </div>
+        }
         <br />
 
 
@@ -154,7 +157,16 @@
                 }
             </div>
         }
-
+        else
+        {
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
+                    <p>No <strong>Images</strong> Uploaded Yet</p>
+                </div>
+            </div>
+        }
+        
         <br>
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
@@ -174,7 +186,7 @@
         @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
 
         <p id="geoNonSupport" style="color:red"></p>
-        <p>Drag map marker to record the location <div id="friendlyaddress"></div></p>
+
         <div class="row">
 
             <div class="form-group col-xs-4">
@@ -185,30 +197,36 @@
                 <label>longitude</label>
                 <input type="text" name="longitude" id="curlat" class="form-control" disabled />
             </div>
+            <div class="form-group col-xs-4">
 
-            <form asp-antiforgery="true" id="edit-location-form" class="col-xs-4">
-                <div class="form-group col-xs-4">
-                    @*<label asp-for="Location">Location is </label>*@
-                    <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
-                    @*<span asp-validation-for="Location" class="text-danger"></span>*@
-                </div>
+                <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
+                    <div class="form-group col-xs-4">
+                        @*<label asp-for="Location">Location is </label>*@
+                        <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
+                        @*<span asp-validation-for="Location" class="text-danger"></span>*@
+                        <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
 
-                <button type="submit" id="btnSave" class="btn btn-default"><i class="far fa-edit" aria-hidden="true"></i></button>
-            </form>
+                    </div>
+
+                </form>
+            </div>
         </div>
         <div class="pac-card" id="pac-card">
             <div id="pac-container">
-                <input id="pac-input" type="text"
-                       placeholder="Enter a location">
+                <input id="pac-input" type="text" placeholder="Enter location">
             </div>
         </div>
+
         <div id="googleMap" style="height:400px; width: 100%;"></div>
         <div id="infowindow-content">
             <img src="" width="16" height="16" id="place-icon">
             <span id="place-name" class="title"></span><br>
             <span id="place-address"></span>
         </div>
-
+        <div class="text-center">
+            <br />
+            <p>Drag map marker to record the location <div id="friendlyaddress"></div></p>
+        </div>
     </div>
 
 </div>
@@ -218,14 +236,14 @@
         @if (@ViewBag.PreviousEvent != null)
         {
             <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
-                <i class="fas fa-arrow-left xl"></i>   @ViewBag.PreviousEvent.Title
+                <i class="fas fa-arrow-left xl"></i>    @ViewBag.PreviousEvent.Title
             </a>
         }
         <a class="button btnEvent uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
         @if (@ViewBag.NextEvent != null)
         {
             <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
-                @ViewBag.NextEvent.Title  <i class="fas fa-arrow-right"></i>
+                @ViewBag.NextEvent.Title   <i class="fas fa-arrow-right"></i>
             </a>
         }
         <p id="geoNonSupport" style="color:red;"></p>
