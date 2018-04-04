@@ -39,3 +39,12 @@
     width: 33%;
 }
 
+
+/* Media queries - Responsive timeline on screens less than 700px wide */
+@media only screen and (max-width: 640px) {
+ 
+
+
+
+
+}

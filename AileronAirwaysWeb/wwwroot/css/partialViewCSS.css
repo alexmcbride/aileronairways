@@ -103,9 +103,9 @@
 }
 
 #btnPartialToggle, #btnPartialToggled {
-    background-color: white; 
-    color: #0D1B2E;
-    border: #0D1B2E solid medium;
+    background-color: white;
+    color: #734EA6;
+    border: #734EA6 solid medium;
     padding: 10px 24px;
     text-align: center;
     text-decoration: none;
@@ -119,15 +119,15 @@
 
 
     #btnPartialToggle:hover, #btnPartialToggled:hover {
-        background-color: #0D1B2E; 
+        background-color: #734EA6;
         color: white;
-        border: #0D1B2E solid medium;
+        border: #734EA6 solid medium;
     }
 
 .activeToggleButton {
-    background-color: #0D1B2E !important; 
+    background-color: #734EA6 !important;
     color: white !important;
-    border: #0D1B2E solid medium !important;
+    border: #734EA6 solid medium !important;
 }
 
 @media only screen and (max-width:450px) {

@@ -36,8 +36,8 @@
 
 /*custum navbar of purple to replace with navbar-inverse*/
 .mt-navbar-custom {
-    background-color: #734EA6;
-    border-color: #734EA6;
+    background-color: purple; /* color purple: #734EA6*/
+    border-color: purple;
 }
 
     .mt-navbar-custom .navbar-brand {
@@ -68,23 +68,23 @@
     .mt-navbar-custom .navbar-nav > .active > a:hover,
     .mt-navbar-custom .navbar-nav > .active > a:focus {
         color: #fff;
-        background-color: #734EA6;
+        background-color: purple;
     }
 
     .mt-navbar-custom .navbar-nav > .disabled > a,
     .mt-navbar-custom .navbar-nav > .disabled > a:hover,
     .mt-navbar-custom .navbar-nav > .disabled > a:focus {
-        color: #734EA6;
+        color: purple;
         background-color: transparent;
     }
 
     .mt-navbar-custom .navbar-toggle {
-        border-color: #734EA6;
+        border-color: purple;
     }
 
         .mt-navbar-custom .navbar-toggle:hover,
         .mt-navbar-custom .navbar-toggle:focus {
-            background-color: #734EA6;
+            background-color: purple;
         }
 
         .mt-navbar-custom .navbar-toggle .icon-bar {
@@ -100,17 +100,17 @@
     .mt-navbar-custom .navbar-nav > .open > a:hover,
     .mt-navbar-custom .navbar-nav > .open > a:focus {
         color: #fff;
-        background-color: #734EA6;
+        background-color: purple;
     }
 
 @media (max-width: 767px) {
-     
+
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .dropdown-header {
-        border-color: #734EA6;
+        border-color: purple;
     }
 
     .mt-navbar-custom .navbar-nav .open .dropdown-menu .divider {
-        background-color: #734EA6;
+        background-color: purple;
     }
 
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > li > a {
@@ -127,13 +127,13 @@
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .active > a:hover,
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .active > a:focus {
         color: #fff;
-        background-color: #734EA6;
+        background-color: purple;
     }
 
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a,
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:hover,
     .mt-navbar-custom .navbar-nav .open .dropdown-menu > .disabled > a:focus {
-        color: #734EA6;
+        color: purple;
         background-color: transparent;
     }
 }
@@ -159,7 +159,7 @@
     fieldset[disabled] .mt-navbar-custom .btn-link:hover,
     .mt-navbar-custom .btn-link[disabled]:focus,
     fieldset[disabled] .mt-navbar-custom .btn-link:focus {
-        color: #734EA6;
+        color: purple;
     }
 
 .mt-navbar-custom .navbar-link {
@@ -193,21 +193,21 @@
     width: 80%;
 }
 .dataTables_length label {
-    color: #734EA6;
+    color: purple;
 }
 .dataTables_filter label {
-    color: #734EA6;
+    color: purple;
 }
 
 .dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-color: #734EA6;
-    background: #fff ;
+    border-color: purple;
+    background: #fff;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button.current {
-    border-color: #734EA6;
-    background: #fff /*linear-gradient(to bottom, #fff 0%, #734EA6 100%)*/;
-}
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+        border-color: purple;
+        background: #fff /*linear-gradient(to bottom, #fff 0%, #734EA6 100%)*/;
+    }
 
     .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
         border-color: #0D63AC;
@@ -255,7 +255,7 @@
 }
 
 .mt-purpule-color {
-    color: #734EA6
+    color: purple
 }
 
 
@@ -289,7 +289,7 @@
 
 
 .mt-purpule-color {
-    color: #734EA6
+    color: purple;
 }
 
 #description {

@@ -27,3 +27,13 @@
 .dataTables_wrapper .dataTables_filter {
     display: none;
 }
+
+
+@media only screen and (max-width: 554px) {
+
+
+    .main-content {
+        display: block;
+        width: 100%;
+    }
+}

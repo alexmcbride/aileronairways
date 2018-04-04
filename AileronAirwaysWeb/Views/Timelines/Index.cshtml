@@ -9,6 +9,7 @@
     <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 }
+<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
 
 <div class="content-wrapper">
     <div class="sidebar-wrapper">
@@ -18,7 +19,7 @@
 
         <div class="sidebar-content">
             <div class="search">
-                <h4>Filter Timelines</h4>
+                <h6 class="text-uppercase">Filter Timelines</h6>
 
                 <hr>
 
@@ -55,7 +56,7 @@
 
                 <div class="form-group">
                     <button type="button" class="btn btn-default" id="clearDates">
-                        <span class="glyphicon glyphicon-remove" style="color: #808080;"></span>
+                        <span class="glyphicon glyphicon-remove" style="color: #ff0000"></span>
                         Clear Filters
                     </button>
                 </div>
@@ -64,6 +65,7 @@
     </div>
 
     <div class="main-content">
+        <br />
         <h3>@ViewData["Title"]</h3>
         <hr />
         <table class="display" data-order='[[ 1, "des" ]]' id="tbltimelines" style="width: 100%">
@@ -79,7 +81,6 @@
         </table>
     </div>
 
-    <button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>
 
     <div id='myModal' class='modal'>
         <div class="modal-dialog">
@@ -337,12 +338,12 @@
                         $('#sidebar-arrow').removeClass('rightArrow');
                         $('#sidebar-arrow').addClass('leftArrow');
                     });
-                    $('.main-content').animate({ marginLeft: '280px' });
+                    $('.main-content').animate({ marginLeft: '240px' });
                     $('.sidebar-content').css({ 'display': 'block' });
                 }
                 else {
                     sidebarCollapsed = true;
-                    $('.sidebar-wrapper').animate({ left: '-250px' }, function () {
+                    $('.sidebar-wrapper').animate({ left: '-210px' }, function () {
                         $('.sidebar-content').css({ 'display': 'none' });
                         $('#sidebar-arrow').removeClass('leftArrow');
                         $('#sidebar-arrow').addClass('rightArrow');
@@ -360,9 +361,9 @@
                     $('.main-content').css({ marginLeft: '10px' });
                 }
                 else {
-                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '270px', height: '100%' });
+                    $('.sidebar-wrapper').css({ position: 'fixed', top: '50px', width: '230px', height: '100%' });
                     $('.sidebar-toggle').css({ display: 'block' });
-                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '270px' });
+                    $('.main-content').css({ marginLeft: sidebarCollapsed ? '10px' : '230px' });
                 }
             }
             mql.addListener(handleScreenSizeChange);
