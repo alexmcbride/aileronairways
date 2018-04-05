@@ -136,7 +136,7 @@
                     {
                         //This column is hidden and used for getting the timestamp for filtering
                         'visible': false,
-                        'searchanle': false,
+                        'searchable': false,
                         mRender: function (data, type, row) {
                             return row.created;
                         }
@@ -249,7 +249,7 @@
 
         function displayEditModal(data, id) {
             $('#myModalContent').html(data);
-            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal({ keyboard: true });
             $('#myModal').modal('show');
 
             $('#edit-form').on('submit', function (e) {
@@ -294,7 +294,7 @@
 
         function displayDeleteModal(data, id) {
             $('#myModalContent').html(data);
-            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal({ keyboard: true });
             $('#myModal').modal('show');
 
             $('#delete-form').on('submit', function (e) {
