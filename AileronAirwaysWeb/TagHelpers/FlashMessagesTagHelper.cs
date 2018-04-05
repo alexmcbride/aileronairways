@@ -19,6 +19,7 @@ namespace AileronAirwaysWeb.TagHelpers
             // Switch custom tag to div with class.
             output.TagName = "div";
             output.Attributes.SetAttribute("class", "flash-messages");
+            
             output.TagMode = TagMode.StartTagAndEndTag;
 
             // Get messages and add a new Bootstrap alert for each one.
