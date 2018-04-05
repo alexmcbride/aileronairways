@@ -209,31 +209,29 @@
         }
         else
         {
-            <p class="text-center">Maybe create an event dipshot. </p>
-            <br /><br /><br />
-
+            <p class="text-center"><a href="#" id="addEventLink">Add a new event!</a></p>
         }
 
 
 
 
-        <div class="backToTopContainer" onclick="topFunction()">
+            <div class="backToTopContainer" onclick="topFunction()">
 
-            <span><i class="backToTop"></i></span>
+                <span><i class="backToTop"></i></span>
 
-        </div>
-        <br /><br /><br /><br /><br /><br />
-    </div>
-
-
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div id='myModalContent'></div>
             </div>
-        </div>
-    </div>
-</div>
+            <br /><br /><br /><br /><br /><br />
+            </div>
+
+
+            <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div id='myModalContent'></div>
+                    </div>
+                </div>
+            </div>
+            </div>
 
 
 
@@ -518,7 +516,7 @@
     }
 
     $(function () {
-        $("#addEventBtn").click(function () {
+        $("#addEventBtn,#addEventLink").click(function () {
             $.ajax({
                 type: "GET",
                 url: url,
@@ -553,20 +551,10 @@
             $('#myModal').modal('hide');
         });
 
-        $(".modal-link-delete").click(function () {
-            var id = $(this).attr('data-id');
-            $.ajax({
-                type: "GET",
-                url: "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Delete",
-                contentType: "application/json; charset=utf-8",
-                datatype: "json",
-                success: function (data) {
-                    displayDeleteModal(data, id);
-                },
-                error: function () {
-                    alert("Dynamic content load failed.");
-                }
-            });
+        $(".modal-link-delete").click(function (evt) {
+            evt.preventDefault();
+
+            handleDelete();
         });
 
         // Hack to make flash message appear correctly when side bar is shown.
