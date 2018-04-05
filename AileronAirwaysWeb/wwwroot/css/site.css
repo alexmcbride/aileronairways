@@ -382,5 +382,5 @@ i, .arrow {
 }
 
 .flash-messages {
-    z-index: 3;
+    z-index: 101;
 }

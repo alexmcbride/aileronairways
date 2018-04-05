@@ -1,84 +1,84 @@
-
+@model IEnumerable<TimelineEvent>
 
 <div class="timeline">
 
 
     @{
-                int eventCount = -1;
-                string cssClassIdentifier = "";
+        int eventCount = -1;
+        string cssClassIdentifier = "";
 
 
-                foreach (var item in Model)
-                {
-                    eventCount += 1;
+        foreach (var item in Model)
+        {
+            eventCount += 1;
 
-                    if (eventCount % 2 == 0)
-                    { cssClassIdentifier = "left"; }
-                    else
-                    { cssClassIdentifier = "right"; }
+            if (eventCount % 2 == 0)
+            { cssClassIdentifier = "left"; }
+            else
+            { cssClassIdentifier = "right"; }
 
-        <div id="eventLink-@item.Id" style="padding: 25px 0"></div>
+            <div id="eventLink-@item.Id" style="padding: 25px 0"></div>
 
-        <div class="containerTimeline @cssClassIdentifier">
+            <div class="containerTimeline @cssClassIdentifier">
 
-            <div class="eventContent">
-                <div class="eventDateSection">
-                    <div class="eventDateTime">
-                        <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
-                        <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
+                <div class="eventContent">
+                    <div class="eventDateSection">
+                        <div class="eventDateTime">
+                            <h3 class="eventDate">@item.EventDateTime.ToString("MMM dd")</h3>
+                            <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
+                        </div>
+                        <div class="eventIconDisplay">
+                            <div class="iconSection">
+                                @if (item.HasLocation)
+                                {
+                                    <i class="fas fa-map-marker"></i>
+                                }
+                                <div class="eventIcon"></div>
+                            </div>
+                            <div class="iconSection">
+                                <i class="eventIcon fas fa-paperclip"></i>
+                                <div class="eventIcon">@item.AttachmentFilesCount</div>
+                            </div>
+                            <div class="iconSection">
+                                <i class="far fa-image"></i>
+                                <div class="eventIcon">@item.AttachmentImagesCount</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="eventIconDisplay">
-                        <div class="iconSection">
-                            @if (item.HasLocation)
-                            {
-                                <i class="fas fa-map-marker"></i>
-                            }
-                            <div class="eventIcon"></div>
-                        </div>
-                        <div class="iconSection">
-                            <i class="eventIcon fas fa-paperclip"></i>
-                            <div class="eventIcon">@item.AttachmentFilesCount</div>
-                        </div>
-                        <div class="iconSection">
-                            <i class="far fa-image"></i>
-                            <div class="eventIcon">@item.AttachmentImagesCount</div>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="eventBodySection">
-                    <div class="eventContentPadding">
-                        <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
-                        <p>
-                            @if (item.Description != null && item.Description.Length >= 150)
-                            {
-                                @item.Description.Substring(0, 150)
-                            }
-                            else
-                            {
-                                @item.Description
-                            }
-                            @if(item.Description == null)
-                            {
-                                <em>No description created yet. <br /><br /><br /></em>
+                    <div class="eventBodySection">
+                        <div class="eventContentPadding">
+                            <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
+                            <p>
+                                @if (item.Description != null && item.Description.Length >= 150)
+                                {
+                                    @item.Description.Substring(0, 150)
+                                }
+                                else
+                                {
+                                    @item.Description
+                                }
+                                @if (item.Description == null)
+                                {
+                                    <em>No description created yet. <br /><br /><br /></em>
 
-                            }
-                        </p>
-                        <p class="editDelete">
-                            <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
-                            /
-                            <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id" data-timeline-id="@item.TimelineId" id="deleteEvent">delete</a>
-                        </p>
+                                }
+                            </p>
+                            <p class="editDelete">
+                                <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
+                                /
+                                <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id" data-timeline-id="@item.TimelineId" id="deleteEvent">delete</a>
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div style="padding: 20px 0">
+            <div style="padding: 20px 0">
 
-        </div>
-        <hr />
-                }
+            </div>
+            <hr />
+        }
     }
 
 

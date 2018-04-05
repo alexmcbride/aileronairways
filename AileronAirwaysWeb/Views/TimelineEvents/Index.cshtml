@@ -205,7 +205,6 @@
             <div id="timelinePartial_Out" style="display: none;">
                 @Html.Partial("_TimelineZoomedOut")
             </div>
-
         }
         else
         {
@@ -337,11 +336,11 @@
 
 
 
-        <script>
-            window.onscroll = function () {myFunction()};
+        @*<script>
+            //window.onscroll = function () {myFunction()};
 
-            var header = document.getElementById("myTopPanel");
-            var sticky = header.offsetTop;
+            //var header = document.getElementById("myTopPanel");
+            //var sticky = header.offsetTop;
 
             //function myFunction() {
             //    if (window.pageYOffset >= sticky) {
@@ -350,7 +349,7 @@
             //        header.classList.remove("sticky");
             //    }
             //}
-        </script>
+        </script>*@
 
 
 
@@ -427,6 +426,25 @@
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
 
+    function loadTimelines(eventId) {
+        loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_In');
+        loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_Out');
+    }
+
+    function loadTimelinePartial(url, eventId, element) {
+        $.ajax({
+            url: url,
+            dataType: 'html',
+            success: function (data, status, xhr) {
+                // Overwite old timeline code
+                $(element).html(data);
+
+                // Scroll to this event
+                location.href = '/Timelines/@ViewBag.TimelineId/Events/#eventLink-' + eventId;
+            }
+        });
+    }
+
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
         $('#myModal').modal({ keyboard: true });
@@ -441,9 +459,9 @@
             var data = $('#create-event-form').serialize();
             $.post(url, data, function (response) {
                 if (response.startsWith('OK')) {
-                    var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events/' + eventId;
                     $('#myModal').modal('hide');
+                    var eventId = response.split(' ')[1];
+                    loadTimelines(eventId);
                 }
                 else {
                     displayCreateModal(response);
