@@ -51,13 +51,13 @@
                         <h3 class="eventDate uppercase"><a asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@item.Id">@item.Title</a></h3>
                         <p>
                             @if (item.Description != null && item.Description.Length >= 150)
-                                        {
-                            @item.Description.Substring(0, 150)
-                                        }
-                                        else
-                                        {
-                            @item.Description
-                                        }
+                            {
+                                @item.Description.Substring(0, 150)
+                            }
+                            else
+                            {
+                                @item.Description
+                            }
                             @if(item.Description == null)
                             {
                                 <em>No description created yet. <br /><br /><br /></em>
@@ -67,7 +67,7 @@
                         <p class="editDelete">
                             <a href="javascript:void(0);" class="modal-link-edit" data-id="@item.Id">edit</a>
                             /
-                            <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id">delete</a>
+                            <a href="javascript:void(0);" class="modal-link-delete" data-id="@item.Id" data-timeline-id="@item.TimelineId" id="deleteEvent">delete</a>
                         </p>
                     </div>
                 </div>

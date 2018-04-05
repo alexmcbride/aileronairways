@@ -553,20 +553,10 @@
             $('#myModal').modal('hide');
         });
 
-        $(".modal-link-delete").click(function () {
-            var id = $(this).attr('data-id');
-            $.ajax({
-                type: "GET",
-                url: "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + id +"/Delete",
-                contentType: "application/json; charset=utf-8",
-                datatype: "json",
-                success: function (data) {
-                    displayDeleteModal(data, id);
-                },
-                error: function () {
-                    alert("Dynamic content load failed.");
-                }
-            });
+        $(".modal-link-delete").click(function (evt) {
+            evt.preventDefault();
+
+            handleDelete();
         });
 
         // Hack to make flash message appear correctly when side bar is shown.

@@ -166,7 +166,7 @@
                 </div>
             </div>
         }
-        
+
         <br>
 
         <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
@@ -183,7 +183,7 @@
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
         @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-        @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
+            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
 
         <p id="geoNonSupport" style="color:red"></p>
 
@@ -236,23 +236,30 @@
     <div class="btnContainer">
         @if (@ViewBag.PreviousEvent != null)
         {
-        <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
-            <i class="fas fa-arrow-left xl"></i>&nbsp;&nbsp;&nbsp;@ViewBag.PreviousEvent.Title
-        </a>
+            <a class="button btnEvent uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.PreviousEvent.Id">
+                <i class="fas fa-arrow-left xl"></i>&nbsp;&nbsp;&nbsp;@ViewBag.PreviousEvent.Title
+            </a>
         }
-        <a class="button btnEvent uppercase" asp-action="delete" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@Model.Id">Delete</a>
-        
-        
+        <a class="button btnEvent uppercase" data-id="@Model.Id" data-timeline-id="@Model.TimelineId" href="#" id="deleteEvent">Delete</a>
+
+
         @if (@ViewBag.NextEvent != null)
         {
-        <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
-            @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
-        </a>
+            <a class="button btnEvent btnRight uppercase" asp-action="details" asp-route-timelineId="@ViewBag.TimelineId" asp-route-eventId="@ViewBag.NextEvent.Id">
+                @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
+            </a>
         }
         <p id="geoNonSupport" style="color:red;"></p>
     </div>
 </div>
 
+<div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'></div>
+        </div>
+    </div>
+</div>
 
 @section Scripts{
 
@@ -370,7 +377,7 @@
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
         });
     }
-    
+
     </script>
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCfblapLmgaCE0GVpChYqSoGMJ8ik09IZA&libraries=places&callback=initAutocomplete"></script>
@@ -380,7 +387,7 @@
 
     $('#edit-location-form').on('submit', function (e) {
         e.preventDefault();
-        
+
         var data = $('#edit-location-form').serialize();
         disableFormElement($('#btnSave'), true);
         $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
@@ -489,6 +496,12 @@
 
         $(function () {
             handleEditDescription();
+
+            $('#deleteEvent').click(function (evt) {
+                evt.preventDefault();
+
+                handleDelete();
+            });
         });
     </script>
 }
