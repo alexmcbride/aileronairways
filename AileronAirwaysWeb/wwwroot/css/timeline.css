@@ -586,7 +586,7 @@ h3.eventDate {
 @media only screen and (max-width: 555px) {
     .sidenav, #sideNavArrows, #sideNavContent {
         visibility: hidden !important;
-        display:none;
+        display: none;
     }
     
 

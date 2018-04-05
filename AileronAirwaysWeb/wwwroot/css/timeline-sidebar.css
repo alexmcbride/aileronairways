@@ -8,7 +8,7 @@
     z-index: 2; /* Stop footer overlaying sidebar */
     left: 0px;
     background-color: #fafafa;
-    overflow-x: hidden;
+    /*overflow-x: hidden;*/
     border-right: 1px solid #0D1B2E;
 }
 
