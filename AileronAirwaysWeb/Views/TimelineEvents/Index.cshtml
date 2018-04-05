@@ -426,7 +426,9 @@
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
 
+    var tabsLoaded = 0;
     function loadTimelines(eventId) {
+        tabsLoaded = 0;
         loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_In');
         loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_Out');
     }
@@ -439,8 +441,12 @@
                 // Overwite old timeline code
                 $(element).html(data);
 
-                // Scroll to this event
-                location.href = '/Timelines/@ViewBag.TimelineId/Events/#eventLink-' + eventId;
+                // Scroll to this event once both tabs loaded.
+                tabsLoaded++;
+                if (tabsLoaded == 2) {
+                    // TODO: rewrite using URL deep linking?
+                    location.href = '/Timelines/@ViewBag.TimelineId/Events/#eventLink-' + eventId;
+                }
             }
         });
     }
