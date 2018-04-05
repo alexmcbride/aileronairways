@@ -134,7 +134,6 @@
                     {
                         //This column is hidden and used for getting the timestamp for filtering
                         'visible': false,
-                        'searchable': false,
                         mRender: function (data, type, row) {
                             return row.created;
                         }
@@ -162,6 +161,7 @@
             var min = moment(startDate);
             var max = moment(endDate);
             var date = moment(data[3]);
+
             return (startDate == "" || date.isAfter(min)) && (endDate == "" || date.isBefore(max));
         }
 
