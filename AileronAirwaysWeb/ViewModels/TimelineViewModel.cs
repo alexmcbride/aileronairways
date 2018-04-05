@@ -22,7 +22,7 @@ namespace AileronAirwaysWeb.ViewModels
 
         public string CreatedPretty
         {
-            get { return $"{CreationTimeStamp.ToShortDateString()} {CreationTimeStamp.ToShortTimeString()}"; }
+            get { return $"{CreationTimeStamp.ToString("yyyy/MM/dd")} {CreationTimeStamp.ToShortTimeString()}"; }
         }
 
         public bool IsDeleted { get; set; }

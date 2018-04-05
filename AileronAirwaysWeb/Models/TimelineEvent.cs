@@ -42,32 +42,11 @@ namespace AileronAirwaysWeb.Models
             get { return Attachments.Where(a => !a.IsImage); }
         }
 
-        [JsonIgnore]
-        [NotMapped]
-        public double Longitude { get; set; }
+        public string Location { get; set; }
 
-        [NotMapped]
-        [JsonIgnore]
-        public double Latitude { get; set; }
-
-        public string Location
+        public bool HasLocation
         {
-            get { return string.Format("{0},{1}", Latitude, Longitude); }
-
-            set
-            {
-                if (!string.IsNullOrEmpty(value))
-                {
-                    string[] tokens = value.Split(',');
-                    if (tokens.Length == 2 &&
-                        double.TryParse(tokens[0], out double latitude) &&
-                        double.TryParse(tokens[1], out double longitude))
-                    {
-                        Latitude = latitude;
-                        Longitude = longitude;
-                    }
-                }
-            }
+            get { return Location != null && Location != "0,0"; }
         }
 
         public static Task<TimelineEvent> CreateAsync(ITimelineService api, string title, string description, DateTime eventDateTime, string location)

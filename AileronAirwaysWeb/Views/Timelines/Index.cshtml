@@ -17,8 +17,6 @@
             <div class="arrow leftArrow" id="sidebar-arrow"></div>
         </div>
 
-
-
         <div class="sidebar-content">
             <div class="search">
                 <h6 class="text-uppercase">Filter Timelines</h6>
@@ -101,13 +99,13 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="display" data-order='[[ 1, "des" ]]' id="tbltimelines" style="width: 100%">
+        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines" style="width: 100%">
             <thead>
                 <tr>
                     <th>Title</th>
                     <th>Created</th>
                     <th></th>
-                    @*<th></th>*@
+                    <th></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -157,7 +155,7 @@
                     {
                         //This column is hidden and used for getting the timestamp for filtering
                         'visible': false,
-                        'searchanle': false,
+                        'searchable': false,
                         mRender: function (data, type, row) {
                             return row.created;
                         }
@@ -270,7 +268,7 @@
 
         function displayEditModal(data, id) {
             $('#myModalContent').html(data);
-            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal({ keyboard: true });
             $('#myModal').modal('show');
 
             $('#edit-form').on('submit', function (e) {
@@ -315,7 +313,7 @@
 
         function displayDeleteModal(data, id) {
             $('#myModalContent').html(data);
-            $('#myModal').modal({ "backdrop": "static", keyboard: true });
+            $('#myModal').modal({ keyboard: true });
             $('#myModal').modal('show');
 
             $('#delete-form').on('submit', function (e) {
