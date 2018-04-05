@@ -11,57 +11,32 @@
     <script src="~/js/site.js"></script>
 }
 
-
-
-
 <div class="topPanel sticky text-center" id="myTopPanel">
     <div id="topNavArrow"  onclick="openTopNav()">
         <div id="arrowsSidePanel"><i id="arrowChangeTop" class="downArrow"></i></div>
     </div>
 
     <!-- Content for top nav -->
-
-
     <div id="topNavContent" style="visibility: hidden;">
-
-
         @if (Model.Any())
         {
             <!-- Zoomed In View - Default -->
             <div id="timelinePartial_In_LinksTop" style="visibility: visible;">
                 <div id="eventNameListTop">
-
                     @{
                         int i = 0;
                         foreach (var item in Model)
                         {
                             i = i + 1;
-                            <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+                            <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
                         }
                     }
-
                 </div>
             </div>
-            <div id="timelinePartial_Out_LinksTop" style="visibility: visible; display: none;">
-                <div id="eventNameListTopPartial">
-
-                    @{
-                        int j = 0;
-                        foreach (var item in Model)
-                        {
-                            j = j + 1;
-                            <a class="eventTitlesFilter uppercase" href="#eventLinks-@item.Id">@j: @item.Title</a>
-                        }
-                    }
-
-                </div>
-            </div>
-
         }
         else
         {
             <p>No Events Yet</p>
-
         }
     </div>
 </div>
@@ -77,24 +52,19 @@
 
         document.getElementById("arrowChangeTop").classList.remove("downArrow");
         document.getElementById("arrowChangeTop").classList.add("upArrow");
-
     }
 
-    // cloe top panel
+    // close top panel
     function closeTopNav() {
-
         document.getElementById("myTopPanel").style.height = "20px";
 
         // document.getElementById("arrowChangeTop").style.paddingTop = '5px';
-
 
         document.getElementById("topNavArrow").removeEventListener("click", closeTopNav);
         document.getElementById("topNavArrow").addEventListener("click", openTopNav);
 
         document.getElementById("arrowChangeTop").classList.remove("upArrow");
         document.getElementById("arrowChangeTop").classList.add("downArrow");
-
-
     }
 </script>
 
@@ -102,7 +72,6 @@
     <button id="addEventBtn" title="Add Event">&#43;</button>
 
     <!--Side Panel - Will Display all Headings-->
-
     <div id="mainSidePanel">
         @*<div class="container body-content">
             </div>*@
@@ -112,12 +81,7 @@
             <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
         </div>
 
-
-        <hr />
-
-
-
-
+        <hr>
 
         <!-- Side Nav Content -->
         <div id="mySidenav" class="sidenav">
@@ -130,15 +94,11 @@
 
             <br /><br />
 
-
-
-
             <div id="sideNavContent" style="visibility: hidden;">
 
                 <div id="searchBox">
                     <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
                 </div>
-
 
                 @if (Model.Any())
                 {
@@ -151,27 +111,12 @@
                                 foreach (var item in Model)
                                 {
                                     i = i + 1;
-                                    <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+                                    <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
                                 }
                             }
 
                         </div>
                     </div>
-                    <div id="timelinePartial_Out_Links" style="display: none;">
-                        <div id="eventNameListPartial">
-
-                            @{
-                                int j = 0;
-                                foreach (var item in Model)
-                                {
-                                    j = j + 1;
-                                    <a class="eventTitlesFilter uppercase" href="#eventLinks-@item.Id">@j: @item.Title</a>
-                                }
-                            }
-
-                        </div>
-                    </div>
-
                 }
                 else
                 {
@@ -192,24 +137,20 @@
 
             @*--------------------------------------------------<i class="fas fa-search"></i>---------------------------*@
             <div class="text-center">
-                <button id="btnPartialToggle" class="activeToggleButton" onclick="togglePartial()">DETAILED</button>
-                <button id="btnPartialToggled" onclick="togglePartials()">OVERVIEW</button>
+                <button id="btnShowDetailed" class="activeToggleButton">DETAILED</button>
+                <button id="btnShowOverview">OVERVIEW</button>
             </div>
 
             <br /><br /><br />
-
-            <!-- Zoomed In View - Default -->
-            <div id="timelinePartial_In" style="visibility: visible;">
-                @Html.Partial("_TimelineZoomedIn")
-            </div>
-            <div id="timelinePartial_Out" style="display: none;">
-                @Html.Partial("_TimelineZoomedOut")
-            </div>
         }
         else
         {
             <p class="text-center"><a href="#" id="addEventLink">Add a new event!</a></p>
         }
+
+        <div id="timelinePartialContent">
+            @Html.Partial("_TimelineZoomedIn", Model)
+        </div>
 
 
 
@@ -235,124 +176,6 @@
 
 
 @section Scripts{
-
-    <!-- Holds JS for partials view toggle functionality  -->
-    <script>
-
-        // change to detailed view
-        function togglePartial() {
-
-
-            // Detailed button - shows detailed/default view
-            var detailed = document.getElementById("btnPartialToggle");
-
-            // overview button - shows overview view
-            var overview = document.getElementById("btnPartialToggled");
-
-            // If no already active then set value - changing CSS
-            if (!detailed.classList.contains("activeToggleButton")) {
-                detailed.classList.add("activeToggleButton");
-            }
-            if (overview.classList.contains("activeToggleButton")) {
-                overview.classList.remove("activeToggleButton");
-            }
-
-
-
-            var partial_In = document.getElementById("timelinePartial_In");
-            var partial_Out = document.getElementById("timelinePartial_Out");
-
-
-            //btnClick.innerHTML = "Detailed";
-            partial_In.style.display = "block";
-            partial_Out.style.display = "none";
-
-
-            // Links in side panel
-            var partial_In_Links = document.getElementById("timelinePartial_In_Links");
-            var partial_Out_Links = document.getElementById("timelinePartial_Out_Links");
-
-            partial_In_Links.style.display = "block";
-            partial_Out_Links.style.display = "none";
-
-
-            // Links in top panel
-            var partial_In_LinksTop = document.getElementById("timelinePartial_In_LinksTop");
-            var partial_Out_LinksTop = document.getElementById("timelinePartial_Out_LinksTop");
-
-            partial_In_LinksTop.style.display = "block";
-            partial_Out_LinksTop.style.display = "none";
-
-        }
-
-        // change to overview view 
-        function togglePartials() {
-
-            // Detailed button - shows detailed/default view
-            var detailed = document.getElementById("btnPartialToggled");
-
-            // overview button - shows overview view
-            var overview = document.getElementById("btnPartialToggle");
-
-
-            if (!detailed.classList.contains("activeToggleButton")) {
-                detailed.classList.add("activeToggleButton");
-            }
-            if (overview.classList.contains("activeToggleButton")) {
-                overview.classList.remove("activeToggleButton");
-            }
-
-
-            var partial_In = document.getElementById("timelinePartial_In");
-            var partial_Out = document.getElementById("timelinePartial_Out");
-
-            //btnClick.innerHTML = "Overview";
-            partial_In.style.display = "none";
-            partial_Out.style.display = "block";
-
-
-            // Links in side panel
-            var partial_In_Links = document.getElementById("timelinePartial_In_Links");
-            var partial_Out_Links = document.getElementById("timelinePartial_Out_Links");
-
-            // Links in side panel
-            partial_In_Links.style.display = "none";
-            partial_Out_Links.style.display = "block";
-            
-      
-            // Links in top panel
-            var partial_In_LinksTop = document.getElementById("timelinePartial_In_LinksTop");
-            var partial_Out_LinksTop = document.getElementById("timelinePartial_Out_LinksTop");
-
-            // Links in top panel
-            partial_In_LinksTop.style.display = "none";
-            partial_Out_LinksTop.style.display = "block";
-
-
-
-
-        }
-        </script>
-
-
-
-        @*<script>
-            //window.onscroll = function () {myFunction()};
-
-            //var header = document.getElementById("myTopPanel");
-            //var sticky = header.offsetTop;
-
-            //function myFunction() {
-            //    if (window.pageYOffset >= sticky) {
-            //        header.classList.add("sticky");
-            //    } else {
-            //        header.classList.remove("sticky");
-            //    }
-            //}
-        </script>*@
-
-
-
     <script>
 
     var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
@@ -426,29 +249,47 @@
         $("html, body").animate({ scrollTop:0 }, "fast");
     }
 
-    var tabsLoaded = 0;
-    function loadTimelines(eventId) {
-        tabsLoaded = 0;
-        loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_In');
-        loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId, '#timelinePartial_Out');
+    function scrollToEvent(eventId) {
+        $('html, body').animate({
+            scrollTop: $("#eventLink-" + eventId).offset().top
+        }, 200);
     }
 
-    function loadTimelinePartial(url, eventId, element) {
+    function loadTimelinePartial(url, eventId) {
         $.ajax({
             url: url,
             dataType: 'html',
             success: function (data, status, xhr) {
                 // Overwite old timeline code
-                $(element).html(data);
-
-                // Scroll to this event once both tabs loaded.
-                tabsLoaded++;
-                if (tabsLoaded == 2) {
-                    // TODO: rewrite using URL deep linking?
-                    location.href = '/Timelines/@ViewBag.TimelineId/Events/#eventLink-' + eventId;
+                $('#timelinePartialContent').html(data);
+                
+                if (eventId != null) {
+                    scrollToEvent(eventId);
                 }
             }
         });
+    }
+
+    function loadDetailedView(eventId) {            
+        $('#btnShowOverview').removeClass('activeToggleButton');
+        $('#btnShowDetailed').addClass('activeToggleButton');
+        loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId);
+    }
+        
+    function loadOverviewView(eventId) {            
+        $('#btnShowDetailed').removeClass('activeToggleButton');
+        $('#btnShowOverview').addClass('activeToggleButton');
+        loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId);
+    }
+
+    function reloadSelectedTimeline(eventId) {
+        if ($('#btnShowDetailed').hasClass('activeToggleButton')) {
+            loadDetailedView(eventId);
+        }
+
+        if ($('#btnShowOverview').hasClass('activeToggleButton')) {
+            loadOverviewView(eventId);
+        }
     }
 
     function displayCreateModal(data) {
@@ -467,7 +308,7 @@
                 if (response.startsWith('OK')) {
                     $('#myModal').modal('hide');
                     var eventId = response.split(' ')[1];
-                    loadTimelines(eventId);
+                    reloadSelectedTimeline(eventId);
                 }
                 else {
                     displayCreateModal(response);
@@ -573,6 +414,22 @@
             evt.preventDefault();
 
             handleDelete();
+        });
+
+        $('#btnShowDetailed').click(function (evt) {
+            evt.preventDefault();
+            loadDetailedView(null);
+        });
+
+        $('#btnShowOverview').click(function (evt) {
+            evt.preventDefault();
+            loadOverviewView(null);
+        });
+
+        $('.eventTitlesFilter').click(function (evt) {
+            evt.preventDefault()
+            var eventId = $(this).attr('data-id');
+            scrollToEvent(eventId);
         });
     });
 

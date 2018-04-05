@@ -95,14 +95,14 @@
 
 
 
-#btnPartialToggle {
+#btnShowDetailed {
     margin-right: 0px;
 }
-#btnPartialToggled {
+#btnShowOverview {
     margin-left: 0px;
 }
 
-#btnPartialToggle, #btnPartialToggled {
+#btnShowDetailed, #btnShowOverview {
     background-color: white;
     color: purple;
     border: purple solid thin;
