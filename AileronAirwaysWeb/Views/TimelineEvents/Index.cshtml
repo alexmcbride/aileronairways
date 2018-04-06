@@ -61,18 +61,20 @@
         document.getElementById("arrowChangeTop").classList.add("downArrow");
     }
 </script>
+
 <div class="container body-content">
     <button id="addEventBtn" title="Add Event">&#43;</button>
+
     <!--Side Panel - Will Display all Headings-->
     <div id="mainSidePanel">
-        @*<div class="container body-content">
-        </div>*@
         <div class="headerSection">
             <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
             <hr class="headerHR" />
             <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
         </div>
+
         <hr>
+
         <!-- Side Nav Content -->
         <div id="mySidenav" class="sidenav">
             <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
@@ -87,26 +89,26 @@
                     <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
                 </div>
                 @if (Model.Any())
-            {
-                <!-- Zoomed In View - Default -->
-                <div id="timelinePartial_In_Links" style="visibility: visible;">
-                    <div id="eventNameList">
-                        @{
-                        int i = 0;
-                        foreach (var item in Model)
-                        {
-                            i = i + 1;
-                            <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
-                    }
+                {
+                    <!-- Zoomed In View - Default -->
+                    <div id="timelinePartial_In_Links" style="visibility: visible;">
+                        <div id="eventNameList">
+                            @{
+                            int i = 0;
+                            foreach (var item in Model)
+                            {
+                                i = i + 1;
+                                <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
                         }
+                            }
+                        </div>
                     </div>
-                </div>
-        }
-        else
-        {
-            <p>No Events Yet</p>
+                }
+                else
+                {
+                    <p>No Events Yet</p>
 
-    }
+                }
             </div>
         </div>
         <!-- END of sideNav -->
@@ -116,21 +118,21 @@
             <button id="btnShowOverview">OVERVIEW</button>
         </div>
 
+        <p id="addEventLink" class="text-center" style="display: none;"><a href="#" id="addEventLink">Add a new event!</a></p>
+
         <br /><br /><br />
         <div id="timelinePartialContent">
-            <p id="addEventLink" class="text-center"><a href="#" id="addEventLink">Add a new event!</a></p>
-
             @Html.Partial("_TimelineZoomedIn", Model)
         </div>
 
         @*Hide stuff if there's no events*@
         @if (!Model.Any())
-        {
-            <script>
-                document.getElementById("timelineTabs").style.display = "none";
-                document.getElementById("addEventLink").style.display = "block";                    
-            </script>
-        }
+    {
+        <script>
+            document.getElementById("timelineTabs").style.display = "none";
+            document.getElementById("addEventLink").style.display = "block";
+        </script>
+}
 
         <div class="backToTopContainer" onclick="topFunction()">
             <span><i class="backToTop"></i></span>
@@ -259,7 +261,7 @@
 
                 // Remove no-events message
                 $("#timelineTabs").css({ display: "block" });
-                $("#addEventLink").css({ display: "none" });                
+                $("#addEventLink").css({ display: "none" });
             }
         });
     }
