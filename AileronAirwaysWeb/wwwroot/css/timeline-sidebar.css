@@ -33,4 +33,37 @@
 /* Hides data table search box. */
 .dataTables_wrapper .dataTables_filter {
     display: none;
+
 }
+
+
+@media only screen and (max-width: 640px) {
+
+
+
+    .sidebar-wrapper {
+        border-right: 0px solid #0D1B2E;
+    }
+
+    .main-content {
+        margin-left: 0px;
+    }
+
+    .search {
+        width: 100%;
+    }
+    .wtSearchBar{
+        width: 100%;
+    } 
+    
+    .wtForm {
+        width: 50%;
+        float: left;
+        display: inline;
+    }
+
+
+
+
+}
+
