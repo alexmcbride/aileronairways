@@ -2,20 +2,15 @@
 @{
     ViewData["Title"] = "Timeline Events";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
 }
-
 @section AddToHead{
-
     <link href="~/css/partialViewCSS.css" rel="stylesheet" />
     <script src="~/js/site.js"></script>
 }
-
 <div class="topPanel sticky text-center" id="myTopPanel">
-    <div id="topNavArrow"  onclick="openTopNav()">
+    <div id="topNavArrow" onclick="openTopNav()">
         <div id="arrowsSidePanel"><i id="arrowChangeTop" class="downArrow"></i></div>
     </div>
-
     <!-- Content for top nav -->
     <div id="topNavContent" style="visibility: hidden;">
         @if (Model.Any())
@@ -40,7 +35,6 @@
         }
     </div>
 </div>
-
 
 <script>
     // open top nav - only option when window width = 450px or less
@@ -67,113 +61,92 @@
         document.getElementById("arrowChangeTop").classList.add("downArrow");
     }
 </script>
-
 <div class="container body-content">
     <button id="addEventBtn" title="Add Event">&#43;</button>
-
     <!--Side Panel - Will Display all Headings-->
     <div id="mainSidePanel">
         @*<div class="container body-content">
-            </div>*@
+        </div>*@
         <div class="headerSection">
             <h2 class="mainHeader">@ViewBag.TimelineTitle </h2>
             <hr class="headerHR" />
             <h4><em>@ViewBag.TimelineCreationTimeStamp.ToString("dd MMMM yyyy")</em></h4>
         </div>
-
         <hr>
-
         <!-- Side Nav Content -->
         <div id="mySidenav" class="sidenav">
             <!-- Arrow Collapse        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"><i class="leftArrow"></i></a>
-            -->
+        -->
             <!-- Searching for Events -->
             <div id="sideNavArrows" onclick="openNav()">
                 <div" id="arrowsSidePanel"><i id="arrowChange" class="rightArrow"></i></div">
             </div>
-
             <br /><br />
-
             <div id="sideNavContent" style="visibility: hidden;">
-
                 <div id="searchBox">
                     <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
                 </div>
-
                 @if (Model.Any())
-                {
-                    <!-- Zoomed In View - Default -->
-                    <div id="timelinePartial_In_Links" style="visibility: visible;">
-                        <div id="eventNameList">
-
-                            @{
-                                int i = 0;
-                                foreach (var item in Model)
-                                {
-                                    i = i + 1;
-                                    <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
-                                }
-                            }
-
-                        </div>
+            {
+                <!-- Zoomed In View - Default -->
+                <div id="timelinePartial_In_Links" style="visibility: visible;">
+                    <div id="eventNameList">
+                        @{
+                        int i = 0;
+                        foreach (var item in Model)
+                        {
+                            i = i + 1;
+                            <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
+                    }
+                        }
                     </div>
-                }
-                else
-                {
-                    <p>No Events Yet</p>
+                </div>
+        }
+        else
+        {
+            <p>No Events Yet</p>
 
-                }
+    }
             </div>
         </div>
         <!-- END of sideNav -->
 
+        <div id="timelineTabs" class="text-center">
+            <button id="btnShowDetailed" class="activeToggleButton">DETAILED</button>
+            <button id="btnShowOverview">OVERVIEW</button>
+        </div>
 
-
-
-
-
-        @if (Model.Any())
-        {
-
-            @*--------------------------------------------------<i class="fas fa-search"></i>---------------------------*@
-            <div class="text-center">
-                <button id="btnShowDetailed" class="activeToggleButton">DETAILED</button>
-                <button id="btnShowOverview">OVERVIEW</button>
-            </div>
-
-            <br /><br /><br />
-        }
-        else
-        {
-            <p class="text-center"><a href="#" id="addEventLink">Add a new event!</a></p>
-        }
-
+        <br /><br /><br />
         <div id="timelinePartialContent">
+            <p id="addEventLink" class="text-center"><a href="#" id="addEventLink">Add a new event!</a></p>
+
             @Html.Partial("_TimelineZoomedIn", Model)
         </div>
 
-
-
+        @*Hide stuff if there's no events*@
+        @if (!Model.Any())
+        {
+            <script>
+                document.getElementById("timelineTabs").style.display = "none";
+                document.getElementById("addEventLink").style.display = "block";                    
+            </script>
+        }
 
         <div class="backToTopContainer" onclick="topFunction()">
-
             <span><i class="backToTop"></i></span>
-           
+
         </div>
         <br /><br /><br /><br /><br /><br />
-        </div>
+    </div>
 
-
-        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div id='myModalContent'></div>
-                </div>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div id='myModalContent'></div>
             </div>
         </div>
     </div>
-
-
+</div>
 
 @section Scripts{
     <script>
@@ -283,17 +256,21 @@
                 attachEditDeleteEvents();
 
                 scrollToEvent(eventId);
+
+                // Remove no-events message
+                $("#timelineTabs").css({ display: "block" });
+                $("#addEventLink").css({ display: "none" });                
             }
         });
     }
 
-    function loadDetailedTab(eventId) {            
+    function loadDetailedTab(eventId) {
         $('#btnShowOverview').removeClass('activeToggleButton');
         $('#btnShowDetailed').addClass('activeToggleButton');
         loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId);
     }
-        
-    function loadOverviewTab(eventId) {            
+
+    function loadOverviewTab(eventId) {
         $('#btnShowDetailed').removeClass('activeToggleButton');
         $('#btnShowOverview').addClass('activeToggleButton');
         loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId);
