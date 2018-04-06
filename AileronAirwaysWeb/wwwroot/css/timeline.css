@@ -245,19 +245,18 @@ li {
 }
 
 .eventIconDisplay {
-    float: right;
+    /*float: right;*/
+    margin-right: auto;
+    margin-left: auto;
     width: 100%;
     height: 45%;
-    border: medium solid #0D1B2E; 
+    border: medium solid #0D1B2E;
     border-width: 1.5px 0 0 0;
-
-
-
 }
 
 .iconSection {
-    float: left;
-    width: 31%;
+    display: inline-block;
+    width: 25%;
     align-content: center;
     padding: 0 1%;
 }
@@ -708,3 +707,116 @@ footer {
 .mainColor {
     color: #0a2263;
 }
+
+
+
+
+/* Change the way each event is being displayed */
+@media only screen and (max-width: 475px) {
+
+
+    .eventContent {
+        height: auto;
+        display: block;
+    }
+
+
+
+    /* Subsection of eventContent thats shows date and time and icons */
+    .eventDateSection {
+        min-width: 100%;
+        height: 20% !important;
+        display: inline;
+        border-right: none;
+        border-bottom: 1.5px solid #0D1B2E;
+    }
+
+
+    .eventBodySection {
+        min-width: 100%;
+        display: inline-block;
+        float: unset;
+        height: 45% !important;
+    }
+
+
+
+    .eventDateTime {
+        max-height: 50%;
+        display: block;
+        width: 100%;
+        
+    }
+
+        .eventDateTime > h3 {
+            width: 50%;
+            padding: 15px 3% 45px 0;
+            display: inline;
+            font-size: 12pt;
+        }
+        .eventDateTime > p {
+            width: 50%;
+            padding: 5px 0 10px 3%;
+            display: inline;
+            font-size: 12pt;
+            line-height: 1pt;
+        }
+
+
+
+
+    .eventIconDisplay {
+        /*float: right;*/
+        margin-right: auto;
+        margin-left: auto;
+        width: 100%;
+        height: 50%;
+        border: medium solid #0D1B2E;
+        border-width: 1.5px 0 0 0;
+    }
+
+    .eventIcon {
+        display: inline;
+
+    }
+
+
+    /* The actual timeline (the vertical ruler) */
+    .timeline::after {
+        display: none;
+        visibility: hidden;
+    }
+
+    .containerTimeline {
+        padding-right: 5%;
+        padding-left: 5%;
+  
+    }
+
+
+
+
+
+    /* The circles on the timeline */
+    .containerTimeline::after {
+        display: none;
+        visibility: hidden;
+    }
+    /* Add arrows to the left containerTimeline (pointing right) */
+    .left::before {
+        display: none;
+        visibility: hidden;
+    }
+
+    /* Add arrows to the right containerTimeline (pointing left) */
+    .right::before {
+        display: none;
+        visibility: hidden;
+    }
+
+   
+}
+
+
+
+
