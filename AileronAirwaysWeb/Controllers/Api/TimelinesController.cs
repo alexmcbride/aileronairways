@@ -27,7 +27,8 @@ namespace AileronAirwaysWeb.Controllers.Api
                 Id = t.Id,
                 Title = t.Title,
                 CreationTimeStamp = t.CreationTimeStamp,
-                IsDeleted = t.IsDeleted
+                IsDeleted = t.IsDeleted,
+                EventsCount = t.EventsCount
             }).ToList();
 
             return Ok(timelines);

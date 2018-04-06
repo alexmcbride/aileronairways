@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
@@ -16,6 +17,7 @@ namespace AileronAirwaysWeb.Models
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime CreationTimeStamp { get; set; }
         public bool IsDeleted { get; set; }
+        public int EventsCount { get; set; }
 
         public virtual Collection<TimelineEvent> TimelineEvents { get; set; }
 
@@ -46,11 +48,16 @@ namespace AileronAirwaysWeb.Models
             });
         }
 
-        public void UpdateAttachmentCounts()
+        public void UpdateCalculatedColumns()
         {
             foreach (var @event in TimelineEvents)
             {
                 @event.UpdateAttachmentCounts();
+            }
+
+            if (TimelineEvents != null)
+            {
+                EventsCount = TimelineEvents.Count();
             }
         }
 

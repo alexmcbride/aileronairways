@@ -85,6 +85,7 @@
                 <tr>
                     <th>Title</th>
                     <th>Created</th>
+                    <th>Events</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -123,6 +124,15 @@
                     {
                         mRender: function (data, type, row) {
                             return row.createdPretty;
+                        }
+                    },
+                    {
+                        mRender: function (data, type, row) {
+                            var count = row.eventsCount;
+                            if (count == 0) {
+                                return 'None';
+                            }
+                            return count;
                         }
                     },
                     {

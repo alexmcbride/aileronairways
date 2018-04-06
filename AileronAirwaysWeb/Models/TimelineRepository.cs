@@ -43,7 +43,7 @@ namespace AileronAirwaysWeb.Models
 
                 foreach (var timeline in timelines)
                 {
-                    timeline.UpdateAttachmentCounts();
+                    timeline.UpdateCalculatedColumns();
                 }
 
                 await _context.AddRangeAsync(timelines);
@@ -117,6 +117,13 @@ namespace AileronAirwaysWeb.Models
             var timelineEvent = await TimelineEvent.CreateAndLinkAsync(_api, title, description, eventDateTime, location, timelineId);
             timelineEvent.TimelineId = timelineId;
             await _context.TimelineEvents.AddAsync(timelineEvent);
+
+            // Increment event count
+            Timeline timeline = GetTimeline(timelineId);
+            timeline.EventsCount++;
+            _context.Entry(timeline).State = EntityState.Modified;
+    
+            // Save
             await _context.SaveChangesAsync();
             return timelineEvent;
         }
@@ -139,6 +146,12 @@ namespace AileronAirwaysWeb.Models
         {
             await TimelineEvent.UnlinkAndDeleteAsync(_api, evt.TimelineId, evt.Id);
             _context.TimelineEvents.Remove(evt);
+
+            // Deincrement event count
+            var timeline = GetTimeline(evt.TimelineId);
+            timeline.EventsCount--;
+            _context.Entry(timeline).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
 
