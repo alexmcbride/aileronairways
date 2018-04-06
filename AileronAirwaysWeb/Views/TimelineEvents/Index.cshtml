@@ -116,23 +116,23 @@
         <div id="timelineTabs" class="text-center">
             <button id="btnShowDetailed" class="activeToggleButton">DETAILED</button>
             <button id="btnShowOverview">OVERVIEW</button>
+            <br /><br /><br />
         </div>
 
         <p id="addEventLink" class="text-center" style="display: none;"><a href="#" id="addEventLink">Add a new event!</a></p>
 
-        <br /><br /><br />
         <div id="timelinePartialContent">
             @Html.Partial("_TimelineZoomedIn", Model)
         </div>
 
         @*Hide stuff if there's no events*@
         @if (!Model.Any())
-    {
-        <script>
-            document.getElementById("timelineTabs").style.display = "none";
-            document.getElementById("addEventLink").style.display = "block";
-        </script>
-}
+        {
+            <script>
+                document.getElementById("timelineTabs").style.display = "none";
+                document.getElementById("addEventLink").style.display = "block";
+            </script>
+        }
 
         <div class="backToTopContainer" onclick="topFunction()">
             <span><i class="backToTop"></i></span>
