@@ -155,30 +155,29 @@
 
 
 
-            <div class="backToTopContainer" onclick="topFunction()">
+        <div class="backToTopContainer" onclick="topFunction()">
 
-                <span><i class="backToTop"></i></span>
+            <span><i class="backToTop"></i></span>
+           
+        </div>
+        <br /><br /><br /><br /><br /><br />
+        </div>
 
-            </div>
-            <br /><br /><br /><br /><br /><br />
-            </div>
 
-
-            <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div id='myModalContent'></div>
-                    </div>
+        <div id="myModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div id='myModalContent'></div>
                 </div>
             </div>
-            </div>
+        </div>
+    </div>
 
 
 
 @section Scripts{
     <script>
-
-    var url = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
+    var createEventUrl = "@Url.Action("Create", "TimelineEvents", new { timelineId=ViewBag.TimelineId })";
 
     function filterEventTitles() {
         var input, filter, table, tr, td, i;
@@ -200,14 +199,6 @@
             }
         }
     }
-
-   
-
-
-
-
-
-
 
     // open side panel
     function openNav() {
@@ -250,9 +241,11 @@
     }
 
     function scrollToEvent(eventId) {
-        $('html, body').animate({
-            scrollTop: $("#eventLink-" + eventId).offset().top
-        }, 200);
+        if (eventId != null) {
+            $('html, body').animate({
+                scrollTop: $("#eventLink-" + eventId).offset().top
+            }, 200);
+        }
     }
 
     function attachEditDeleteEvents() {
@@ -289,20 +282,18 @@
 
                 attachEditDeleteEvents();
 
-                if (eventId != null) {
-                    scrollToEvent(eventId);
-                }
+                scrollToEvent(eventId);
             }
         });
     }
 
-    function loadDetailedView(eventId) {            
+    function loadDetailedTab(eventId) {            
         $('#btnShowOverview').removeClass('activeToggleButton');
         $('#btnShowDetailed').addClass('activeToggleButton');
         loadTimelinePartial('/TimelineEvents/TimelineZoomedInPartial/@ViewBag.TimelineId', eventId);
     }
         
-    function loadOverviewView(eventId) {            
+    function loadOverviewTab(eventId) {            
         $('#btnShowDetailed').removeClass('activeToggleButton');
         $('#btnShowOverview').addClass('activeToggleButton');
         loadTimelinePartial('/TimelineEvents/TimelineZoomedOutPartial/@ViewBag.TimelineId', eventId);
@@ -310,11 +301,11 @@
 
     function reloadSelectedTimeline(eventId) {
         if ($('#btnShowDetailed').hasClass('activeToggleButton')) {
-            loadDetailedView(eventId);
+            loadDetailedTab(eventId);
         }
 
         if ($('#btnShowOverview').hasClass('activeToggleButton')) {
-            loadOverviewView(eventId);
+            loadOverviewTab(eventId);
         }
     }
 
@@ -330,7 +321,7 @@
             disableFormElement('#btnSave', true);
 
             var data = $('#create-event-form').serialize();
-            $.post(url, data, function (response) {
+            $.post(createEventUrl, data, function (response) {
                 if (response.startsWith('OK')) {
                     $('#myModal').modal('hide');
                     var eventId = response.split(' ')[1];
@@ -404,7 +395,7 @@
         $("#addEventBtn,#addEventLink").click(function () {
             $.ajax({
                 type: "GET",
-                url: url,
+                url: createEventUrl,
                 contentType: "application/html; charset=utf-8",
                 datatype: "html",
                 success: function (data) {
@@ -422,12 +413,12 @@
 
         $('#btnShowDetailed').click(function (evt) {
             evt.preventDefault();
-            loadDetailedView(null);
+            loadDetailedTab(null);
         });
 
         $('#btnShowOverview').click(function (evt) {
             evt.preventDefault();
-            loadOverviewView(null);
+            loadOverviewTab(null);
         });
 
         $('.eventTitlesFilter').click(function (evt) {
