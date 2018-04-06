@@ -170,7 +170,7 @@
 
             var min = moment(startDate);
             var max = moment(endDate);
-            var date = moment(data[3]);
+            var date = moment(data[4]);
 
             return (startDate == "" || date.isAfter(min)) && (endDate == "" || date.isBefore(max));
         }
