@@ -86,7 +86,7 @@ namespace AileronAirwaysWeb.Controllers
 
             ViewBag.EventId = eventId;
 
-            return View(attachment);
+            return PartialView(attachment);
         }
 
         // POST: Attachments/Delete/5
@@ -100,7 +100,7 @@ namespace AileronAirwaysWeb.Controllers
             _flash.Message($"Deleted attachment");
 
             var @event = _repo.GetTimelineEvent(eventId);
-            return RedirectToAction("Details", "TimelineEvents", new { eventId, timelineId = @event.TimelineId });
+            return Ok("OK " + attachmentId);
         }
     }
 }

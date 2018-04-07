@@ -75,7 +75,7 @@ namespace AileronAirwaysWeb.Controllers
                     vm.Location,
                     timelineId);
 
-                //_flash.Message($"Event '{evt.Title}' added!");
+                _flash.Message($"Event '{evt.Title}' added!");
 
                 return Ok("OK " + evt.Id);
             }
