@@ -202,7 +202,7 @@
     function scrollToEvent(eventId) {
         if (eventId != null) {
             $('html, body').animate({
-                scrollTop: $("#eventLink-" + eventId).offset().top
+                scrollTop: $("#eventLink-" + eventId).offset().top - 60
             }, 200);
         }
     }
