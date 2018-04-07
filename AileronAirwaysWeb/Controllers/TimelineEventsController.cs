@@ -238,7 +238,17 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet]
         public ActionResult FlashMessages()
         {
-            return PartialView();
+            return PartialView("_FlashMessages");
+        }
+
+        [HttpGet]
+        public ActionResult EventsSidebar(string id)
+        {
+            var events = _repo.TimelineEvents
+                .Where(e => e.TimelineId == id)
+                .OrderBy(e => e.EventDateTime);
+
+            return PartialView("_EventsSidebar", events);
         }
     }
 }

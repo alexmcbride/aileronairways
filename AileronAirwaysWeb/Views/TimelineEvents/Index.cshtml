@@ -18,14 +18,7 @@
             <!-- Zoomed In View - Default -->
             <div id="timelinePartial_In_LinksTop" style="visibility: visible;">
                 <div id="eventNameListTop">
-                    @{
-                        int i = 0;
-                        foreach (var item in Model)
-                        {
-                            i = i + 1;
-                            <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
-                        }
-                    }
+                    @Html.Partial("_EventsSidebar", Model)
                 </div>
             </div>
         }
@@ -90,26 +83,17 @@
                 </div>
                 @if (Model.Any())
                 {
-                    <!-- Zoomed In View - Default -->
-                    <div id="timelinePartial_In_Links" style="visibility: visible;">
+                    <div id="timelinePartial_In_Links">
                         <div id="eventNameList">
-                            @{
-                            int i = 0;
-                            foreach (var item in Model)
-                            {
-                                i = i + 1;
-                                <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
-                        }
-                            }
+                            @Html.Partial("_EventsSidebar", Model)
                         </div>
                     </div>
                 }
                 else
                 {
                     <p>No Events Yet</p>
-
                 }
-            </div>
+                </div>
         </div>
         <!-- END of sideNav -->
 
@@ -247,6 +231,13 @@
         });
     }
 
+    function loadSidebarPartial() {
+        $.get('/TimelineEvents/EventsSidebar/@ViewBag.TimelineId', function (data) {
+            $('#eventNameListTop').html(data);
+            $('#eventNameList').html(data);
+        });
+    }
+
     function loadTimelinePartial(url, eventId) {
         $.ajax({
             url: url,
@@ -264,6 +255,7 @@
                 $("#addEventLink").css({ display: "none" });
 
                 loadFlashPartial();
+                loadSidebarPartial();
             }
         });
     }
