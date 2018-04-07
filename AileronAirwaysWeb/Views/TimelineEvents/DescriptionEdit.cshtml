@@ -6,7 +6,7 @@
     <input type="hidden" asp-for="Id">
 
     <div class="form-group">
-        <textarea asp-for="Description" class="form-control" rows="10"></textarea>
+        <textarea asp-for="Description" class="form-control" rows="10" id="edit-description"></textarea>
         <span asp-validation-for="Description" class="text-danger"></span>
     </div>
 
@@ -14,6 +14,4 @@
         <input type="submit" id="editDescriptionBtn" value="Save" class="btn btn-inverted-main" />
         <input type="button" id="cancelEditDescriptionBtn" value="Cancel" class="btn btn-main" />
     </div>
-
-    
 </form>

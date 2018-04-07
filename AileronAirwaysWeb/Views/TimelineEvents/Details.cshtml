@@ -475,6 +475,8 @@
                 $.get('/TimelineEvents/DescriptionEdit/' + id, function (data) {
                     $('#descriptionContent').html(data);
 
+                    $('#edit-description').focus();
+
                     $('#editDescriptionForm').on('submit', function (evt) {
                         evt.preventDefault();
                         disableFormElement('#editDescriptionBtn', true);
