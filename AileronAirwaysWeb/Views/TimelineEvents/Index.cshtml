@@ -231,10 +231,19 @@
         });
     }
 
+    function attachSidebarEvents() {
+        $('.eventTitlesFilter').click(function (evt) {
+            evt.preventDefault()
+            var eventId = $(this).attr('data-id');
+            scrollToEvent(eventId);
+        });
+    }
+
     function loadSidebarPartial() {
         $.get('/TimelineEvents/EventsSidebar/@ViewBag.TimelineId', function (data) {
             $('#eventNameListTop').html(data);
             $('#eventNameList').html(data);
+            attachSidebarEvents();
         });
     }
 
@@ -394,12 +403,7 @@
             loadOverviewTab(null);
         });
 
-        $('.eventTitlesFilter').click(function (evt) {
-            evt.preventDefault()
-            var eventId = $(this).attr('data-id');
-            scrollToEvent(eventId);
-        });
-
+        attachSidebarEvents();
         attachEditDeleteEvents();
     });
 
