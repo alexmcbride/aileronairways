@@ -381,6 +381,6 @@ i, .arrow {
     -webkit-transform: rotate(45deg);
 }
 
-.flash-messages {
+.flash-messages-wrapper {
     z-index: 101;
 }

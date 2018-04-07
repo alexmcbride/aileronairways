@@ -51,3 +51,9 @@ function handleDelete() {
         }
     });
 }
+
+function loadFlashPartial() {
+    $.get('/TimelineEvents/FlashMessages', function (data) {
+        $('#flash-messages-wrapper').html(data);
+    });
+}

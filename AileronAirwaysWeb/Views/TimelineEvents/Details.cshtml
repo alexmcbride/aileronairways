@@ -519,6 +519,8 @@
                                     // Remove item from table.
                                     var attachmentId = response.split(' ')[1];
                                     $('#attachment-item-' + attachmentId).remove();
+
+                                    loadFlashPartial();
                                 }
                             }
                         });

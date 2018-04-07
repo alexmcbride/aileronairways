@@ -234,5 +234,11 @@ namespace AileronAirwaysWeb.Controllers
 
             return events;
         }
+
+        [HttpGet]
+        public ActionResult FlashMessages()
+        {
+            return PartialView();
+        }
     }
 }
