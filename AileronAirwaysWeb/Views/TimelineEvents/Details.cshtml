@@ -106,7 +106,7 @@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
 
-            <input type="submit" value="Upload" class="btn btn-default" />
+            <input type="submit" value="Upload" class="btn btn-default" id="add-file-attachment-submit" />
         </form>
 
 
@@ -168,13 +168,13 @@
 
         <br>
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" id="add-file-attachment-form">
             <div class="form-group formDragAndDrop">
                 @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
 
-            <input type="submit" value="Upload" class="btn btn-default" />
+            <input type="submit" value="Upload" class="btn btn-default" id="add-file-submit-button" />
         </form>
     </div>
 
