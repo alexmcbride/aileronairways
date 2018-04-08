@@ -234,5 +234,15 @@ namespace AileronAirwaysWeb.Models
             _context.Entry(@event).State = EntityState.Modified;
             await _context.SaveChangesAsync();
         }
+
+        public async Task<bool> IsOfflineAsync()
+        {
+            bool offline = await _api.IsOfflineAsync();
+            if (offline)
+            {
+                
+            }
+            return offline;
+        }
     }
 }
