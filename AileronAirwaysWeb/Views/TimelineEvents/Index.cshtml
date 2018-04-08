@@ -22,47 +22,51 @@
     <!-- Content for top nav -->
 
 
-    <div id="topNavContent" style="visibility: hidden;">
+    <div id="topNavContent" style="visibility: visible;">
+        <div class="searchBox">
+            <input type="text" style="color: black; width: 80%; padding-left: 15px;"
+                   id="myInputSearchEventsTop" onkeyup="filterEventTitlesTop()" placeholder="Search events...">
+        </div>
 
 
         @if (Model.Any())
-        {
-            <!-- Zoomed In View - Default -->
-            <div id="timelinePartial_In_LinksTop" style="visibility: visible;">
-                <div id="eventNameListTop">
+    {
+        <!-- Zoomed In View - Default -->
+        <div id="timelinePartial_In_LinksTop" style="visibility: visible;">
+            <div id="eventNameListTop" style="height: 50%;">
 
-                    @{
-                        int i = 0;
-                        foreach (var item in Model)
-                        {
-                            i = i + 1;
-                            <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
-                        }
-                    }
+                @{
+                int i = 0;
+                foreach (var item in Model)
+                {
+                    i = i + 1;
+                    <a class="eventTitlesFilter uppercase" href="#eventLink-@item.Id">@i: @item.Title</a>
+            }
+                }
 
-                </div>
             </div>
-            <div id="timelinePartial_Out_LinksTop" style="visibility: visible; display: none;">
-                <div id="eventNameListTopPartial">
+        </div>
+        <div id="timelinePartial_Out_LinksTop" style="visibility: visible; display: none;">
+            <div id="eventNameListTopPartial" style="height: 50%;">
 
-                    @{
-                        int j = 0;
-                        foreach (var item in Model)
-                        {
-                            j = j + 1;
-                            <a class="eventTitlesFilter uppercase" href="#eventLinks-@item.Id">@j: @item.Title</a>
-                        }
-                    }
+                @{
+                int j = 0;
+                foreach (var item in Model)
+                {
+                    j = j + 1;
+                    <a class="eventTitlesFilter uppercase" href="#eventLinks-@item.Id">@j: @item.Title</a>
+            }
+                }
 
-                </div>
             </div>
+        </div>
 
-        }
-        else
-        {
-            <p>No Events Yet</p>
+}
+else
+{
+    <p>No Events Yet</p>
 
-        }
+}
     </div>
 </div>
 
@@ -135,7 +139,7 @@
 
             <div id="sideNavContent" style="visibility: visible;">
 
-                <div id="searchBox">
+                <div class="searchBox">
                     <input type="text" id="myInputSearchEvents" onkeyup="filterEventTitles()" placeholder="search events...">
                 </div>
 
@@ -378,6 +382,27 @@
             }
         }
     }
+
+        function filterEventTitlesTop() {
+            var input, filter, table, tr, td, i;
+
+            input = document.getElementById("myInputSearchEventsTop");
+
+            filter = input.value.toUpperCase();
+            titles = document.getElementsByClassName("eventTitlesFilter");
+
+
+            for (i = 0; i < titles.length; i++) {
+                td = titles[i];
+                if (td) {
+                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                        titles[i].style.display = "";
+                    } else {
+                        titles[i].style.display = "none";
+                    }
+                }
+            }
+        }
 
    
 

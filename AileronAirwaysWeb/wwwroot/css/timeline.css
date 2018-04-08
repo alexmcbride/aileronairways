@@ -437,6 +437,10 @@ li {
         transition: 0.3s;
     }
 
+    #eventNameListTop a, #eventNameListTopPartial a {
+        line-height: 1;
+    }
+
 
 
 h3.eventDate {
@@ -452,11 +456,11 @@ h3.eventDate {
     align-content: center;
 }
 
-#searchBox {
+.searchBox {
     width: 80%;
     align-content: center;
     margin: 0 10%;
-    padding: 0 0 20px 0;
+    padding: 5px 0 5px 0;
 }
 
 #myInputSearchEvents {
