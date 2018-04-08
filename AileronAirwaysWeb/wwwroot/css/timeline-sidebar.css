@@ -51,6 +51,8 @@
 @media only screen and (max-width: 640px) {
     .sidebar-wrapper {
         border-right: 0px solid #0D1B2E;
+        padding-bottom: 10px;
+        border-bottom: 1px solid grey;
     }
 
     .main-content {
@@ -86,7 +88,6 @@
         text-align: center;
 
         height: 170px;
-        border-bottom: 1px solid grey;
     }
 
     .moveButtonDisplay {
@@ -97,8 +98,9 @@
         
     }
 
-    .btn-main{
-        padding: 6px 10px;
+    .paddingChangeBtn {
+        padding: 6.5px 10px 6.5px 10px;
+        margin: 0px;
     }
 
     .HRgone640 {
@@ -113,7 +115,6 @@
     .sidebar-content {
 
         height: 250px;
-        border-bottom: 1px solid grey;
     }
 
     .wtSearchBar {
