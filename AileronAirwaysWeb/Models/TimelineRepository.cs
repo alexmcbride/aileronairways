@@ -2,6 +2,7 @@
 using AileronAirwaysWeb.Services;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,14 +42,24 @@ namespace AileronAirwaysWeb.Models
             {
                 var timelines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
 
-                foreach (var timeline in timelines)
-                {
-                    timeline.UpdateCalculatedColumns();
-                }
-
                 await _context.AddRangeAsync(timelines);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public void Initialize()
+        {
+            Debug.WriteLine("TimelineRepository: dropping and recreating DB");
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
+
+            Debug.WriteLine("TimelineRepository: getting all timelines and events");
+            var timelines = Timeline.GetAllTimelinesAndEvents(_api);
+
+            _context.AddRange(timelines);
+            _context.SaveChanges();
+
+            Debug.WriteLine("TimelineRepository: done");
         }
 
         public Timeline GetTimeline(string id)

@@ -82,6 +82,27 @@ namespace AileronAirwaysWeb.Models
             var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
             if (timelines != null)
             {
+                foreach (var timeline in timelines.Timelines)
+                {
+                    timeline.UpdateCalculatedColumns();
+                }
+                return timelines.Timelines;
+            }
+            return null;
+        }
+
+        public static List<Timeline> GetAllTimelinesAndEvents(ITimelineService api)
+        {
+            var task = api.GetJsonAsync("Timeline/GetAllTimelinesAndEvent");
+            task.Wait();
+            string json = task.Result;
+            var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
+            if (timelines != null)
+            {
+                foreach (var timeline in timelines.Timelines)
+                {
+                    timeline.UpdateCalculatedColumns();
+                }
                 return timelines.Timelines;
             }
             return null;
