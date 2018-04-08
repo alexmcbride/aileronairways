@@ -29,11 +29,18 @@
                 <hr>
                 <div class="wtForm">
                     <div class="form-group">
+                        <button type="button" class="wtSearchBar btn btn-inverted-main" id="clearDates">
+                            <span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Clear Filters
+                        </button>
+                    </div>
+                    <hr class="HRgone640">
+
+                    <div class="form-group">
                         <div class="input-group wtSearchBar">
                             <input type="text" class="form-control" placeholder="Search..." id="search">
                             @*<span class="input-group-addon">
-                    <span class="glyphicon glyphicon-search"></span>
-                </span>*@
+                        <span class="glyphicon glyphicon-search"></span>
+                    </span>*@
                         </div>
                     </div>
 
@@ -41,7 +48,7 @@
 
                 <div class="wtForm">
                     <div class="form-group">
-                        <div class='input-group date' id='startDate'>
+                        <div class='input-group date wtSearchBar' id='startDate'>
                             <input type='text' class="form-control" id="startDateInput" placeholder="Start date" title="Enter a date" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -50,7 +57,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class='input-group date' id='endDate'>
+                        <div class='input-group date wtSearchBar' id='endDate'>
                             <input type='text' class="form-control" id="endDateInput" placeholder="End date" title="Enter a date" />
                             <span class="input-group-addon">
                                 <span class="glyphicon glyphicon-calendar"></span>
@@ -58,34 +65,10 @@
                         </div>
                     </div>
                 </div>
-
-                @*<div class="form-group">
-                        <div class='input-group date' id='startDate'>
-                            <input type='text' class="form-control" id="startDateInput" placeholder="Start date" title="Enter a date" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class='input-group date' id='endDate'>
-                            <input type='text' class="form-control" id="endDateInput" placeholder="End date" title="Enter a date" />
-                            <span class="input-group-addon">
-                                <span class="glyphicon glyphicon-calendar"></span>
-                            </span>
-                        </div>
-                    </div>*@
-
-
-
                 <hr>
 
-                <div class="form-group">
-                    <button type="button" class="btn btn-main" id="clearDates">
-                        <span class="glyphicon glyphicon-remove"></span>&nbsp;&nbsp;Clear Filters
-                    </button>
-                </div>
+
+
             </div>
         </div>
     </div>
@@ -99,7 +82,7 @@
 
 
 
-    <div class="main-content" style="overflow-x: auto;">
+    <div class="main-content" style="overflow-x: auto; max-width: 100%;">
         <br />
         <h3 class="mainColor">
             <strong>@ViewData["Title"]</strong>
@@ -107,12 +90,12 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines" style="width: 100%; overflow: auto;">
+        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines"  style=" width: 100%; max-width: 100%; overflow-x: auto;">
             <thead>
                 <tr>
-                    <th style="width: 50% !important;">Title</th>
-                    <th style="width: 25% !important;">Created</th>
-                    <th style="width: 25% !important;"></th>
+                    <th style="width: 40% !important;">Title</th>
+                    <th style="width: 30% !important;">Created</th>
+                    <th style="width: 30% !important;"></th>
                     @**@<th></th>
                 </tr>
             </thead>
@@ -136,8 +119,7 @@
 
 
     <script>
-
-
+     
         var timelinetable = null;
         function updateTable(jsondata) {
             timelinetable = $('#tbltimelines').DataTable({
@@ -369,7 +351,11 @@
                 timelinetable.data();
             });
 
-            $('#startDate, #startDateInput').datetimepicker({
+
+
+
+            // , #startDateInput
+            $('#startDate').datetimepicker({
                 format: 'YYYY-MM-DD'
             });
 
@@ -382,10 +368,10 @@
                 useCurrent: false //Important! See issue #1075
             });
 
-            $('#endDateInput').datetimepicker({
-                format: 'YYYY-MM-DD',
-                useCurrent: false //Important! See issue #1075
-            });
+            //$('#endDateInput').datetimepicker({
+            //    format: 'YYYY-MM-DD',
+            //    useCurrent: false //Important! See issue #1075
+            //});
 
 
 
@@ -404,7 +390,7 @@
                         $('#sidebar-arrow').removeClass('rightArrow');
                         $('#sidebar-arrow').addClass('leftArrow');
                     });
-                    $('.main-content').animate({ marginLeft: '240px' });
+                    $('.main-content').animate({ marginLeft: '230px' });
                     $('.sidebar-content').css({ 'display': 'block' });
                 }
                 else {

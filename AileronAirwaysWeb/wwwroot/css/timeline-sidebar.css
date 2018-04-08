@@ -14,6 +14,7 @@
 
 .sidebar-content {
     padding: 65px 15px 15px 15px;
+    height: inherit;
 }
 
 #sidebar-arrow {
@@ -38,24 +39,37 @@
 
 }
 
+.wtSearchBar {
+    width: 100%;
+}
+
+.form-control {
+    border-radius: unset;
+}
+
 
 @media only screen and (max-width: 640px) {
-
-
-
     .sidebar-wrapper {
         border-right: 0px solid #0D1B2E;
     }
 
     .main-content {
-        margin-left: 0px;
+        margin-left: 0px !important;
+        padding-left: 5%;
+        padding-right: 5%;
+        padding-top: 10px;
+        width: 100vh;
+        /*max-width: 100%;*/
     }
 
     .search {
         width: 100%;
+        height: inherit;
     }
-    .wtSearchBar{
-        width: 100%;
+    .wtSearchBar {
+        width: 90%;
+        margin-left: 5%;
+        margin-right: 5%;
     } 
     
     .wtForm {
@@ -67,26 +81,63 @@
 
     .sidebar-content {
         margin-top: 0px;
-        padding-top: 5px;
+        padding-top: 10px;
         padding-bottom: 5px;
         text-align: center;
+
+        height: 170px;
+        border-bottom: 1px solid grey;
     }
 
+    .moveButtonDisplay {
+        position: absolute;
+        top: 160px;
+        width: 50%;
+        left: 10px;
+        
+    }
 
+    .btn-main{
+        padding: 6px 10px;
+    }
 
+    .HRgone640 {
+        display: none;
+        visibility: hidden;
+    }
 }
 
 @media only screen and (max-width: 450px) {
+    
+    
+    .sidebar-content {
+
+        height: 250px;
+        border-bottom: 1px solid grey;
+    }
 
     .wtSearchBar {
-        width: 95%;
-        padding-right: 5%;
+        width: 100%;
+        margin-left: 0%;
+        margin-right: 0%;
+       
     }
+
+   
+
 
     .wtForm {
         width: 100%;
         float: left;
         display: block;
+        margin: 0px;
+        padding: 0px;
+
+    }
+
+    .form-group {
+        margin-top: 3px;
+        margin-bottom: 3px;
     }
 }
 
