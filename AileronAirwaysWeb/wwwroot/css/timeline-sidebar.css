@@ -27,6 +27,8 @@
 
 .main-content {
     width: auto;
+    margin-right: 5px;
+    margin-left: 5px;
     padding: 15px 5% 0px 5%;
 }
 
@@ -63,7 +65,29 @@
     }
 
 
+    .sidebar-content {
+        margin-top: 0px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        text-align: center;
+    }
+
 
 
 }
+
+@media only screen and (max-width: 450px) {
+
+    .wtSearchBar {
+        width: 95%;
+        padding-right: 5%;
+    }
+
+    .wtForm {
+        width: 100%;
+        float: left;
+        display: block;
+    }
+}
+
 

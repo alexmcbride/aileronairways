@@ -14,6 +14,9 @@
 @*<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>*@
 
 <div class="content-wrapper">
+
+
+
     <div class="sidebar-wrapper">
         <div class="sidebar-toggle text-right">
             <div class="arrow leftArrow" id="sidebar-arrow"></div>
@@ -26,8 +29,8 @@
                 <hr>
                 <div class="wtForm">
                     <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control wtSearchBar" placeholder="Search..." id="search">
+                        <div class="input-group wtSearchBar">
+                            <input type="text" class="form-control" placeholder="Search..." id="search">
                             @*<span class="input-group-addon">
                     <span class="glyphicon glyphicon-search"></span>
                 </span>*@
@@ -96,7 +99,7 @@
 
 
 
-    <div class="main-content">
+    <div class="main-content" style="overflow-x: auto;">
         <br />
         <h3 class="mainColor">
             <strong>@ViewData["Title"]</strong>
@@ -104,12 +107,12 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines" style="width: 100%; overflow-x: scroll;">
+        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines" style="width: 100%; overflow: auto;">
             <thead>
-                <tr style="max-width: 100% !important">
-                    <th style="width: 60% !important;">Title</th>
-                    <th style="width: 20% !important;">Created</th>
-                    <th style="width: 20% !important;"></th>
+                <tr>
+                    <th style="width: 50% !important;">Title</th>
+                    <th style="width: 25% !important;">Created</th>
+                    <th style="width: 25% !important;"></th>
                     @**@<th></th>
                 </tr>
             </thead>
@@ -145,7 +148,7 @@
                 columns: [
                     {
                         mRender: function renderTitle(data, type, row) {
-                            return '<a href="/timelines/' + row.id + '/events/">' + row.title.substring(0, 20) +' </a> '
+                            return '<a href="/timelines/' + row.id + '/events/">' + row.title +' </a> '
                         }
                     },
                     {
@@ -374,10 +377,18 @@
             //    format: 'YYYY-MM-DD'
             //});
 
-            $('#endDate, #endDateInput').datetimepicker({
+            $('#endDate').datetimepicker({
                 format: 'YYYY-MM-DD',
                 useCurrent: false //Important! See issue #1075
             });
+
+            $('#endDateInput').datetimepicker({
+                format: 'YYYY-MM-DD',
+                useCurrent: false //Important! See issue #1075
+            });
+
+
+
             $("#startDate").on("dp.change", function (e) {
                 $('#endDate').data("DateTimePicker").minDate(e.date);
             });
