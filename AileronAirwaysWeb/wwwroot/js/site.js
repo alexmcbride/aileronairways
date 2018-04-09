@@ -62,7 +62,7 @@ function loadFlashPartial() {
 function handleApiOffline(callback) {
     var html = '<div class="alert alert-danger alert-dismissible text-center alert-flash" role="alert">' +
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-        '<strong class="text-capitalize">Read-only mode</strong> The site has been switch to read-only mode, as the API is offline' +
+        '<strong class="text-capitalize">API offline</strong> The site has been switch to read-only mode' +
         '</div>';
 
     $('.flash-messages').append(html);

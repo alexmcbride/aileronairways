@@ -14,20 +14,16 @@ namespace AileronAirwaysWeb.Controllers.Api
     public class TimelinesController : Controller
     {
         private readonly TimelineRepository _repo;
-        private readonly IFlashService _flash;
 
-        public TimelinesController(TimelineRepository repo, IFlashService flash)
+        public TimelinesController(TimelineRepository repo)
         {
             _repo = repo;
-            _flash = flash;
         }
 
         // GET: api/timelines
         [HttpGet]
         public IActionResult Get()
         {
-            _flash.Message("Og, hello you!");
-
             var timelines = _repo.Timelines.OrderByDescending(t => t.CreationTimeStamp).Select(t => new TimelineViewModel
             {
                 Id = t.Id,
