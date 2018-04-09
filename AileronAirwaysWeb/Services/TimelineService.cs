@@ -135,11 +135,15 @@ namespace AileronAirwaysWeb.Services
             using (Ping ping = new Ping())
             {
                 Uri url = new Uri(_baseUrl);
+                WebProxy proxy = new WebProxy(url);
+                
                 var buffer = Encoding.ASCII.GetBytes("ping");
                 PingReply reply = await ping.SendPingAsync(url.Host, timeout, buffer, new PingOptions
                 {
-                    DontFragment = true,
+                    Ttl = 64,
+                    DontFragment = false,
                 });
+                Debug.WriteLine(reply.Status);
                 return reply.Status != IPStatus.Success;
             }
         }

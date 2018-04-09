@@ -238,22 +238,25 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
-        public async Task<bool> IsOfflineAsync()
+        public Task<bool> IsOfflineAsync()
         {
-            bool test = _config.GetValue<bool>("TestReadonlyMode");
-            if (test)
-            {
-                return true;
-            }
+            //bool test = _config.GetValue<bool>("TestReadonlyMode");
+            //if (test)
+            //{
+            //    return true;
+            ////}
 
-            bool offline = await _api.IsOfflineAsync();
-            if (offline)
-            {
-                Debug.WriteLine("API is offline :(");
+            //bool offline = await _api.IsOfflineAsync();
+            //if (offline)
+            //{
+            //    Debug.WriteLine("API is offline :(");
 
-                // Cache in DB or summit.
-            }
-            return offline;
+            //    // Cache in DB or summit.
+            //}
+            //return offline;
+            var source = new TaskCompletionSource<bool>();
+            source.SetResult(false);
+            return source.Task;
         }
     }
 }
