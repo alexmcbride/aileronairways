@@ -58,17 +58,17 @@ function loadFlashPartial() {
     });
 }
 
-function checkApiOffline(closure) {
+function checkApiOffline(callback) {
     $.ajax({
         url: '/api/timelines/offline',
         dataType: 'json',
         success: function (data, status, xhr) {
             if (data.offline) {
-                closure();
+                callback();
             }
         },
         fail: function () {
-            closure(); // Call anyway if error
+            callback(); // Call anyway if error
         }
     });
 }

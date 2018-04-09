@@ -1,6 +1,7 @@
 ﻿using AileronAirwaysWeb.Data;
 using AileronAirwaysWeb.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -13,6 +14,7 @@ namespace AileronAirwaysWeb.Models
     {
         private readonly ITimelineService _api;
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _config;
 
         public IQueryable<Timeline> Timelines
         {
@@ -29,10 +31,11 @@ namespace AileronAirwaysWeb.Models
             get { return _context.Attachments; }
         }
 
-        public TimelineRepository(ITimelineService api, ApplicationDbContext context)
+        public TimelineRepository(ITimelineService api, ApplicationDbContext context, IConfiguration config)
         {
             _api = api;
             _context = context;
+            _config = config;
         }
 
         public async Task InitializeAsync()
@@ -237,10 +240,18 @@ namespace AileronAirwaysWeb.Models
 
         public async Task<bool> IsOfflineAsync()
         {
+            bool test = _config.GetValue<bool>("TestReadonlyMode");
+            if (test)
+            {
+                return true;
+            }
+
             bool offline = await _api.IsOfflineAsync();
             if (offline)
             {
-                
+                Debug.WriteLine("API is offline :(");
+
+                // Cache in DB or summit.
             }
             return offline;
         }

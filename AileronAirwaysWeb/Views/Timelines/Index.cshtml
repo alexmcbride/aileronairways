@@ -394,6 +394,8 @@
             // Checks if API is offline.
             checkApiOffline(function () {
                 console.log('IdeaGen API is offline...');
+
+                $('.modal-link-create-timeline').attr('disabled', 'disabled');
             });
         });
     </script>
