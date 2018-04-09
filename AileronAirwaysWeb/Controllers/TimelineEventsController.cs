@@ -210,17 +210,17 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet]
         public ActionResult TimelineZoomedInPartial(string id)
         {
-            var timelines = LoadTimelineEventsFromRepo(id);
+            var events = LoadTimelineEventsFromRepo(id);
 
-            return PartialView("_TimelineZoomedIn", timelines);
+            return PartialView("_TimelineZoomedIn", events);
         }
 
         [HttpGet]
         public ActionResult TimelineZoomedOutPartial(string id)
         {
-            var timelines = LoadTimelineEventsFromRepo(id);
+            var events = LoadTimelineEventsFromRepo(id);
 
-            return PartialView("_TimelineZoomedOut", timelines);
+            return PartialView("_TimelineZoomedOut", events);
         }
 
         private IEnumerable<TimelineEvent> LoadTimelineEventsFromRepo(string id)

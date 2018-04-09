@@ -57,3 +57,18 @@ function loadFlashPartial() {
         $('#flash-messages-wrapper').html(data);
     });
 }
+
+function checkApiOffline(closure) {
+    $.ajax({
+        url: '/api/timelines/offline',
+        dataType: 'json',
+        success: function (data, status, xhr) {
+            if (data.offline) {
+                closure();
+            }
+        },
+        fail: function () {
+            closure(); // Call anyway if error
+        }
+    });
+}

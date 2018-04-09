@@ -390,6 +390,11 @@
             }
             mql.addListener(handleScreenSizeChange);
             handleScreenSizeChange(mql); // Set right styles on startup.
+
+            // Checks if API is offline.
+            checkApiOffline(function () {
+                console.log('IdeaGen API is offline...');
+            });
         });
     </script>
 }
