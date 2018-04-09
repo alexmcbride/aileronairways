@@ -134,11 +134,9 @@ namespace AileronAirwaysWeb.Services
             const int timeout = 1024;
             using (Ping ping = new Ping())
             {
-                Uri url = new Uri(_baseUrl);
-                WebProxy proxy = new WebProxy(url);
-                
+                var url = new Uri(_baseUrl);
                 var buffer = Encoding.ASCII.GetBytes("ping");
-                PingReply reply = await ping.SendPingAsync(url.Host, timeout, buffer, new PingOptions
+                var reply = await ping.SendPingAsync(url.Host, timeout, buffer, new PingOptions
                 {
                     Ttl = 64,
                     DontFragment = false,

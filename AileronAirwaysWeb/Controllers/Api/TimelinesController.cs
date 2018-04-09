@@ -2,6 +2,7 @@
 using AileronAirwaysWeb.Services;
 using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -89,6 +90,8 @@ namespace AileronAirwaysWeb.Controllers.Api
         public async Task<IActionResult> Offline()
         {
             bool offline = await _repo.IsOfflineAsync();
+
+            Debug.WriteLine($"API Offline: {offline}");
 
             return Ok(new
             {
