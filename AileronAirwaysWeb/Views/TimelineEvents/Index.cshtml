@@ -463,6 +463,12 @@
 
         attachSidebarEvents();
         attachEditDeleteEvents();
+
+        // Check if API is offline.
+        checkApiOffline(function () {
+            // Code inside this function gets executing if API is offline
+            $('.modal-link-create-timeline').attr('disabled', 'disabled');
+        });
     });
 
     </script>

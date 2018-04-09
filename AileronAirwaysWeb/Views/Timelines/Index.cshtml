@@ -11,7 +11,6 @@
     <link href="~/css/timelineIndex.css" rel="stylesheet" />
     <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
 }
-@*<button id="addEventBtn" class="modal-link-create-timeline" title="Create New Timeline">&#43;</button>*@
 
 <div class="content-wrapper">
 
@@ -432,10 +431,9 @@
             mql.addListener(handleScreenSizeChange);
             handleScreenSizeChange(mql); // Set right styles on startup.
 
-            // Checks if API is offline.
+            // Check if API is offline.
             checkApiOffline(function () {
-                console.log('IdeaGen API is offline...');
-
+                // Code inside this function gets executing if API is offline
                 $('.modal-link-create-timeline').attr('disabled', 'disabled');
             });
         });
