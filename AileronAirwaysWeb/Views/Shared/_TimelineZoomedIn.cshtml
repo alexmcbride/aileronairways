@@ -28,13 +28,13 @@
                             <p>@item.EventDateTime.ToString("HH:mm:ss")</p>
                         </div>
                         <div class="eventIconDisplay">
-                            <div class="iconSection">
-                                @if (item.HasLocation)
-                                {
+                            @if (item.HasLocation)
+                            {
+                                <div class="iconSection">
                                     <i class="fas fa-map-marker"></i>
-                                }
-                                <div class="eventIcon"></div>
-                            </div>
+                                    <div class="eventIcon">&nbsp;</div>
+                                </div>
+                            }
                             <div class="iconSection">
                                 <i class="eventIcon fas fa-paperclip"></i>
                                 <div class="eventIcon">@item.AttachmentFilesCount</div>
