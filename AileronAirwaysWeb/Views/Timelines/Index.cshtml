@@ -93,10 +93,11 @@
         <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines"  style=" width: 100%; max-width: 100%; overflow-x: auto;">
             <thead>
                 <tr>
-                    <th style="min-width: 40% !important;">Title</th>
-                    <th style="min-width: 30% !important;">Created</th>
-                    <th style="min-width: 30% !important;"></th>
-                    @**@<th></th>
+                    <th>Title</th>
+                    <th>Created</th>
+                    <th>Events</th>
+                    <th></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -140,6 +141,15 @@
                     },
                     {
                         mRender: function (data, type, row) {
+                            var count = row.eventsCount;
+                            if (count == 0) {
+                                return 'None';
+                            }
+                            return count;
+                        }
+                    },
+                    {
+                        mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
                                 '<a href="javascript:void(0);" /*href="/timelines/delete/' + row.id + '"*/ onclick="deleteTimeline(\'' + row.id + '\')">Delete</a>';
                         }, sortable: false
@@ -173,7 +183,8 @@
 
             var min = moment(startDate);
             var max = moment(endDate);
-            var date = moment(data[3]);
+            var date = moment(data[4]);
+
             return (startDate == "" || date.isAfter(min)) && (endDate == "" || date.isBefore(max));
         }
 
@@ -420,6 +431,13 @@
             }
             mql.addListener(handleScreenSizeChange);
             handleScreenSizeChange(mql); // Set right styles on startup.
+
+            // Checks if API is offline.
+            checkApiOffline(function () {
+                console.log('IdeaGen API is offline...');
+
+                $('.modal-link-create-timeline').attr('disabled', 'disabled');
+            });
         });
     </script>
 }

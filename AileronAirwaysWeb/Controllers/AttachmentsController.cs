@@ -74,7 +74,8 @@ namespace AileronAirwaysWeb.Controllers
                 _flash.Message("No attachments uploaded", FlashType.Info);
             }
 
-            return RedirectToAction(nameof(Index), new { eventId });
+            var @event = _repo.GetTimelineEvent(eventId);
+            return RedirectToAction("Details", "TimelineEvents", new { eventId, timelineId = @event.TimelineId });
         }
 
         // GET: Attachments/Delete/5
@@ -85,7 +86,7 @@ namespace AileronAirwaysWeb.Controllers
 
             ViewBag.EventId = eventId;
 
-            return View(attachment);
+            return PartialView(attachment);
         }
 
         // POST: Attachments/Delete/5
@@ -98,7 +99,8 @@ namespace AileronAirwaysWeb.Controllers
 
             _flash.Message($"Deleted attachment");
 
-            return RedirectToAction(nameof(Index), new { eventId });
+            var @event = _repo.GetTimelineEvent(eventId);
+            return Ok("OK " + attachmentId);
         }
     }
 }

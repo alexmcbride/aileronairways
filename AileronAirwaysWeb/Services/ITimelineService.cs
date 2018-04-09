@@ -16,5 +16,6 @@ namespace AileronAirwaysWeb.Services
         void FileDelete(string filename);
         Stream FileOpenWrite(string filename);
         void DisposeStream(Stream stream);
+        Task<bool> IsOfflineAsync();
     }
 }

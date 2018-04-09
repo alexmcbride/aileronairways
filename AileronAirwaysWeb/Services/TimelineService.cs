@@ -1,8 +1,12 @@
 ﻿using AileronAirwaysWeb.Models;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Net.NetworkInformation;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Services
@@ -123,6 +127,21 @@ namespace AileronAirwaysWeb.Services
         public void DisposeStream(Stream stream)
         {
             stream.Dispose();
+        }
+
+        public async Task<bool> IsOfflineAsync()
+        {
+            const int timeout = 1024;
+            using (Ping ping = new Ping())
+            {
+                Uri url = new Uri(_baseUrl);
+                var buffer = Encoding.ASCII.GetBytes("ping");
+                PingReply reply = await ping.SendPingAsync(url.Host, timeout, buffer, new PingOptions
+                {
+                    DontFragment = true,
+                });
+                return reply.Status != IPStatus.Success;
+            }
         }
     }
 }

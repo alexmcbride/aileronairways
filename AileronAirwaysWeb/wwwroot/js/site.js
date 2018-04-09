@@ -51,3 +51,24 @@ function handleDelete() {
         }
     });
 }
+
+function loadFlashPartial() {
+    $.get('/TimelineEvents/FlashMessages', function (data) {
+        $('#flash-messages-wrapper').html(data);
+    });
+}
+
+function checkApiOffline(callback) {
+    $.ajax({
+        url: '/api/timelines/offline',
+        dataType: 'json',
+        success: function (data, status, xhr) {
+            if (data.offline) {
+                callback();
+            }
+        },
+        fail: function () {
+            callback(); // Call anyway if error
+        }
+    });
+}

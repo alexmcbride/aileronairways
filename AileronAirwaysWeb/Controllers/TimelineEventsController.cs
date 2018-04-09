@@ -4,6 +4,7 @@ using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,7 +14,7 @@ namespace AileronAirwaysWeb.Controllers
     {
         private readonly TimelineRepository _repo;
         private readonly IFlashService _flash;
-        
+
 
         public TimelineEventsController(TimelineRepository repo, IFlashService flash, ITimelineService api)
         {
@@ -24,15 +25,7 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet("Timelines/{timelineId}/Events")]
         public ActionResult Index(string timelineId)
         {
-            var timeline = _repo.GetTimelineWithEvents(timelineId);
-            var events = timeline.TimelineEvents
-                .OrderBy(e => e.EventDateTime)
-                .ToList();
-
-            // Extra data needed by view.
-            ViewBag.TimelineId = timelineId;
-            ViewBag.TimelineTitle = timeline.Title;
-            ViewBag.TimelineCreationTimeStamp = timeline.CreationTimeStamp;
+            var events = LoadTimelineEventsFromRepo(timelineId);
 
             return View(events);
         }
@@ -181,7 +174,7 @@ namespace AileronAirwaysWeb.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DescriptionEditPost(string id,[Bind("Id,Description")] EditDescriptionViewModel vm)
+        public async Task<ActionResult> DescriptionEditPost(string id, [Bind("Id,Description")] EditDescriptionViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -193,22 +186,6 @@ namespace AileronAirwaysWeb.Controllers
 
             return PartialView("DescriptionEdit", vm);
         }
-
-        //// GET: Timelines/Events/EditLocation/5
-        //[HttpGet("Timelines/{timelineId}/Events/{eventId}/EditLocation")]
-        //public PartialViewResult EditLocation(string eventId)
-        //{
-        //    TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
-        //    string[] arrlocation = { timelineEvent.Location.Split(",")[0], timelineEvent.Location.Split(",")[1] };
-        //    var vm = new TimelineEventLocationViewModel
-        //    {
-        //        Latitude = arrlocation[0],
-        //        Longitude = arrlocation[1],
-        //    };
-        //    ViewBag.lon = vm.Latitude;
-        //    ViewBag.lan = vm.Longitude;
-        //    return PartialView(vm);
-        //}
 
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/EditEventLocation")]
@@ -228,6 +205,50 @@ namespace AileronAirwaysWeb.Controllers
             }
 
             return PartialView(vm);
+        }
+
+        [HttpGet]
+        public ActionResult TimelineZoomedInPartial(string id)
+        {
+            var events = LoadTimelineEventsFromRepo(id);
+
+            return PartialView("_TimelineZoomedIn", events);
+        }
+
+        [HttpGet]
+        public ActionResult TimelineZoomedOutPartial(string id)
+        {
+            var events = LoadTimelineEventsFromRepo(id);
+
+            return PartialView("_TimelineZoomedOut", events);
+        }
+
+        private IEnumerable<TimelineEvent> LoadTimelineEventsFromRepo(string id)
+        {
+            var timeline = _repo.GetTimelineWithEvents(id);
+            var events = timeline.TimelineEvents.OrderBy(e => e.EventDateTime);
+
+            ViewBag.TimelineId = id;
+            ViewBag.TimelineTitle = timeline.Title;
+            ViewBag.TimelineCreationTimeStamp = timeline.CreationTimeStamp;
+
+            return events;
+        }
+
+        [HttpGet]
+        public ActionResult FlashMessages()
+        {
+            return PartialView("_FlashMessages");
+        }
+
+        [HttpGet]
+        public ActionResult EventsSidebar(string id)
+        {
+            var events = _repo.TimelineEvents
+                .Where(e => e.TimelineId == id)
+                .OrderBy(e => e.EventDateTime);
+
+            return PartialView("_EventsSidebar", events);
         }
     }
 }

@@ -26,5 +26,7 @@ namespace AileronAirwaysWeb.ViewModels
         }
 
         public bool IsDeleted { get; set; }
+
+        public int EventsCount { get; set; }
     }
 }

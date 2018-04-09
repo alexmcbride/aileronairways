@@ -1,4 +1,5 @@
 ﻿using AileronAirwaysWeb.Models;
+using AileronAirwaysWeb.Services;
 using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
@@ -27,7 +28,8 @@ namespace AileronAirwaysWeb.Controllers.Api
                 Id = t.Id,
                 Title = t.Title,
                 CreationTimeStamp = t.CreationTimeStamp,
-                IsDeleted = t.IsDeleted
+                IsDeleted = t.IsDeleted,
+                EventsCount = t.EventsCount
             }).ToList();
 
             return Ok(timelines);
@@ -81,6 +83,17 @@ namespace AileronAirwaysWeb.Controllers.Api
             await _repo.DeleteTimelineAsync(id);
 
             return Ok();
+        }
+
+        [HttpGet("offline")]
+        public async Task<IActionResult> Offline()
+        {
+            bool offline = await _repo.IsOfflineAsync();
+
+            return Ok(new
+            {
+                offline
+            });
         }
     }
 }

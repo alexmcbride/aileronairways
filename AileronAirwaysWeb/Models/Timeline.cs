@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
@@ -16,6 +17,7 @@ namespace AileronAirwaysWeb.Models
         [JsonConverter(typeof(CustomDateTimeConverter))]
         public DateTime CreationTimeStamp { get; set; }
         public bool IsDeleted { get; set; }
+        public int EventsCount { get; set; }
 
         public virtual Collection<TimelineEvent> TimelineEvents { get; set; }
 
@@ -46,11 +48,16 @@ namespace AileronAirwaysWeb.Models
             });
         }
 
-        public void UpdateAttachmentCounts()
+        public void UpdateCalculatedColumns()
         {
             foreach (var @event in TimelineEvents)
             {
                 @event.UpdateAttachmentCounts();
+            }
+
+            if (TimelineEvents != null)
+            {
+                EventsCount = TimelineEvents.Count();
             }
         }
 
@@ -75,6 +82,27 @@ namespace AileronAirwaysWeb.Models
             var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
             if (timelines != null)
             {
+                foreach (var timeline in timelines.Timelines)
+                {
+                    timeline.UpdateCalculatedColumns();
+                }
+                return timelines.Timelines;
+            }
+            return null;
+        }
+
+        public static List<Timeline> GetAllTimelinesAndEvents(ITimelineService api)
+        {
+            var task = api.GetJsonAsync("Timeline/GetAllTimelinesAndEvent");
+            task.Wait();
+            string json = task.Result;
+            var timelines = JsonConvert.DeserializeObject<TimelineCollection>(json);
+            if (timelines != null)
+            {
+                foreach (var timeline in timelines.Timelines)
+                {
+                    timeline.UpdateCalculatedColumns();
+                }
                 return timelines.Timelines;
             }
             return null;

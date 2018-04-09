@@ -20,10 +20,8 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         // GET: Timelines
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            await _repo.InitializeAsync();
-
             return View();
         }
 

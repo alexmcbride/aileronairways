@@ -30,7 +30,9 @@
     </nav>
 
     @*Use tag helper to display flash messages.*@
-    <flash-messages />
+    <div id="flash-messages-wrapper" style="z-index:999; position: fixed; width: 100%;">
+        <flash-messages />
+    </div>
 
     <div style="flex: 1 0 auto;">
         @*class="container body-content"*@

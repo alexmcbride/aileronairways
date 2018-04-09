@@ -1,0 +1,11 @@
+﻿@model IEnumerable<TimelineEvent>       
+
+
+@{
+    int i = 0;
+    foreach (var item in Model)
+    {
+        i = i + 1;
+        <a class="eventTitlesFilter uppercase" data-id="@item.Id" href="javascript:void(0);">@i: @item.Title</a>
+    }
+}

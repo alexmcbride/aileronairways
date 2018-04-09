@@ -1,7 +1,9 @@
 ﻿using AileronAirwaysWeb.Data;
 using AileronAirwaysWeb.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ namespace AileronAirwaysWeb.Models
     {
         private readonly ITimelineService _api;
         private readonly ApplicationDbContext _context;
+        private readonly IConfiguration _config;
 
         public IQueryable<Timeline> Timelines
         {
@@ -28,10 +31,11 @@ namespace AileronAirwaysWeb.Models
             get { return _context.Attachments; }
         }
 
-        public TimelineRepository(ITimelineService api, ApplicationDbContext context)
+        public TimelineRepository(ITimelineService api, ApplicationDbContext context, IConfiguration config)
         {
             _api = api;
             _context = context;
+            _config = config;
         }
 
         public async Task InitializeAsync()
@@ -41,14 +45,24 @@ namespace AileronAirwaysWeb.Models
             {
                 var timelines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
 
-                foreach (var timeline in timelines)
-                {
-                    timeline.UpdateAttachmentCounts();
-                }
-
                 await _context.AddRangeAsync(timelines);
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public void Initialize()
+        {
+            Debug.WriteLine("TimelineRepository: dropping and recreating DB");
+            _context.Database.EnsureDeleted();
+            _context.Database.EnsureCreated();
+
+            Debug.WriteLine("TimelineRepository: getting all timelines and events");
+            var timelines = Timeline.GetAllTimelinesAndEvents(_api);
+
+            _context.AddRange(timelines);
+            _context.SaveChanges();
+
+            Debug.WriteLine("TimelineRepository: done");
         }
 
         public Timeline GetTimeline(string id)
@@ -117,6 +131,13 @@ namespace AileronAirwaysWeb.Models
             var timelineEvent = await TimelineEvent.CreateAndLinkAsync(_api, title, description, eventDateTime, location, timelineId);
             timelineEvent.TimelineId = timelineId;
             await _context.TimelineEvents.AddAsync(timelineEvent);
+
+            // Increment event count
+            Timeline timeline = GetTimeline(timelineId);
+            timeline.EventsCount++;
+            _context.Entry(timeline).State = EntityState.Modified;
+    
+            // Save
             await _context.SaveChangesAsync();
             return timelineEvent;
         }
@@ -139,6 +160,12 @@ namespace AileronAirwaysWeb.Models
         {
             await TimelineEvent.UnlinkAndDeleteAsync(_api, evt.TimelineId, evt.Id);
             _context.TimelineEvents.Remove(evt);
+
+            // Deincrement event count
+            var timeline = GetTimeline(evt.TimelineId);
+            timeline.EventsCount--;
+            _context.Entry(timeline).State = EntityState.Modified;
+
             await _context.SaveChangesAsync();
         }
 
@@ -209,6 +236,24 @@ namespace AileronAirwaysWeb.Models
             await @event.EditDescriptionAsync(_api);
             _context.Entry(@event).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> IsOfflineAsync()
+        {
+            bool test = _config.GetValue<bool>("TestReadonlyMode");
+            if (test)
+            {
+                return true;
+            }
+
+            bool offline = await _api.IsOfflineAsync();
+            if (offline)
+            {
+                Debug.WriteLine("API is offline :(");
+
+                // Cache in DB or summit.
+            }
+            return offline;
         }
     }
 }
