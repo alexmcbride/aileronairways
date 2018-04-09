@@ -27,7 +27,7 @@ namespace AileronAirwaysWeb.TagHelpers
             foreach (var message in messages)
             {
                 string type = message.Type.ToString();
-                output.Content.AppendHtml($"<div class=\"alert alert-{type.ToLower()} alert-dismissible text-center\" role=\"alert\">");
+                output.Content.AppendHtml($"<div class=\"alert alert-{type.ToLower()} alert-dismissible text-center alert-flash\" role=\"alert\">");
                 output.Content.AppendHtml("<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\"><span aria-hidden=\"true\">&times;</span></button>");
                 output.Content.AppendHtml($"<strong>{type}</strong> {message.Text}");
                 output.Content.AppendHtml("</div>");

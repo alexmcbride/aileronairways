@@ -381,6 +381,11 @@ i, .arrow {
     -webkit-transform: rotate(45deg);
 }
 
-.flash-messages-wrapper {
-    z-index: 101;
+#flash-messages-wrapper {
+    width: 100%;
+    z-index: 1;
+}
+
+.alert-flash {
+    margin-bottom: 0px;
 }

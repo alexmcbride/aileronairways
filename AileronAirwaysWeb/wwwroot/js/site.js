@@ -54,8 +54,20 @@ function handleDelete() {
 
 function loadFlashPartial() {
     $.get('/TimelineEvents/FlashMessages', function (data) {
+        $('#flash-messages-wrapper').css({'position': 'fixed'});
         $('#flash-messages-wrapper').html(data);
     });
+}
+
+function handleApiOffline(callback) {
+    var html = '<div class="alert alert-danger alert-dismissible text-center alert-flash" role="alert">' +
+        '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+        '<strong class="text-capitalize">Read-only mode</strong> The site has been switch to read-only mode, as the API is offline' +
+        '</div>';
+
+    $('.flash-messages').append(html);
+
+    callback();
 }
 
 function checkApiOffline(callback) {
@@ -64,11 +76,12 @@ function checkApiOffline(callback) {
         dataType: 'json',
         success: function (data, status, xhr) {
             if (data.offline) {
-                callback();
+                handleApiOffline();
             }
         },
         fail: function () {
-            callback(); // Call anyway if error
+            // Call anyway if error
+            handleApiOffline();
         }
     });
 }
