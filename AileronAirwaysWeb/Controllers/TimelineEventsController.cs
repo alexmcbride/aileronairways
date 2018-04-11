@@ -147,7 +147,7 @@ namespace AileronAirwaysWeb.Controllers
             var evt = _repo.GetTimelineEventWithAttachments(eventId);
             await _repo.DeleteTimelineEventAsync(evt);
 
-            _flash.Message("Deleted timeline event");
+            _flash.Message($"Deleted '{evt.Title}' event");
 
             return Ok("OK " + eventId);
         }

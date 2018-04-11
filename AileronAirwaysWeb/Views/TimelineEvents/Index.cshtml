@@ -444,7 +444,7 @@
             $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    reloadSelectedTimeline(eventId);
+                    reloadSelectedTimeline(null);
                     $('#myModal').modal('hide');
                 }
                 else {
