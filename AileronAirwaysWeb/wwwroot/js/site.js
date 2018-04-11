@@ -35,9 +35,9 @@ function displayDeleteModal(data, id, timelineId) {
     });
 }
 
-function handleDelete() {
-    var id = $('#deleteEvent').attr('data-id');
-    var timelineId = $('#deleteEvent').attr('data-timeline-id');
+function handleDelete(linkElement) {
+    var id = linkElement.attr('data-id');
+    var timelineId = linkElement.attr('data-timeline-id');
     $.ajax({
         type: "GET",
         url: "/Timelines/" + timelineId + "/Events/" + id + "/Delete",

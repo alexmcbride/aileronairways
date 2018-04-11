@@ -285,7 +285,7 @@
         $(".modal-link-delete").click(function (evt) {
             evt.preventDefault();
 
-            handleDelete();
+            handleDelete($(this));
         });
     }
 
@@ -417,7 +417,7 @@
                 console.log(response);
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events';
+                    reloadSelectedTimeline(eventId);
                     $('#myModal').modal('hide');
                 }
                 else {
@@ -444,7 +444,7 @@
             $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events';
+                    reloadSelectedTimeline(eventId);
                     $('#myModal').modal('hide');
                 }
                 else {
