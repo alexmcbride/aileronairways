@@ -64,7 +64,7 @@ namespace AileronAirwaysWeb.Controllers
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string timelineId, [Bind("Title,Description,EventDateTime,Location")] TimelineEventViewModel vm)
+        public async Task<ActionResult> Create(string timelineId, [Bind("Title,Description,EventDateTime")] TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
