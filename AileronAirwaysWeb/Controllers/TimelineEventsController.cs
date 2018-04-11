@@ -103,15 +103,13 @@ namespace AileronAirwaysWeb.Controllers
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,Description,EventDateTime,Location")]  TimelineEventViewModel vm)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,EventDateTime")]  TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
                 evt.Title = vm.Title;
-                evt.Description = vm.Description;
                 evt.EventDateTime = vm.EventDateTime;
-                evt.Location = vm.Location;
                 await _repo.EditTimelineEventAsync(evt);
 
                 _flash.Message($"Event '{evt.Title}' edited!");
