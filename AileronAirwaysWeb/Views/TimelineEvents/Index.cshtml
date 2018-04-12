@@ -429,33 +429,6 @@
         });
     }
 
-    function displayDeleteModal(data, id) {
-        $('#myModalContent').html(data);
-        $('#myModal').modal({ keyboard: true });
-        $('#myModal').modal('show');
-
-        // Hook event to edit view form.
-        $('#delete-event-form').on('submit', function (e) {
-            e.preventDefault();
-
-            disableFormElement('#btnSave', true);
-
-            var data = $('#delete-event-form').serialize();
-            $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
-                if (response.startsWith('OK')) {
-                    var eventId = response.split(' ')[1];
-                    reloadSelectedTimeline(null);
-                    $('#myModal').modal('hide');
-                }
-                else {
-                    displayDeleteModal(response, id);
-                }
-
-                disableFormElement('#btnSave', false);
-            }, 'html');
-        });
-    }
-
     $(function () {
         $("#addEventBtn,#addEventLink").click(function () {
             $.ajax({
