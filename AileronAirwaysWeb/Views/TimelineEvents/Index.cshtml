@@ -285,7 +285,7 @@
         $(".modal-link-delete").click(function (evt) {
             evt.preventDefault();
 
-            handleDelete();
+            handleDelete($(this));
         });
     }
 
@@ -349,6 +349,25 @@
         }
     }
 
+    function handleCreateResponse(response, redirect) {
+        if (response.startsWith('OK')) {
+            $('#myModal').modal('hide');
+            var eventId = response.split(' ')[1];
+
+            if (redirect) {
+                location.href = "/timelines/@ViewBag.TimelineId/events/" + eventId;
+            }
+            else {
+                reloadSelectedTimeline(eventId);
+            }
+        }
+        else {
+            displayCreateModal(response);
+        }
+
+        disableFormElement('#btnSave', false);
+    }
+
     function displayCreateModal(data) {
         $('#myModalContent').html(data);
         $('#myModal').modal({ keyboard: true });
@@ -362,16 +381,22 @@
 
             var data = $('#create-event-form').serialize();
             $.post(createEventUrl, data, function (response) {
-                if (response.startsWith('OK')) {
-                    $('#myModal').modal('hide');
-                    var eventId = response.split(' ')[1];
-                    reloadSelectedTimeline(eventId);
-                }
-                else {
-                    displayCreateModal(response);
-                }
+                handleCreateResponse(response, false);
 
                 disableFormElement('#btnSave', false);
+            }, 'html');
+        });
+
+        $('#createAndEditButton').click(function (evt) {
+            evt.preventDefault();
+
+            disableFormElement('#createAndEditButton', true);
+
+            var data = $('#create-event-form').serialize();
+            $.post(createEventUrl, data, function (response) {
+                handleCreateResponse(response, true);
+
+                disableFormElement('#createAndEditButton', false);
             }, 'html');
         });
     }
@@ -392,7 +417,7 @@
                 console.log(response);
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events';
+                    reloadSelectedTimeline(eventId);
                     $('#myModal').modal('hide');
                 }
                 else {
@@ -419,7 +444,7 @@
             $.post('/timelines/@ViewBag.TimelineId/events/' + id + '/delete', data, function (response) {
                 if (response.startsWith('OK')) {
                     var eventId = response.split(' ')[1];
-                    location.href = '/timelines/@ViewBag.TimelineId/events';
+                    reloadSelectedTimeline(null);
                     $('#myModal').modal('hide');
                 }
                 else {

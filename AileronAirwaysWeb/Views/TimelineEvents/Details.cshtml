@@ -181,13 +181,9 @@
 
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
-        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
-
         <p id="geoNonSupport" style="color:red"></p>
 
         <div class="row">
-
             <div class="form-group col-xs-3 col-xs-offset-2">
                 <label for="curlng">Latitude</label>
                 <input type="text" name="longitude" id="curlng" class="form-control" disabled />
@@ -205,9 +201,7 @@
                             <i class="far fa-edit" aria-hidden="true"></i>
                             Save
                         </button>
-
                     </div>
-
                 </form>
             </div>
         </div>
@@ -264,10 +258,20 @@
 
     <script>
     function initAutocomplete() {
-        var loc = "@Model.Location"@*!= null ? @Model.Location.Split()[0] : null*@;
+        var loc = "@Model.Location";
         var lat = "55.873543";
         var lng = "-4.289058";
-        //debugger;
+
+        var latlng = new google.maps.LatLng(lat, lng);
+        var mapOptions = {
+            zoom: 15,
+            center: latlng,
+            mapTypeId: 'roadmap'
+        }
+
+        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
+        var marker = null;
+    
         if (loc == "0,0") {
             var options = { enableHighAccuracy: true, };
             if (navigator.geolocation) {
@@ -275,6 +279,7 @@
                     document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
                     console.warn(`ERROR(${err.code}): ${err.message}`);
                 }
+
                 function showPosition(position) {
                     lat = String(position.coords.latitude.toFixed(6));
                     lng = String(position.coords.longitude.toFixed(6));
@@ -282,7 +287,15 @@
                     document.getElementById("curlat").setAttribute("value", lat);
                     document.getElementById("curlng").setAttribute("value", lng);
                     document.forms['edit-location-form']['locationaddress'].value = loc;
+
+                    // Set marker location to current position
+                    if (marker != null) {
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        marker.setPosition(latLng);
+                        map.panTo(latLng);
+                    }
                 }
+
                 navigator.geolocation.getCurrentPosition(showPosition, error, options);
             }
         }
@@ -294,13 +307,6 @@
             document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
             document.forms['edit-location-form']['locationaddress'].value = loc;
         }
-        var latlng = new google.maps.LatLng(lat, lng);
-        var mapOptions = {
-            zoom: 15,
-            center: latlng,
-            mapTypeId: 'roadmap'
-        }
-        var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
 
         //debugger;
         var card = document.getElementById('pac-card');
@@ -320,7 +326,7 @@
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
-        var marker = new google.maps.Marker({
+        marker = new google.maps.Marker({
             position: latlng,
             title: 'Set lat/lon values for this property',
             anchorPoint: new google.maps.Point(0, -29),
