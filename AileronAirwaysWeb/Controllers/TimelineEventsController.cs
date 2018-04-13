@@ -109,9 +109,9 @@ namespace AileronAirwaysWeb.Controllers
             {
                 TimelineEvent evt = _repo.GetTimelineEventWithAttachments(eventId);
                 evt.Title = vm.Title;
-                evt.Description = vm.Description;
+                //evt.Description = vm.Description;
                 evt.EventDateTime = vm.EventDateTime;
-                evt.Location = vm.Location;
+                //evt.Location = vm.Location;
                 await _repo.EditTimelineEventAsync(evt);
 
                 _flash.Message($"Event '{evt.Title}' edited!");
