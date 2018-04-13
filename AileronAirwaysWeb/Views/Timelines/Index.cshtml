@@ -5,12 +5,18 @@
 }
 
 @section AddToHead{
-
     <script src="~/js/site.js"></script>
-
     <link href="~/css/timelineIndex.css" rel="stylesheet" />
     <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
+
+
+    <link href="~/fontAwesome/dataTables.foundation.css" rel="stylesheet" />
+    <link href="~/fontAwesome/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/fontAwesome/jquery.dataTables.css" rel="stylesheet" />
+
+
 }
+
 
 <div class="content-wrapper">
 
@@ -38,8 +44,8 @@
                         <div class="input-group wtSearchBar">
                             <input type="text" class="form-control" placeholder="Search..." id="search">
                             @*<span class="input-group-addon">
-                        <span class="glyphicon glyphicon-search"></span>
-                    </span>*@
+                                    <span class="glyphicon glyphicon-search"></span>
+                                </span>*@
                         </div>
                     </div>
 
@@ -89,7 +95,7 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines"  style=" width: 100%; max-width: 100%; overflow-x: auto;">
+        <table class="display" data-order='[[ 1, "desc" ]]' id="tbltimelines" style=" width: 100%; max-width: 100%; overflow-x: auto;">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -120,7 +126,7 @@
 
 
     <script>
-     
+
         var timelinetable = null;
         function updateTable(jsondata) {
             timelinetable = $('#tbltimelines').DataTable({
