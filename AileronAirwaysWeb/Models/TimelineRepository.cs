@@ -181,7 +181,7 @@ namespace AileronAirwaysWeb.Models
 
         public async Task<Attachment> CreateAttachmentAsync(string eventId, string fileName, Stream stream)
         {
-            var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, fileName, stream);
+            var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, Path.GetFileName(fileName), stream);
 
             // Set relation and update event attachment counters.
             var @event = await _context.TimelineEvents.FindAsync(eventId);
