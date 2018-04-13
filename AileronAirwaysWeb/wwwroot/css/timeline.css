@@ -71,7 +71,9 @@ li {
 .mainHeader {
     font-family: Verdana, Geneva, sans-serif;
     font-weight: bold;
-    
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
