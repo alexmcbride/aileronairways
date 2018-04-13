@@ -121,24 +121,27 @@
         {
             int i = 1;
 
-            <div class="slideshow-container">
-                @foreach (var item in Model.Attachments)
-                {
-                    @if (item.IsImage)
-                    {
-                        <div class="mySlides">
-                            <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
-                            <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
-                            <div class="text">@item.Title</div>
-                        </div>
-                        i++;
-                    }
-                }
+        <div class="slideshow-container">
+            @foreach (var item in Model.Attachments)
+    {
+        @if (item.IsImage)
+{
+        <div class="mySlides">
+            <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
+            <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
+            <div class="text">@item.Title</div>
 
-                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+        </div>
+        <br /><br/>
+        <a href="#" data-id="@item.Id" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
+i++;
+}
+}
 
-            </div>
+            <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+            <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+        </div>
             <br>
             <div style="text-align:center">
                 @if (Model.AttachmentImagesCount > 0)
@@ -248,7 +251,7 @@
                 @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
             </a>
         }
-        <p id="geoNonSupport" style="color:red;"></p>
+        @*<p id="geoNonSupport" style="color:red;"></p>*@
     </div>
 </div>
 
@@ -294,6 +297,7 @@
             document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
             document.forms['edit-location-form']['locationaddress'].value = loc;
         }
+
         var latlng = new google.maps.LatLng(lat, lng);
         var mapOptions = {
             zoom: 15,
@@ -349,8 +353,8 @@
             }
             marker.setPosition(place.geometry.location);
             marker.setVisible(true);
-            var dglat = document.getElementById("curlat").value = String(place.geometry.location.getPosition().lat());
-            var dglng = document.getElementById("curlng").value = String(place.geometry.location.getPosition().lng());
+            var dglat = document.getElementById("curlat").value = String(place.geometry.location.lat());
+            var dglng = document.getElementById("curlng").value = String(place.geometry.location.lng());
             var dgloc = dglat.concat(",", dglng);
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
 
