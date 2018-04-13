@@ -14,7 +14,7 @@
         <div id="eventHeader">
             <div id="backArrow" class="text-center">
                 @*<a class="arrowLink" @*onclick="goBack()" * @ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>*@
-                <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId = ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
@@ -161,7 +161,7 @@
         }
         else
         {
-            <br />
+            <br>
             <div class="panel panel-default">
                 <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
                     <p>No <strong>Images</strong> Uploaded Yet</p>
@@ -527,9 +527,8 @@
                                 if (response.startsWith('OK')) {
                                     // Remove item from table.
                                     var attachmentId = response.split(' ')[1];
-                                    $('#attachment-item-' + attachmentId).remove();
 
-                                    loadFlashPartial();
+                                    location.href = '/timelines/@ViewBag.TimelineId/events/@ViewBag.EventId';
                                 }
                             }
                         });
