@@ -355,8 +355,8 @@
             }
             marker.setPosition(place.geometry.location);
             marker.setVisible(true);
-            var dglat = document.getElementById("curlat").value = String(place.geometry.location.getPosition().lat());
-            var dglng = document.getElementById("curlng").value = String(place.geometry.location.getPosition().lng());
+            var dglat = document.getElementById("curlat").value = String(place.geometry.location.lat());
+            var dglng = document.getElementById("curlng").value = String(place.geometry.location.lng());
             var dgloc = dglat.concat(",", dglng);
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
 
