@@ -129,7 +129,8 @@
 }
 
 #backArrow {
-    position: absolute;
+    /*position: absolute;*/
+    position:fixed;
     top: 120px;
     left: 16px;
     font-size: 50px;
@@ -142,7 +143,7 @@
         display: block;
     }
 
-    #backArrow {
+    /*#backArrow {
         position: unset;
         top: 120px;
         left: 0px;
@@ -152,6 +153,11 @@
         padding: 0;
         padding-top: 60px;
         margin-bottom: -50px;
+    }*/
+
+    #backArrow {
+        top: 80px;
+        left: 10px;
     }
 }
 

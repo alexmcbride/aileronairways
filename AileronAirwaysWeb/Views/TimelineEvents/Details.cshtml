@@ -182,6 +182,10 @@
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
         <p id="geoNonSupport" style="color:red"></p>
+        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
+            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
+
+        @*<p id="geoNonSupport" style="color:red"></p>*@
 
         <div class="row">
             <div class="form-group col-xs-3 col-xs-offset-2">
@@ -242,7 +246,7 @@
                 @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
             </a>
         }
-        <p id="geoNonSupport" style="color:red;"></p>
+        @*<p id="geoNonSupport" style="color:red;"></p>*@
     </div>
 </div>
 
@@ -273,31 +277,22 @@
         var marker = null;
     
         if (loc == "0,0") {
-            var options = { enableHighAccuracy: true, };
-            if (navigator.geolocation) {
-                function error(err) {
-                    document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
-                    console.warn(`ERROR(${err.code}): ${err.message}`);
-                }
-
-                function showPosition(position) {
-                    lat = String(position.coords.latitude.toFixed(6));
-                    lng = String(position.coords.longitude.toFixed(6));
-                    loc = lat.concat(",", lng);
-                    document.getElementById("curlat").setAttribute("value", lat);
-                    document.getElementById("curlng").setAttribute("value", lng);
-                    document.forms['edit-location-form']['locationaddress'].value = loc;
-
-                    // Set marker location to current position
-                    if (marker != null) {
-                        var latLng = new google.maps.LatLng(lat, lng);
-                        marker.setPosition(latLng);
-                        map.panTo(latLng);
-                    }
-                }
-
-                navigator.geolocation.getCurrentPosition(showPosition, error, options);
-            }
+            //var options = { enableHighAccuracy: true, };
+            //if (navigator.geolocation) {
+            //    function error(err) {
+            //        document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
+            //        console.warn(`ERROR(${err.code}): ${err.message}`);
+            //    }
+            //    function showPosition(position) {
+            //        lat = String(position.coords.latitude.toFixed(6));
+            //        lng = String(position.coords.longitude.toFixed(6));
+            //        loc = lat.concat(",", lng);
+            //        document.getElementById("curlat").setAttribute("value", lat);
+            //        document.getElementById("curlng").setAttribute("value", lng);
+            //        document.forms['edit-location-form']['locationaddress'].value = loc;
+            //    }
+            //    navigator.geolocation.getCurrentPosition(showPosition, error, options);
+            //}
         }
         else if (@Model.Location != null) {
             lat = "@Model.Location.Split(",")[0]";
