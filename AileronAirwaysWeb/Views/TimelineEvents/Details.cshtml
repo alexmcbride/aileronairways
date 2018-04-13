@@ -312,13 +312,12 @@ i++;
             document.getElementById("curlat").setAttribute("value", "@Model.Location.Split(",")[0]");
             document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
             document.forms['edit-location-form']['locationaddress'].value = loc;
-
-            // Set marker location to current position
-            if (marker != null) {
-                var latLng = new google.maps.LatLng(lat, lng);
-                marker.setPosition(latLng);
-                map.panTo(latLng);
-            }
+        }
+        var latlng = new google.maps.LatLng(lat, lng);
+        var mapOptions = {
+            zoom: 15,
+            center: latlng,
+            mapTypeId: 'roadmap'
         }
 
         //debugger;
