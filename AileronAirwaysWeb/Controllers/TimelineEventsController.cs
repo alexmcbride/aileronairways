@@ -197,8 +197,7 @@ namespace AileronAirwaysWeb.Controllers
                 evt.Location = vm.Location;
                 await _repo.EditEventLocationAsync(evt);
 
-
-                _flash.Message($"Event location edited!");
+                _flash.Message($"Event location saved!");
 
                 return Ok("OK " + evt.Id);
             }

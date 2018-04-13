@@ -182,11 +182,6 @@
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
         <p id="geoNonSupport" style="color:red"></p>
-        @*@Html.Partial("~/Views/TimelineEvents/EditLocation.cshtml", new AileronAirwaysWeb.ViewModels.TimelineEventLocationViewModel())
-            @Html.Partial("EditLocation", Model.TimelineEventLocationViewModel)*@
-
-        @*<p id="geoNonSupport" style="color:red"></p>*@
-
         <div class="row">
             <div class="form-group col-xs-3 col-xs-offset-2">
                 <label for="curlng">Latitude</label>
@@ -237,8 +232,8 @@
                 <i class="fas fa-arrow-left xl"></i>&nbsp;&nbsp;&nbsp;@ViewBag.PreviousEvent.Title
             </a>
         }
-        <a class="button btnEvent uppercase" data-id="@Model.Id" data-timeline-id="@Model.TimelineId" href="#" id="deleteEvent">Delete</a>
 
+        <a class="button btnEvent uppercase" data-id="@Model.Id" data-timeline-id="@Model.TimelineId" href="#" id="deleteEvent">Delete</a>
 
         @if (@ViewBag.NextEvent != null)
         {
@@ -274,25 +269,38 @@
         }
 
         var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
-        var marker = null;
+        marker = new google.maps.Marker({
+            position: latlng,
+            title: 'Set lat/lon values for this property',
+            anchorPoint: new google.maps.Point(0, -29),
+            map: map,
+            draggable: true
+        });
     
         if (loc == "0,0") {
-            //var options = { enableHighAccuracy: true, };
-            //if (navigator.geolocation) {
-            //    function error(err) {
-            //        document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
-            //        console.warn(`ERROR(${err.code}): ${err.message}`);
-            //    }
-            //    function showPosition(position) {
-            //        lat = String(position.coords.latitude.toFixed(6));
-            //        lng = String(position.coords.longitude.toFixed(6));
-            //        loc = lat.concat(",", lng);
-            //        document.getElementById("curlat").setAttribute("value", lat);
-            //        document.getElementById("curlng").setAttribute("value", lng);
-            //        document.forms['edit-location-form']['locationaddress'].value = loc;
-            //    }
-            //    navigator.geolocation.getCurrentPosition(showPosition, error, options);
-            //}
+            var options = { enableHighAccuracy: true, };
+            if (navigator.geolocation) {
+                function error(err) {
+                    document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
+                    console.warn(`ERROR(${err.code}): ${err.message}`);
+                }
+                function showPosition(position) {
+                    lat = String(position.coords.latitude.toFixed(6));
+                    lng = String(position.coords.longitude.toFixed(6));
+                    loc = lat.concat(",", lng);
+                    document.getElementById("curlat").setAttribute("value", lat);
+                    document.getElementById("curlng").setAttribute("value", lng);
+                    document.forms['edit-location-form']['locationaddress'].value = loc;
+
+                    // Set marker location to current position
+                    if (marker != null) {
+                        var latLng = new google.maps.LatLng(lat, lng);
+                        marker.setPosition(latLng);
+                        map.panTo(latLng);
+                    }
+                }
+                navigator.geolocation.getCurrentPosition(showPosition, error, options);
+            }
         }
         else if (@Model.Location != null) {
             lat = "@Model.Location.Split(",")[0]";
@@ -301,6 +309,13 @@
             document.getElementById("curlat").setAttribute("value", "@Model.Location.Split(",")[0]");
             document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
             document.forms['edit-location-form']['locationaddress'].value = loc;
+
+            // Set marker location to current position
+            if (marker != null) {
+                var latLng = new google.maps.LatLng(lat, lng);
+                marker.setPosition(latLng);
+                map.panTo(latLng);
+            }
         }
 
         //debugger;
@@ -321,13 +336,7 @@
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
-        marker = new google.maps.Marker({
-            position: latlng,
-            title: 'Set lat/lon values for this property',
-            anchorPoint: new google.maps.Point(0, -29),
-            map: map,
-            draggable: true
-        });
+
         marker.setMap(map);
 
         autocomplete.addListener('place_changed', function () {
@@ -391,18 +400,12 @@
         var data = $('#edit-location-form').serialize();
         disableFormElement($('#btnSave'), true);
         $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
-        // If edit was successful post returns with OK
-        if (response.startsWith('OK')) {
-            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
-
-            // Hack to make flash message appear correctly when side bar is shown.
-             $('.flash-messages').css('margin-left', '20px');
-        }
-        else {
-            // Otherwise redisplay form.
-            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
-        }
-    }, 'html');
+            // If edit was successful post returns with OK
+            if (response.startsWith('OK')) {
+                disableFormElement($('#btnSave'), false);
+                loadFlashPartial();
+            }
+        }, 'html');
 
     });
     </script>
