@@ -30,5 +30,6 @@ namespace AileronAirwaysWeb.Data
         public DbSet<Timeline> Timelines { get; set; }
         public DbSet<TimelineEvent> TimelineEvents { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<ApiEvent> ApiEvents { get; set; }
     }
 }

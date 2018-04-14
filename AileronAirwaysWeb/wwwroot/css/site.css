@@ -399,6 +399,7 @@ i {
     font-size: 32px;
 }
 
+/* Disable links */
 a.disabled {
     /* Make the disabled links grayish*/
     color: gray;
