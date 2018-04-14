@@ -353,7 +353,14 @@
     }
 
 /*Right/left Arrow Icon*/
-i, .arrow {
+i {
+    display: inline-block;
+    padding: 3px;
+}
+
+.arrow {
+    border: solid black;
+    border-width: 0 2px 2px 0;
     display: inline-block;
     padding: 3px;
 }
@@ -390,4 +397,11 @@ i, .arrow {
 
 .trash_icon {
     font-size: 32px;
+}
+
+a.disabled {
+    /* Make the disabled links grayish*/
+    color: gray;
+    /* And disable the pointer events */
+    pointer-events: none;
 }

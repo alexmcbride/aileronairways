@@ -64,7 +64,7 @@
 </script>
 
 <div class="container body-content">
-    <button id="addEventBtn" title="Add Event">&#43;</button>
+    <button id="addEventBtn" title="Add Event" class="btn">&#43;</button>
 
     <!--Side Panel - Will Display all Headings-->
     <div id="mainSidePanel">
@@ -120,7 +120,7 @@
             <br /><br /><br />
         </div>
 
-        <p id="addEventLink" class="text-center" style="display: none;"><a href="#" id="addEventLink">Add a new event!</a></p>
+        <p id="addEventLinkWrapper" class="text-center" style="display: none;"><a href="#" id="addEventLink">Add a new event!</a></p>
 
         <div id="timelinePartialContent">
             @Html.Partial("_TimelineZoomedIn", Model)
@@ -131,7 +131,7 @@
         {
             <script>
                 document.getElementById("timelineTabs").style.display = "none";
-                document.getElementById("addEventLink").style.display = "block";
+                document.getElementById("addEventLinkWrapper").style.display = "block";
             </script>
         }
 
@@ -163,6 +163,25 @@
         filter = input.value.toUpperCase();
         titles = document.getElementsByClassName("eventTitlesFilter");
 
+        for (i = 0; i < titles.length; i++) {
+            td = titles[i];
+            if (td) {
+                if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+                    titles[i].style.display = "";
+                } else {
+                    titles[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function filterEventTitlesTop() {
+        var input, filter, table, tr, td, i;
+
+        input = document.getElementById("myInputSearchEventsTop");
+
+        filter = input.value.toUpperCase();
+        titles = document.getElementsByClassName("eventTitlesFilter");
 
         for (i = 0; i < titles.length; i++) {
             td = titles[i];
@@ -176,48 +195,11 @@
         }
     }
 
-        function filterEventTitlesTop() {
-            var input, filter, table, tr, td, i;
-
-            input = document.getElementById("myInputSearchEventsTop");
-
-            filter = input.value.toUpperCase();
-            titles = document.getElementsByClassName("eventTitlesFilter");
-
-
-            for (i = 0; i < titles.length; i++) {
-                td = titles[i];
-                if (td) {
-                    if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-                        titles[i].style.display = "";
-                    } else {
-                        titles[i].style.display = "none";
-                    }
-                }
-            }
-        }
-
-   
-
-
-
-
-
-
-
     // open side panel
     function openNav() {
         document.getElementById("mySidenav").style.width = "230px";
         document.getElementById("mySidenav").style.marginLeft = "0px";
         document.getElementById("mainSidePanel").style.marginLeft = "230px";
-
-
-        //document.getElementById("timelinePartial_In_Links").style.visibility = 'visible';
-        //document.getElementById("timelinePartial_Out_Links").style.visibility = 'visible';
-
-
-
-
 
         document.getElementById("sideNavContent").style.visibility = 'visible';
         document.getElementById("sideNavArrows").style.paddingLeft = '200px';
@@ -237,15 +219,7 @@
         document.getElementById("mySidenav").style.marginLeft = "-210px";
         document.getElementById("mainSidePanel").style.marginLeft = "20px";
 
-        // side panel content GONE! - It's Magic
         document.getElementById("sideNavContent").style.visibility = 'hidden';
-
-
-        //document.getElementById("timelinePartial_In_Links").style.visibility = 'hidden';
-        //document.getElementById("timelinePartial_Out_Links").style.visibility = 'hidden';
-
-
-
 
         document.getElementById("sideNavArrows").style.paddingLeft = '215px';
 
@@ -293,6 +267,17 @@
         });
     }
 
+    function checkOffline() {
+        // Check if API is offline.
+        checkApiOffline(function () {
+            // Code inside this function gets executing if API is offline
+            $('#addEventBtn').attr('disabled', 'disabled');
+            $('#addEventLink').addClass('disabled');
+            $('.modal-link-edit').addClass('disabled');
+            $('.modal-link-delete').addClass('disabled');
+        });
+    }
+
     function attachSidebarEvents() {
         $('.eventTitlesFilter').click(function (evt) {
             evt.preventDefault()
@@ -327,6 +312,7 @@
 
                 loadFlashPartial();
                 loadSidebarPartial();
+                checkOffline();
             }
         });
     }
@@ -466,11 +452,7 @@
         attachSidebarEvents();
         attachEditDeleteEvents();
 
-        // Check if API is offline.
-        checkApiOffline(function () {
-            // Code inside this function gets executing if API is offline
-            $('.modal-link-create-timeline').attr('disabled', 'disabled');
-        });
+        checkOffline();
     });
 
     </script>

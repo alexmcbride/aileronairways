@@ -5,12 +5,9 @@
 }
 
 @section AddToHead{
+    <link href="~/lib/DataTables/datatables.min.css" rel="stylesheet" />
 
     <script src="~/js/site.js"></script>
-
-
-    <link href="~/lib/DataTables/datatables.css" rel="stylesheet" />
-
 
     <link href="~/css/timelineIndex.css" rel="stylesheet" />
     <link href="~/css/timeline-sidebar.css" rel="stylesheet" />
@@ -90,7 +87,7 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="display" data-order='[[ 1, 1 ]]' id="tbltimelines" style=" width: 100%; max-width: 100%; overflow-x: auto;">
+        <table class="table table-responsive display" data-order='[[ 1, 1 ]]' id="tbltimelines" style=" width: 100%; max-width: 100%; overflow-x: auto;">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -117,11 +114,21 @@
 @section scripts {
     <script src="~/lib/DataTables/datatables.min.js"></script>
 
-
-
     <script>
 
         var timelinetable = null;
+
+        function checkOffline() {
+            checkApiOffline(function () {
+                // Code inside this function gets executing if API is offline
+                $('.modal-link-create-timeline').attr('disabled', 'disabled');
+                $('.modal-link-edit-timeline').addClass('disabled');
+                $('.modal-link-edit').addClass('disabled');
+                $('.modal-link-delete-timeline').addClass('disabled');
+                $('.modal-link-delete').addClass('disabled');
+            });
+        }
+
         function updateTable(jsondata) {
             timelinetable = $('#tbltimelines').DataTable({
                 searching: true,
@@ -153,7 +160,7 @@
                     {
                         mRender: function (data, type, row) {
                             return '<a href="javascript:void(0);" class="modal-link-edit-timeline" onclick="editTimeline(\'' + row.id + '\')">Edit</a> | ' +
-                                '<a href="javascript:void(0);" /*href="/timelines/delete/' + row.id + '"*/ onclick="deleteTimeline(\'' + row.id + '\')">Delete</a>';
+                                '<a href="javascript:void(0);" class="modal-link-delete-timeline" onclick="deleteTimeline(\'' + row.id + '\')">Delete</a>';
                         }, sortable: false
                     },
                     {
@@ -165,6 +172,8 @@
                     }
                 ]
             });
+
+            timelinetable.on('draw.dt', checkOffline);
         }
 
 
@@ -371,11 +380,6 @@
         }
 
         $(function () {
-
-
-
-
-
             // Event listener to the two range filtering inputs to redraw on input
             $('#startDateInput, #endDateInput, .input-group, input').on('dp.change keyup', function () {
                 timelinetable.draw();
@@ -392,10 +396,6 @@
                 timelinetable.data();
             });
 
-
-
-
-            // , #startDateInput
             $('#startDate').datetimepicker({
                 format: 'YYYY-MM-DD'
             });
@@ -404,7 +404,6 @@
                 format: 'YYYY-MM-DD',
                 useCurrent: false //Important! See issue #1075
             });
-
 
             $("#startDate").on("dp.change", function (e) {
                 $('#endDate').data("DateTimePicker").minDate(e.date);
@@ -453,10 +452,7 @@
             handleScreenSizeChange(mql); // Set right styles on startup.
 
             // Check if API is offline.
-            checkApiOffline(function () {
-                // Code inside this function gets executing if API is offline
-                $('.modal-link-create-timeline').attr('disabled', 'disabled');
-            });
+            checkOffline();
         });
     </script>
 }

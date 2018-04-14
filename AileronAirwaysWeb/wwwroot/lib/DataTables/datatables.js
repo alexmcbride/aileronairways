@@ -4,7 +4,7 @@
  *
  * To rebuild or modify this file with the latest versions of the included
  * software please visit:
- *   https://datatables.net/download/#ju/dt-1.10.16/r-2.2.1
+ *   https://datatables.net/download/#bs/dt-1.10.16/r-2.2.1
  *
  * Included libraries:
  *   DataTables 1.10.16, Responsive 2.2.1
@@ -13847,7 +13847,7 @@
 		 *
 		 *  @type string
 		 */
-		build:"ju/dt-1.10.16/r-2.2.1",
+		build:"bs/dt-1.10.16/r-2.2.1",
 	
 	
 		/**
@@ -15255,16 +15255,16 @@
 }));
 
 
-/*! DataTables jQuery UI integration
- * ©2011-2014 SpryMedia Ltd - datatables.net/license
+/*! DataTables Bootstrap 3 integration
+ * ©2011-2015 SpryMedia Ltd - datatables.net/license
  */
 
 /**
- * DataTables integration for jQuery UI. This requires jQuery UI and
+ * DataTables integration for Bootstrap 3. This requires Bootstrap 3 and
  * DataTables 1.10 or newer.
  *
  * This file sets the defaults and adds options to DataTables to style its
- * controls using jQuery UI. See http://datatables.net/manual/styling/jqueryui
+ * controls using Bootstrap. See http://datatables.net/manual/styling/bootstrap
  * for further information.
  */
 (function( factory ){
@@ -15282,6 +15282,9 @@
 			}
 
 			if ( ! $ || ! $.fn.dataTable ) {
+				// Require DataTables, which attaches to jQuery, including
+				// jQuery if needed and have a $ property so we can access the
+				// jQuery object that is used
 				$ = require('datatables.net')(root, $).$;
 			}
 
@@ -15297,124 +15300,139 @@
 var DataTable = $.fn.dataTable;
 
 
-var sort_prefix = 'css_right ui-icon ui-icon-';
-var toolbar_prefix = 'fg-toolbar ui-toolbar ui-widget-header ui-helper-clearfix ui-corner-';
-
 /* Set the defaults for DataTables initialisation */
 $.extend( true, DataTable.defaults, {
 	dom:
-		'<"'+toolbar_prefix+'tl ui-corner-tr"lfr>'+
-		't'+
-		'<"'+toolbar_prefix+'bl ui-corner-br"ip>',
-	renderer: 'jqueryui'
+		"<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+		"<'row'<'col-sm-12'tr>>" +
+		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+	renderer: 'bootstrap'
 } );
 
 
+/* Default class modification */
 $.extend( DataTable.ext.classes, {
-	"sWrapper":            "dataTables_wrapper dt-jqueryui",
-
-	/* Full numbers paging buttons */
-	"sPageButton":         "fg-button ui-button ui-state-default",
-	"sPageButtonActive":   "ui-state-disabled",
-	"sPageButtonDisabled": "ui-state-disabled",
-
-	/* Features */
-	"sPaging": "dataTables_paginate fg-buttonset ui-buttonset fg-buttonset-multi "+
-		"ui-buttonset-multi paging_", /* Note that the type is postfixed */
-
-	/* Sorting */
-	"sSortAsc":            "ui-state-default sorting_asc",
-	"sSortDesc":           "ui-state-default sorting_desc",
-	"sSortable":           "ui-state-default sorting",
-	"sSortableAsc":        "ui-state-default sorting_asc_disabled",
-	"sSortableDesc":       "ui-state-default sorting_desc_disabled",
-	"sSortableNone":       "ui-state-default sorting_disabled",
-	"sSortIcon":           "DataTables_sort_icon",
-
-	/* Scrolling */
-	"sScrollHead": "dataTables_scrollHead "+"ui-state-default",
-	"sScrollFoot": "dataTables_scrollFoot "+"ui-state-default",
-
-	/* Misc */
-	"sHeaderTH":  "ui-state-default",
-	"sFooterTH":  "ui-state-default"
+	sWrapper:      "dataTables_wrapper form-inline dt-bootstrap",
+	sFilterInput:  "form-control input-sm",
+	sLengthSelect: "form-control input-sm",
+	sProcessing:   "dataTables_processing panel panel-default"
 } );
 
 
-DataTable.ext.renderer.header.jqueryui = function ( settings, cell, column, classes ) {
-	// Calculate what the unsorted class should be
-	var noSortAppliedClass = sort_prefix+'caret-2-n-s';
-	var asc = $.inArray('asc', column.asSorting) !== -1;
-	var desc = $.inArray('desc', column.asSorting) !== -1;
+/* Bootstrap paging button renderer */
+DataTable.ext.renderer.pageButton.bootstrap = function ( settings, host, idx, buttons, page, pages ) {
+	var api     = new DataTable.Api( settings );
+	var classes = settings.oClasses;
+	var lang    = settings.oLanguage.oPaginate;
+	var aria = settings.oLanguage.oAria.paginate || {};
+	var btnDisplay, btnClass, counter=0;
 
-	if ( !column.bSortable || (!asc && !desc) ) {
-		noSortAppliedClass = '';
-	}
-	else if ( asc && !desc ) {
-		noSortAppliedClass = sort_prefix+'caret-1-n';
-	}
-	else if ( !asc && desc ) {
-		noSortAppliedClass = sort_prefix+'caret-1-s';
-	}
+	var attach = function( container, buttons ) {
+		var i, ien, node, button;
+		var clickHandler = function ( e ) {
+			e.preventDefault();
+			if ( !$(e.currentTarget).hasClass('disabled') && api.page() != e.data.action ) {
+				api.page( e.data.action ).draw( 'page' );
+			}
+		};
 
-	// Setup the DOM structure
-	$('<div/>')
-		.addClass( 'DataTables_sort_wrapper' )
-		.append( cell.contents() )
-		.append( $('<span/>')
-			.addClass( classes.sSortIcon+' '+noSortAppliedClass )
-		)
-		.appendTo( cell );
+		for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
+			button = buttons[i];
 
-	// Attach a sort listener to update on sort
-	$(settings.nTable).on( 'order.dt', function ( e, ctx, sorting, columns ) {
-		if ( settings !== ctx ) {
-			return;
+			if ( $.isArray( button ) ) {
+				attach( container, button );
+			}
+			else {
+				btnDisplay = '';
+				btnClass = '';
+
+				switch ( button ) {
+					case 'ellipsis':
+						btnDisplay = '&#x2026;';
+						btnClass = 'disabled';
+						break;
+
+					case 'first':
+						btnDisplay = lang.sFirst;
+						btnClass = button + (page > 0 ?
+							'' : ' disabled');
+						break;
+
+					case 'previous':
+						btnDisplay = lang.sPrevious;
+						btnClass = button + (page > 0 ?
+							'' : ' disabled');
+						break;
+
+					case 'next':
+						btnDisplay = lang.sNext;
+						btnClass = button + (page < pages-1 ?
+							'' : ' disabled');
+						break;
+
+					case 'last':
+						btnDisplay = lang.sLast;
+						btnClass = button + (page < pages-1 ?
+							'' : ' disabled');
+						break;
+
+					default:
+						btnDisplay = button + 1;
+						btnClass = page === button ?
+							'active' : '';
+						break;
+				}
+
+				if ( btnDisplay ) {
+					node = $('<li>', {
+							'class': classes.sPageButton+' '+btnClass,
+							'id': idx === 0 && typeof button === 'string' ?
+								settings.sTableId +'_'+ button :
+								null
+						} )
+						.append( $('<a>', {
+								'href': '#',
+								'aria-controls': settings.sTableId,
+								'aria-label': aria[ button ],
+								'data-dt-idx': counter,
+								'tabindex': settings.iTabIndex
+							} )
+							.html( btnDisplay )
+						)
+						.appendTo( container );
+
+					settings.oApi._fnBindAction(
+						node, {action: button}, clickHandler
+					);
+
+					counter++;
+				}
+			}
 		}
+	};
 
-		var colIdx = column.idx;
+	// IE9 throws an 'unknown error' if document.activeElement is used
+	// inside an iframe or frame. 
+	var activeEl;
 
-		cell
-			.removeClass( classes.sSortAsc +" "+classes.sSortDesc )
-			.addClass( columns[ colIdx ] == 'asc' ?
-				classes.sSortAsc : columns[ colIdx ] == 'desc' ?
-					classes.sSortDesc :
-					column.sSortingClass
-			);
+	try {
+		// Because this approach is destroying and recreating the paging
+		// elements, focus is lost on the select button which is bad for
+		// accessibility. So we want to restore focus once the draw has
+		// completed
+		activeEl = $(host).find(document.activeElement).data('dt-idx');
+	}
+	catch (e) {}
 
-		cell
-			.find( 'span.'+classes.sSortIcon )
-			.removeClass(
-				sort_prefix+'triangle-1-n' +" "+
-				sort_prefix+'triangle-1-s' +" "+
-				sort_prefix+'caret-2-n-s' +" "+
-				sort_prefix+'caret-1-n' +" "+
-				sort_prefix+'caret-1-s'
-			)
-			.addClass( columns[ colIdx ] == 'asc' ?
-				sort_prefix+'triangle-1-n' : columns[ colIdx ] == 'desc' ?
-					sort_prefix+'triangle-1-s' :
-					noSortAppliedClass
-			);
-	} );
+	attach(
+		$(host).empty().html('<ul class="pagination"/>').children('ul'),
+		buttons
+	);
+
+	if ( activeEl !== undefined ) {
+		$(host).find( '[data-dt-idx='+activeEl+']' ).focus();
+	}
 };
-
-
-/*
- * TableTools jQuery UI compatibility
- * Required TableTools 2.1+
- */
-if ( DataTable.TableTools ) {
-	$.extend( true, DataTable.TableTools.classes, {
-		"container": "DTTT_container ui-buttonset ui-buttonset-multi",
-		"buttons": {
-			"normal": "DTTT_button ui-button ui-state-default"
-		},
-		"collection": {
-			"container": "DTTT_collection ui-buttonset ui-buttonset-multi"
-		}
-	} );
-}
 
 
 return DataTable;
