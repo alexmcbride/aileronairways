@@ -13,6 +13,8 @@ namespace AileronAirwaysWeb.Models
 {
     public class TimelineRepository
     {
+        private const int OfflineCacheMinutes = 1;
+
         private readonly ITimelineService _api;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
@@ -252,8 +254,8 @@ namespace AileronAirwaysWeb.Models
 
         private Task<ApiEvent> FindRecentOfflineEventAsync()
         {
-            const int OfflineCacheMinutes = 2;
-            var time = DateTime.Now.Subtract(TimeSpan.FromMinutes(OfflineCacheMinutes));
+            var span = TimeSpan.FromMinutes(OfflineCacheMinutes);
+            var time = DateTime.Now.Subtract(span);
             return _context.ApiEvents.Where(a => a.Timestamp > time)
                 .OrderByDescending(a => a.Timestamp)
                 .FirstOrDefaultAsync();
