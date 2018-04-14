@@ -33,11 +33,10 @@
     <div>
         <div class="tabLinksContainer">
             <div class="tab">
-                <button class="tablinks uppercase active" onclick="openTab(event, 'overview')">Overview</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')">Location</button>
-
+                <button class="tablinks uppercase" onclick="openTab(event, 'overview')" id="tab-overview">Overview</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')" id="tab-attachments">Attachments</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')" id="tab-gallery">Gallery</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')" id="tab-location">Location</button>
             </div>
         </div>
     </div>
@@ -81,7 +80,7 @@
                                     <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
                                 </td>
                                 <td>
-                                    <a href="#" data-id="@item.Id" class="deleteAttachmentLink">Delete</a>
+                                    <a href="#" data-id="@item.Id" data-tab="attachments"  class="deleteAttachmentLink">Delete</a>
                                 </td>
                             </tr>
                         }
@@ -101,7 +100,7 @@
         <br />
 
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="attachments">
             <div class="form-group formDragAndDrop">
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
@@ -131,7 +130,7 @@
                             <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
                             <div class="text">@item.Title</div>
                             <br /><br />
-                            <a href="#" data-id="@item.Id" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
+                            <a href="#" data-id="@item.Id" data-tab="gallery" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
                         </div>
 
                         i++;
@@ -171,7 +170,7 @@
 
         <br>
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" id="add-file-attachment-form">
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="gallery" id="add-file-attachment-form">
             <div class="form-group formDragAndDrop">
                 @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
@@ -502,7 +501,7 @@
             });
         }
 
-        function showDeleteModal(linkElement) {
+        function showDeleteModal(linkElement, tab) {
             var id = linkElement.attr('data-id');
             $.ajax({
                 url: '/attachments/@ViewBag.EventId/delete/' + id,
@@ -528,7 +527,7 @@
                                     // Remove item from table.
                                     var attachmentId = response.split(' ')[1];
 
-                                    location.href = '/timelines/@ViewBag.TimelineId/events/@ViewBag.EventId';
+                                    location.href = '/timelines/@ViewBag.TimelineId/events/@ViewBag.EventId?tab=' + tab;
                                 }
                             }
                         });
@@ -549,7 +548,8 @@
             $('.deleteAttachmentLink').click(function (evt) {
                 evt.preventDefault();
 
-                showDeleteModal($(this));
+                var tab = $(this).attr('data-tab');
+                showDeleteModal($(this), tab);
             });
 
             // Check if API is offline.
@@ -557,6 +557,18 @@
                 // Code inside this function gets executing if API is offline
                 $('.modal-link-create-timeline').attr('disabled', 'disabled');
             });
+
+            function eventFire(el, etype) {
+                if (el.fireEvent) {
+                    el.fireEvent('on' + etype);
+                } else {
+                    var evObj = document.createEvent('Events');
+                    evObj.initEvent(etype, true, false);
+                    el.dispatchEvent(evObj);
+                }
+            }
+
+            eventFire(document.getElementById("tab-@ViewBag.Tab"), "click");
         });
     </script>
 }
