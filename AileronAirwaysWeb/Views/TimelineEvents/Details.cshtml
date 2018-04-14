@@ -14,12 +14,12 @@
         <div id="eventHeader">
             <div id="backArrow" class="text-center">
                 @*<a class="arrowLink" @*onclick="goBack()" * @ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>*@
-                <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId = ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
             </div>
             <div class="headerSection">
                 <h2 class="mainHeader">@Model.Title </h2>
                 <hr class="headerHR" />
-                <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy")</em></h4>
+                <h4><em>@Model.EventDateTime.ToString("dddd, dd MMMM, yyyy")</em></h4>
             </div>
         </div>
     </div>
@@ -33,11 +33,10 @@
     <div>
         <div class="tabLinksContainer">
             <div class="tab">
-                <button class="tablinks uppercase active" onclick="openTab(event, 'overview')">Overview</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
-                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')">Location</button>
-
+                <button class="tablinks uppercase" onclick="openTab(event, 'overview')" id="tab-overview">Overview</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')" id="tab-attachments">Attachments</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')" id="tab-gallery">Gallery</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')" id="tab-location">Location</button>
             </div>
         </div>
     </div>
@@ -81,7 +80,7 @@
                                     <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
                                 </td>
                                 <td>
-                                    <a href="#" data-id="@item.Id" class="deleteAttachmentLink">Delete</a>
+                                    <a href="#" data-id="@item.Id" data-tab="attachments"  class="deleteAttachmentLink">Delete</a>
                                 </td>
                             </tr>
                         }
@@ -101,7 +100,7 @@
         <br />
 
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="attachments">
             <div class="form-group formDragAndDrop">
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
             </div>
@@ -126,11 +125,14 @@
                 {
                     @if (item.IsImage)
                     {
-                        <div class="mySlides">
+                        <div class="mySlides" id="attachment-item-@item.Id">
                             <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
                             <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
                             <div class="text">@item.Title</div>
+                            <br /><br />
+                            <a href="#" data-id="@item.Id" data-tab="gallery" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
                         </div>
+
                         i++;
                     }
                 }
@@ -158,7 +160,7 @@
         }
         else
         {
-            <br />
+            <br>
             <div class="panel panel-default">
                 <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
                     <p>No <strong>Images</strong> Uploaded Yet</p>
@@ -168,7 +170,7 @@
 
         <br>
 
-        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" id="add-file-attachment-form">
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="gallery" id="add-file-attachment-form">
             <div class="form-group formDragAndDrop">
                 @*<p>Upload one or more attachments:</p>*@
                 <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
@@ -182,7 +184,6 @@
     <!-- Location TAB -->
     <div id="locationtab" class="tabcontent">
         <p id="geoNonSupport" style="color:red"></p>
-
         <div class="row">
             <div class="form-group col-xs-3 col-xs-offset-2">
                 <label for="curlng">Latitude</label>
@@ -233,8 +234,8 @@
                 <i class="fas fa-arrow-left xl"></i>&nbsp;&nbsp;&nbsp;@ViewBag.PreviousEvent.Title
             </a>
         }
-        <a class="button btnEvent uppercase" data-id="@Model.Id" data-timeline-id="@Model.TimelineId" href="#" id="deleteEvent">Delete</a>
 
+        <a class="button btnEvent uppercase" data-id="@Model.Id" data-timeline-id="@Model.TimelineId" href="#" id="deleteEvent">Delete</a>
 
         @if (@ViewBag.NextEvent != null)
         {
@@ -242,7 +243,7 @@
                 @ViewBag.NextEvent.Title&nbsp;&nbsp;&nbsp;<i class="fas fa-arrow-right"></i>
             </a>
         }
-        <p id="geoNonSupport" style="color:red;"></p>
+        @*<p id="geoNonSupport" style="color:red;"></p>*@
     </div>
 </div>
 
@@ -270,8 +271,14 @@
         }
 
         var map = new google.maps.Map(document.getElementById("googleMap"), mapOptions);
-        var marker = null;
-    
+        marker = new google.maps.Marker({
+            position: latlng,
+            title: 'Set lat/lon values for this property',
+            anchorPoint: new google.maps.Point(0, -29),
+            map: map,
+            draggable: true
+        });
+
         if (loc == "0,0") {
             var options = { enableHighAccuracy: true, };
             if (navigator.geolocation) {
@@ -279,7 +286,6 @@
                     document.getElementById("geoNonSupport").innerHTML = "Geolocation is not supported by this browser."
                     console.warn(`ERROR(${err.code}): ${err.message}`);
                 }
-
                 function showPosition(position) {
                     lat = String(position.coords.latitude.toFixed(6));
                     lng = String(position.coords.longitude.toFixed(6));
@@ -295,7 +301,6 @@
                         map.panTo(latLng);
                     }
                 }
-
                 navigator.geolocation.getCurrentPosition(showPosition, error, options);
             }
         }
@@ -306,6 +311,13 @@
             document.getElementById("curlat").setAttribute("value", "@Model.Location.Split(",")[0]");
             document.getElementById("curlng").setAttribute("value", "@Model.Location.Split(",")[1]");
             document.forms['edit-location-form']['locationaddress'].value = loc;
+
+            // Set marker location to current position
+            if (marker != null) {
+                var latLng = new google.maps.LatLng(lat, lng);
+                marker.setPosition(latLng);
+                map.panTo(latLng);
+            }
         }
 
         //debugger;
@@ -326,13 +338,7 @@
         var infowindow = new google.maps.InfoWindow();
         var infowindowContent = document.getElementById('infowindow-content');
         infowindow.setContent(infowindowContent);
-        marker = new google.maps.Marker({
-            position: latlng,
-            title: 'Set lat/lon values for this property',
-            anchorPoint: new google.maps.Point(0, -29),
-            map: map,
-            draggable: true
-        });
+
         marker.setMap(map);
 
         autocomplete.addListener('place_changed', function () {
@@ -355,8 +361,8 @@
             }
             marker.setPosition(place.geometry.location);
             marker.setVisible(true);
-            var dglat = document.getElementById("curlat").value = String(place.geometry.location.getPosition().lat());
-            var dglng = document.getElementById("curlng").value = String(place.geometry.location.getPosition().lng());
+            var dglat = document.getElementById("curlat").value = String(place.geometry.location.lat());
+            var dglng = document.getElementById("curlng").value = String(place.geometry.location.lng());
             var dgloc = dglat.concat(",", dglng);
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
 
@@ -396,18 +402,12 @@
         var data = $('#edit-location-form').serialize();
         disableFormElement($('#btnSave'), true);
         $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
-        // If edit was successful post returns with OK
-        if (response.startsWith('OK')) {
-            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId"; // Redirect here instead of on server-side
-
-            // Hack to make flash message appear correctly when side bar is shown.
-             $('.flash-messages').css('margin-left', '20px');
-        }
-        else {
-            // Otherwise redisplay form.
-            location.href = "/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId";
-        }
-    }, 'html');
+            // If edit was successful post returns with OK
+            if (response.startsWith('OK')) {
+                disableFormElement($('#btnSave'), false);
+                loadFlashPartial();
+            }
+        }, 'html');
 
     });
     </script>
@@ -501,7 +501,7 @@
             });
         }
 
-        function showDeleteModal(linkElement) {
+        function showDeleteModal(linkElement, tab) {
             var id = linkElement.attr('data-id');
             $.ajax({
                 url: '/attachments/@ViewBag.EventId/delete/' + id,
@@ -526,9 +526,8 @@
                                 if (response.startsWith('OK')) {
                                     // Remove item from table.
                                     var attachmentId = response.split(' ')[1];
-                                    $('#attachment-item-' + attachmentId).remove();
 
-                                    loadFlashPartial();
+                                    location.href = '/timelines/@ViewBag.TimelineId/events/@ViewBag.EventId?tab=' + tab;
                                 }
                             }
                         });
@@ -549,7 +548,8 @@
             $('.deleteAttachmentLink').click(function (evt) {
                 evt.preventDefault();
 
-                showDeleteModal($(this));
+                var tab = $(this).attr('data-tab');
+                showDeleteModal($(this), tab);
             });
 
             // Check if API is offline.
@@ -557,6 +557,18 @@
                 // Code inside this function gets executing if API is offline
                 $('.modal-link-create-timeline').attr('disabled', 'disabled');
             });
+
+            function eventFire(el, etype) {
+                if (el.fireEvent) {
+                    el.fireEvent('on' + etype);
+                } else {
+                    var evObj = document.createEvent('Events');
+                    evObj.initEvent(etype, true, false);
+                    el.dispatchEvent(evObj);
+                }
+            }
+
+            eventFire(document.getElementById("tab-@ViewBag.Tab"), "click");
         });
     </script>
 }

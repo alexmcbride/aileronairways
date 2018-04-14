@@ -31,7 +31,7 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
-        public async Task<ActionResult> Details(string timelineId, string eventId)
+        public async Task<ActionResult> Details(string timelineId, string eventId, string tab)
         {
             Timeline timeline = _repo.GetTimelineWithEvents(timelineId);
             TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
@@ -39,6 +39,7 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
             ViewBag.EventId = eventId;
+            ViewBag.Tab = string.IsNullOrEmpty(tab) ? "overview" : tab;
 
             // Get next and previous events
             ViewBag.NextEvent = await _repo.GetNextEventAsync(timelineEvent);
@@ -197,8 +198,7 @@ namespace AileronAirwaysWeb.Controllers
                 evt.Location = vm.Location;
                 await _repo.EditEventLocationAsync(evt);
 
-
-                _flash.Message($"Event location edited!");
+                _flash.Message($"Event location saved!");
 
                 return Ok("OK " + evt.Id);
             }
