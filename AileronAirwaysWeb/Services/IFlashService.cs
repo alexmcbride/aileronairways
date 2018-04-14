@@ -8,6 +8,7 @@ namespace AileronAirwaysWeb.Services
         Queue<FlashMessage> GetMessages();
         void Message(string text);
         void Message(string text, FlashType type);
+        bool HasMessages { get; }
     }
 
 }

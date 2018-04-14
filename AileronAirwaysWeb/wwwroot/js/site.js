@@ -54,8 +54,10 @@ function handleDelete(linkElement) {
 
 function loadFlashPartial() {
     $.get('/TimelineEvents/FlashMessages', function (data) {
-        $('#flash-messages-wrapper').css({'position': 'fixed'});
-        $('#flash-messages-wrapper').html(data);
+        if (data) {
+            $('#flash-messages-wrapper').css({ 'position': 'fixed' });
+            $('#flash-messages-wrapper').html(data);
+        }
     });
 }
 

@@ -1,14 +1,22 @@
-﻿using AileronAirwaysWeb.Models;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AileronAirwaysWeb.Services
 {
     public class FlashService : IFlashService
     {
         private readonly ITempDataDictionary _tempData;
+
+        public bool HasMessages
+        {
+            get
+            {
+                return GetMessages().Any();
+            }
+        }
 
         public FlashService(ITempDataDictionaryFactory factory, IHttpContextAccessor contextAccessor)
         {
