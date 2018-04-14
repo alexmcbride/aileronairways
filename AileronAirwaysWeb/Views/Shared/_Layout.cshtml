@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Aileron Airways</title>
 
+    <link href="~/lib/fontAwesome/web-fonts-with-css/css/fontawesome-all.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="~/lib/bootstrap-datepicker/bootstrap-datetimepicker.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
-    <link href="~/css/web-fonts-with-css/css/fontawesome-all.css" rel="stylesheet" />
+
     <link href="~/css/timeline.css" rel="stylesheet" />
 
     @if (IsSectionDefined("AddToHead"))
@@ -17,7 +18,6 @@
         @RenderSection("AddToHead", required: false)
     }
 
-    <script src="~/fontAwesome/fontawesome-all.min.js"></script>
 
     @*<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>*@
 

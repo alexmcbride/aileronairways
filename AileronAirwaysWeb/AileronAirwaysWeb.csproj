@@ -37,6 +37,38 @@
     <None Include="wwwroot\css\eventDetailed.css" />
     <None Include="wwwroot\css\timelineIndex.css" />
     <None Include="wwwroot\css\timeline.css" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.bootstrap.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.bootstrap.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.bootstrap4.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.foundation.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.foundation.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.jqueryui.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.jqueryui.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.semanticui.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\dataTables.semanticui.min.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\jquery.dataTables.js" />
+    <None Include="wwwroot\lib\DataTables\DataTables-1.10.16\js\jquery.dataTables.min.js" />
+    <None Include="wwwroot\lib\DataTables\datatables.js" />
+    <None Include="wwwroot\lib\DataTables\datatables.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\dataTables.responsive.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\dataTables.responsive.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.bootstrap.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.bootstrap.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.bootstrap4.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.bootstrap4.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.foundation.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.foundation.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.jqueryui.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.jqueryui.min.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.semanticui.js" />
+    <None Include="wwwroot\lib\DataTables\Responsive-2.2.1\js\responsive.semanticui.min.js" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-brands-400.svg" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-brands-400.woff2" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-regular-400.svg" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-regular-400.woff2" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-solid-900.svg" />
+    <None Include="wwwroot\lib\fontAwesome\web-fonts-with-css\webfonts\fa-solid-900.woff2" />
   </ItemGroup>
 
   <ItemGroup>

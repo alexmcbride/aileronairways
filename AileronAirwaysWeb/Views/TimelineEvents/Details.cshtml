@@ -457,8 +457,12 @@
             for (i = 0; i < dots.length; i++) {
                 dots[i].className = dots[i].className.replace(" active", "");
             }
-            slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
+            if (slides.length > 0) {
+                slides[slideIndex - 1].style.display = "block";
+            }
+            if (dots.length > 0) {
+                dots[slideIndex - 1].className += " active";
+            }
         }
     </script>
 
@@ -558,6 +562,7 @@
                 $('.modal-link-create-timeline').attr('disabled', 'disabled');
             });
 
+            // Simulate an event,
             function eventFire(el, etype) {
                 if (el.fireEvent) {
                     el.fireEvent('on' + etype);
@@ -568,6 +573,7 @@
                 }
             }
 
+            // Fire off a click event for the selected tab
             eventFire(document.getElementById("tab-@ViewBag.Tab"), "click");
         });
     </script>

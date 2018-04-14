@@ -7,11 +7,9 @@
 @section AddToHead{
 
     <script src="~/js/site.js"></script>
-    @*<link href="~/fontAwesome/dataTables.semanticui.css" rel="stylesheet" />*@
-    <link href="~/fontAwesome/dataTables.foundation.css" rel="stylesheet" />
-    <link href="~/fontAwesome/dataTables.bootstrap4.css" rel="stylesheet" />
 
-    <link href="~/fontAwesome/jquery.dataTables.css" rel="stylesheet" />
+
+    <link href="~/lib/DataTables/datatables.css" rel="stylesheet" />
 
 
     <link href="~/css/timelineIndex.css" rel="stylesheet" />
@@ -43,9 +41,6 @@
                     <div class="form-group">
                         <div class="input-group wtSearchBar">
                             <input type="text" class="form-control" placeholder="Search..." id="search">
-                            @*<span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-search"></span>
-                                </span>*@
                         </div>
                     </div>
 
@@ -120,8 +115,7 @@
 </div>
 
 @section scripts {
-    @*<script src="http s://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.16/af-2.2.2/b-1.5.0/b-colvis-1.5.0/b-html5-1.5.0/b-print-1.5.0/cr-1.4.1/r-2.2.1/rg-1.0.2/rr-1.2.3/sc-1.4.3/sl-1.2.4/datatables.min.js"></script>*@
-    <script src="~/fontAwesome/datatables.min.js"></script>
+    <script src="~/lib/DataTables/datatables.min.js"></script>
 
 
 
@@ -406,20 +400,10 @@
                 format: 'YYYY-MM-DD'
             });
 
-            //$('#endDate').datetimepicker({
-            //    format: 'YYYY-MM-DD'
-            //});
-
             $('#endDate').datetimepicker({
                 format: 'YYYY-MM-DD',
                 useCurrent: false //Important! See issue #1075
             });
-
-            //$('#endDateInput').datetimepicker({
-            //    format: 'YYYY-MM-DD',
-            //    useCurrent: false //Important! See issue #1075
-            //});
-
 
 
             $("#startDate").on("dp.change", function (e) {
