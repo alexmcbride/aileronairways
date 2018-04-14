@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Timeline>
+﻿@model IEnumerable<string>
 
 @{
     ViewData["Title"] = "Timeline Register";
@@ -87,7 +87,7 @@
         <button class="btn btn-main modal-link-create-timeline" title="Create New Timeline">Create Timeline@*&#43;*@</button>
 
         <hr />
-        <table class="table table-responsive display" data-order='[[ 1, 1 ]]' id="tbltimelines" style=" width: 100%; max-width: 100%; overflow-x: auto;">
+        <table class="table table-responsive table-hover display" data-order='[[ 1, 1 ]]' id="tbltimelines" style=" width: 100%; max-width: 100%; overflow-x: auto;">
             <thead>
                 <tr>
                     <th>Title</th>
@@ -282,7 +282,10 @@
                 datatype: 'json',
                 contentType: "application/json; charset=utf-8",
                 table: '#tbltimelines',
-                success: updateTable
+                success: function (data) {
+                    checkOffline();
+                    updateTable(data);
+                }
             });
         });
 
@@ -450,9 +453,6 @@
             }
             mql.addListener(handleScreenSizeChange);
             handleScreenSizeChange(mql); // Set right styles on startup.
-
-            // Check if API is offline.
-            checkOffline();
         });
     </script>
 }

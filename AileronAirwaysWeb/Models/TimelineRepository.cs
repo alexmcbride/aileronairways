@@ -276,6 +276,7 @@ namespace AileronAirwaysWeb.Models
                     return true;
                 }
 
+                // Try and get a timeline.
                 await Timeline.GetTimelinesAsync(_api);
                 return false;
             }
