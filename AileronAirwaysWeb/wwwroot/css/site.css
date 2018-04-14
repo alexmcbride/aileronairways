@@ -199,28 +199,6 @@
     color: purple;
 }
 
-.dataTables_wrapper .dataTables_paginate .paginate_button {
-    border-color: purple;
-    background: #fff;
-}
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current {
-        border-color: purple;
-        background: #fff /*linear-gradient(to bottom, #fff 0%, #734EA6 100%)*/;
-    }
-
-    .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
-        border-color: #0D63AC;
-        color: #fff !important;
-        background: #0D63AC;
-    }
-
-.dataTables_wrapper .dataTables_paginate .paginate_button:hover 
- {
-    border-color: #0D63AC;
-    color: #fff !important;
-    background: #0D63AC;
-}
 /*Static Button -------------------------*/
 .mt-purple-circle-btn {
     z-index: 99;
@@ -237,35 +215,18 @@
     border-radius: 50px;
 }
 
-    .mt-purple-circle-btn:hover {
-        background-color: #b722d8;
-    }
-/*#addEventBtn {
-    /*position: absolute;* /
-    display: block;
-    position: fixed;
-    right: 40px;
-    bottom: 50px;
+.mt-purple-circle-btn:hover {
+    background-color: #b722d8;
 }
-
-@media screen and (max-width: 327px) {
-    #addEventBtn {
-        right: 20px;
-    }
-}*/
 
 .mt-purpule-color {
     color: purple
 }
 
-
-
 .modal-dialog {
     margin-top: 30px;
     width: 50%;
 }
-
-
 
 @media (max-width: 767px) {
     .modal-dialog {
@@ -275,6 +236,7 @@
     }
 
 }
+
 @media (max-width: 380px) {
     .modal-dialog {
         margin-top: 30px;
