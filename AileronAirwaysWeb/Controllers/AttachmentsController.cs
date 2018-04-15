@@ -54,10 +54,8 @@ namespace AileronAirwaysWeb.Controllers
         // POST: Attachments/Create
         [HttpPost("upload/{eventId}")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Upload(string eventId, string tab,List<IFormFile> files)
+        public async Task<ActionResult> Upload(string eventId, List<IFormFile> files, string tab)
         {
-            files = files.Where(f => f.Length > 0).ToList();
-
             if (files.Any())
             {
                 foreach (var file in files)
