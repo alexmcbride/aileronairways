@@ -200,7 +200,7 @@
                     <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
                         <div class="form-group col-sm-4 col-xs-12 col-sm-offset-2">
                             <label for="curlat">Latitude</label>
-                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:90(?:(?:\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,15})?))$" />
+                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:85(?:(?:\.0{1,15})?)|(?:[0-9]|[1-8][0-5])(?:(?:\.[0-9]{1,15})?))$" />
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
                             <label for="curlng">Longitude</label>
@@ -392,16 +392,15 @@
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
            
             // If the place has a geometry, then present it on a map.
-            if (dglat > -85 && dglat < 85 ) {
-                if (dglng > -180 && dglng < 180) {
+            if (dglat >= -85 && dglat <= 85 ) {
+                if (dglng >= -180 && dglng <= 180) {
                     var isValid = true;
                     infowindow.close();
                     marker.setVisible(false);
                   
                     marker.setPosition({ lat: parseFloat(dglat), lng: parseFloat(dglng) });
                     map.setCenter(marker.getPosition());
-                    //map.setZoom(1);   used during test to find marker easier.
-
+                 
                     marker.setVisible(true);
                 } else {
                     window.alert("No details available for this longititude input: valid input is more than -180 less than 180, data you input does not save ");
