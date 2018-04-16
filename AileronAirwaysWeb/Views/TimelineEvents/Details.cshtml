@@ -188,16 +188,16 @@
                     <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
                         <div class="form-group col-sm-4 col-xs-12 col-sm-offset-2">
                             <label for="curlat">Latitude</label>
-                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-4])(?:(?:\\.[0-9]{1,6})?))$" />
+                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:85(?:(?:\.0{1,15})?)|(?:[0-9]|[1-8][0-5])(?:(?:\.[0-9]{1,15})?))$" />
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
                             <label for="curlng">Longitude</label>
-                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$" />
+                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\+|-)?(?:180(?:(?:\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,15})?))$" />
                         </div>
 
                         <div class="form-group col-sm-2 col-xs-12">
 
-                            <div class="form-group col-xs-4">
+                            <div class="form-group col-xs-4 location-button-row">
                                 <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
                                 <button type="submit" id="btnSavelatlng" class="btn btn-default">
                                     <i class="far fa-edit" aria-hidden="true"></i>
@@ -380,15 +380,14 @@
             document.forms['edit-location-form']['locationaddress'].value = dgloc;
            
             // If the place has a geometry, then present it on a map.
-            if (dglat > -85 && dglat < 85 ) {
-                if (dglng > -180 && dglng < 180) {
+            if (dglat >= -85 && dglat <= 85 ) {
+                if (dglng >= -180 && dglng <= 180) {
                     var isValid = true;
                     infowindow.close();
                     marker.setVisible(false);
                   
                     marker.setPosition({ lat: parseFloat(dglat), lng: parseFloat(dglng) });
                     map.setCenter(marker.getPosition());
-                    map.setZoom(1);   //Why 1? Because that way we know where marker is.
                  
                     marker.setVisible(true);
                 } else {
