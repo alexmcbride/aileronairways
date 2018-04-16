@@ -200,11 +200,11 @@
                     <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
                         <div class="form-group col-sm-4 col-xs-12 col-sm-offset-2">
                             <label for="curlat">Latitude</label>
-                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\\+|-)?(?:90(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-8][0-4])(?:(?:\\.[0-9]{1,6})?))$" />
+                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:90(?:(?:\.0{1,15})?)|(?:[0-9]|[1-8][0-9])(?:(?:\.[0-9]{1,15})?))$" />
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
                             <label for="curlng">Longitude</label>
-                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\\+|-)?(?:180(?:(?:\\.0{1,6})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\\.[0-9]{1,6})?))$" />
+                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\+|-)?(?:180(?:(?:\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,15})?))$" />
                         </div>
 
                         <div class="form-group col-sm-2 col-xs-12">
@@ -400,8 +400,8 @@
                   
                     marker.setPosition({ lat: parseFloat(dglat), lng: parseFloat(dglng) });
                     map.setCenter(marker.getPosition());
-                    map.setZoom(1);   //Why 1? Because that way we know where marker is.
-                 
+                    //map.setZoom(1);   used during test to find marker easier.
+
                     marker.setVisible(true);
                 } else {
                     window.alert("No details available for this longititude input: valid input is more than -180 less than 180, data you input does not save ");
