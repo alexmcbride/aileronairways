@@ -572,6 +572,7 @@
             checkApiOffline(function () {
                 // Code inside this function gets executing if API is offline
                 $('#editDescriptionLink').addClass('disabled');
+                $('#editDescriptionLink').css({ display: 'none' });
                 $('#add-file-attachment-submit').attr('disabled', 'disabled');
                 $('#add-file-submit-button').attr('disabled', 'disabled');
                 $('#btnSave').attr('disabled', 'disabled');
