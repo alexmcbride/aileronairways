@@ -1,4 +1,4 @@
-﻿// Write your JavaScript code.
+﻿
 function disableFormElement(element, disabled) {
     if (disabled) {
         $(element).attr('disabled', 'disabled');
@@ -54,8 +54,10 @@ function handleDelete(linkElement) {
 
 function loadFlashPartial() {
     $.get('/TimelineEvents/FlashMessages', function (data) {
-        $('#flash-messages-wrapper').css({'position': 'fixed'});
-        $('#flash-messages-wrapper').html(data);
+        if (data) {
+            $('#flash-messages-wrapper').css({ 'position': 'fixed' });
+            $('#flash-messages-wrapper').html(data);
+        }
     });
 }
 
@@ -64,10 +66,11 @@ function handleApiOffline(callback) {
 
     var html = '<div class="alert alert-danger alert-dismissible text-center alert-flash" role="alert">' +
         '<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
-        '<strong class="text-capitalize">API offline</strong> The site has been switch to read-only mode' +
+        '<strong class="text-capitalize"><i class="fas fa-power-off"></i> ' +
+        'API offline</strong> The site has been set to read-only mode' +
         '</div>';
 
-    $('.flash-messages').append(html);
+    $('.flash-messages').html(html);
 
     callback();
 }

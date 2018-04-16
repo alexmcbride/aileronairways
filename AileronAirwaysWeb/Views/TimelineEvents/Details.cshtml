@@ -7,39 +7,39 @@
 @section AddToHead{
     <link href="~/css/eventDetailed.css" rel="stylesheet" />
 }
-        <div id="superAwesomeTester" style="display: none;">Banana</div>
-        <div class="container">
-            <div class="col-sm-12">
-                <div id="eventHeader">
-                    <div id="backArrow" class="text-center">
-                        @*<a class="arrowLink" @*onclick="goBack()" * @ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>*@
-                        <a class="arrowLink" href="@Url.Action("index", new { timelineId=ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
-                    </div>
-                    <div class="headerSection">
-                        <h2 class="mainHeader">@Model.Title </h2>
-                        <hr class="headerHR" />
-                        <h4><em>@Model.EventDateTime.ToString("dddd, dd MMMM, yyyy")</em></h4>
-                    </div>
-                </div>
+
+<div id="superAwesomeTester" style="display: none;">Banana</div>
+<div class="container">
+    <div class="col-sm-12">
+        <div id="eventHeader">
+            <div id="backArrow" class="text-center">
+                @*<a class="arrowLink" @*onclick="goBack()" * @ asp-action="Index" asp-route-timelineId="@ViewBag.TimelineId"><i class="fas fa-arrow-left"></i></a>*@
+                <a class="arrowLink" href="@Url.Action("index", new { timelineId = ViewBag.TimelineId })#eventLink-@Model.Id"><i class="fas fa-arrow-left"></i></a>
+            </div>
+            <div class="headerSection">
+                <h2 class="mainHeader">@Model.Title </h2>
+                <hr class="headerHR" />
+                <h4><em>@Model.EventDateTime.ToString("dd MMMM yyyy HH:mm")</em></h4>
             </div>
         </div>
+    </div>
+</div>
 
 
 
 
-        <!-- Tab Section Start -->
-        <div class="bgColor">
-            <div>
-                <div class="tabLinksContainer">
-                    <div class="tab">
-                        <button class="tablinks uppercase active" onclick="openTab(event, 'overview')">Overview</button>
-                        <button class="tablinks uppercase" onclick="openTab(event, 'attachments')">Attachments</button>
-                        <button class="tablinks uppercase" onclick="openTab(event, 'gallery')">Gallery</button>
-                        <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')">Location</button>
-
-                    </div>
-                </div>
+<!-- Tab Section Start -->
+<div class="bgColor">
+    <div>
+        <div class="tabLinksContainer">
+            <div class="tab">
+                <button class="tablinks uppercase" onclick="openTab(event, 'overview')" id="tab-overview">Overview</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'attachments')" id="tab-attachments">Attachments</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'gallery')" id="tab-gallery">Gallery</button>
+                <button class="tablinks uppercase" onclick="openTab(event, 'locationtab')" id="tab-location">Location</button>
             </div>
+        </div>
+    </div>
 
 
 
@@ -59,51 +59,51 @@
 
 
 
-                @if (Model.AttachmentFilesCount > 0)
-                {
-                    <table class="table" id="attachment-files-table">
-                        <thead>
-                            <tr>
-                                <th>
-                                    @Html.DisplayNameFor(model => model.Title)
-                                </th>
-                                <th></th>
+        @if (Model.AttachmentFilesCount > 0)
+        {
+            <table class="table" id="attachment-files-table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Attachments)
+                    {
+                        @if (!item.IsImage)
+                        {
+                            <tr class="attachment-file-item" id="attachment-item-@item.Id">
+                                <td>
+                                    <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
+                                </td>
+                                <td>
+                                    <a href="#" data-id="@item.Id" data-tab="attachments"  class="deleteAttachmentLink">Delete</a>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model.Attachments)
-                            {
-                                @if (!item.IsImage)
-                                {
-                                    <tr class="attachment-file-item" id="attachment-item-@item.Id">
-                                        <td>
-                                            <a asp-controller="Attachments" asp-action="Download" asp-route-attachmentId="@item.Id">@item.Title</a>
-                                        </td>
-                                        <td>
-                                            <a href="#" data-id="@item.Id" class="deleteAttachmentLink">Delete</a>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                }
-                else
-                {
-                    <br />
-                    <div class="panel panel-default">
-                        <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
-                            <p>No <strong>Files</strong> Uploaded Yet</p>
-                        </div>
-                    </div>
-                }
-                <br />
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <br />
+            <div class="panel panel-default">
+                <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
+                    <p>No <strong>Files</strong> Uploaded Yet</p>
+                </div>
+            </div>
+        }
+        <br />
 
 
-                <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId">
-                    <div class="form-group formDragAndDrop">
-                        <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
-                    </div>
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="attachments">
+            <div class="form-group formDragAndDrop">
+                <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
+            </div>
 
                     <input type="submit" value="Upload" class="btn btn-default" id="add-file-attachment-submit" />
                 </form>
@@ -111,70 +111,82 @@
 
             </div>
 
-
-            <!-- Gallery TAB -->
-            <div id="gallery" class="tabcontent">
+    <!-- Gallery TAB -->
+    <div id="gallery" class="tabcontent">
 
 
                 @if (Model.AttachmentImagesCount > 0)
                 {
                     int i = 1;
 
-                    <div class="slideshow-container">
-                        @foreach (var item in Model.Attachments)
-                        {
-                            @if (item.IsImage)
-                            {
-                                <div class="mySlides" id="attachment-item-@item.Id">
-                                    <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
-                                    <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
-                                    <div class="text">@item.Title</div>
-                                    <br /><br />
-                                    <a href="#" data-id="@item.Id" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
-                                </div>
-
-                                i++;
-                            }
-                        }
-
-                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
-                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
-
-                    </div>
-                    <br>
-                    <div style="text-align:center">
-                        @if (Model.AttachmentImagesCount > 0)
-                        {
-                            int j = 1;
-                            foreach (var item in Model.Attachments)
-                            {
-
-                                if (item.IsImage)
-                                {
-                                    <span class="dot" onclick="currentSlide(@j)"></span>
-                                    j++;
-                                }
-                            }
-                        }
-                    </div>
-                }
-                else
+            <div class="slideshow-container">
+                @foreach (var item in Model.Attachments)
                 {
-                    <br />
-                    <div class="panel panel-default">
-                        <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
-                            <p>No <strong>Images</strong> Uploaded Yet</p>
+                    @if (item.IsImage)
+                    {
+
+
+                <div class="mySlides" id="attachment-item-@item.Id">
+                        <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
+
+                        <div class="numbertextRight">
+                            <a href="#" style="color: white;font-size: 12pt;" data-id="@item.Id" data-tab="gallery" class="deleteAttachmentLink trash_icon">
+                                <i class="fas fa-trash fa-xs" aria-hidden="true"></i>
+                            </a>
                         </div>
+
+
+                    <div class="imageDisplaying">
+                        <img src="@Url.AttachmentLink(item)" style="width:100%"><!--object-fit contain-->
                     </div>
+                    <div class="text imageTitleSection">
+                        @item.Title
+                    </div>
+                    <br /><br />
+                </div>
+
+                        i++;
+                    }
                 }
+
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+
+            </div>
+            <br>
+            <div style="text-align:center">
+                @if (Model.AttachmentImagesCount > 0)
+                {
+                    int j = 1;
+                    foreach (var item in Model.Attachments)
+                    {
+
+                        if (item.IsImage)
+                        {
+                            <span class="dot" onclick="currentSlide(@j)"></span>
+                            j++;
+                        }
+                    }
+                }
+            </div>
+        }
+        else
+        {
+            <br>
+            <div class="panel panel-default">
+                <div class="panel-body text-center" style="font-size: 10pt; padding: 14px;">
+                    <p>No <strong>Images</strong> Uploaded Yet</p>
+                </div>
+            </div>
+        }
 
                 <br>
 
-                <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" id="add-file-attachment-form">
-                    <div class="form-group formDragAndDrop">
-                        @*<p>Upload one or more attachments:</p>*@
-                        <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
-                    </div>
+        <form method="post" enctype="multipart/form-data" asp-controller="Attachments" asp-action="Upload" asp-route-eventId="@ViewBag.EventId" asp-route-tab="gallery" id="add-file-attachment-form">
+            <div class="form-group formDragAndDrop">
+                @*<p>Upload one or more attachments:</p>*@
+                <input id="fileUpload" type="file" name="files" multiple class="form-control dragAndDrop" />
+            </div>
 
                     <input type="submit" value="Upload" class="btn btn-default" id="add-file-submit-button" />
                 </form>
@@ -478,8 +490,12 @@
             for (i = 0; i < dots.length; i++) {
                 dots[i].className = dots[i].className.replace(" active", "");
             }
-            slides[slideIndex - 1].style.display = "block";
-            dots[slideIndex - 1].className += " active";
+            if (slides.length > 0) {
+                slides[slideIndex - 1].style.display = "block";
+            }
+            if (dots.length > 0) {
+                dots[slideIndex - 1].className += " active";
+            }
         }
     </script>
 
@@ -522,7 +538,7 @@
             });
         }
 
-        function showDeleteModal(linkElement) {
+        function showDeleteModal(linkElement, tab) {
             var id = linkElement.attr('data-id');
             $.ajax({
                 url: '/attachments/@ViewBag.EventId/delete/' + id,
@@ -547,9 +563,8 @@
                                 if (response.startsWith('OK')) {
                                     // Remove item from table.
                                     var attachmentId = response.split(' ')[1];
-                                    $('#attachment-item-' + attachmentId).remove();
 
-                                    loadFlashPartial();
+                                    location.href = '/timelines/@ViewBag.TimelineId/events/@ViewBag.EventId?tab=' + tab;
                                 }
                             }
                         });
@@ -564,20 +579,40 @@
             $('#deleteEvent').click(function (evt) {
                 evt.preventDefault();
 
-                handleDelete();
+                handleDelete($(this));
             });
 
             $('.deleteAttachmentLink').click(function (evt) {
                 evt.preventDefault();
 
-                showDeleteModal($(this));
+                var tab = $(this).attr('data-tab');
+                showDeleteModal($(this), tab);
             });
 
             // Check if API is offline.
             checkApiOffline(function () {
                 // Code inside this function gets executing if API is offline
-                $('.modal-link-create-timeline').attr('disabled', 'disabled');
+                $('#editDescriptionLink').addClass('disabled');
+                $('#editDescriptionLink').css({ display: 'none' });
+                $('#add-file-attachment-submit').attr('disabled', 'disabled');
+                $('#add-file-submit-button').attr('disabled', 'disabled');
+                $('#btnSave').attr('disabled', 'disabled');
+                $('.deleteAttachmentLink').addClass('disabled');
             });
+
+            // Simulate an event
+            function eventFire(el, etype) {
+                if (el.fireEvent) {
+                    el.fireEvent('on' + etype);
+                } else {
+                    var evObj = document.createEvent('Events');
+                    evObj.initEvent(etype, true, false);
+                    el.dispatchEvent(evObj);
+                }
+            }
+
+            // Fire off a click event for the selected tab
+            eventFire(document.getElementById("tab-@ViewBag.Tab"), "click");
         });
     </script>
 }

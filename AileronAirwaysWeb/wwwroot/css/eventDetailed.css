@@ -155,10 +155,10 @@
         margin-bottom: -50px;
     }
 
-    #backArrow {
+    /*#backArrow {
         top: 80px;
         left: 10px;
-    }
+    }*/
 }
 
 
@@ -312,7 +312,8 @@ img {
     color: #f2f2f2;
     font-size: 15px;
     padding: 8px 12px;
-    position: absolute;
+    position: unset;
+    display: block;
     bottom: 18px;
     width: 100%;
     text-align: center;
@@ -327,6 +328,15 @@ img {
     position: absolute;
     top: 0;
     background-color: #0D1B2E;
+}
+.numbertextRight {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 8px 12px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #0D1B2E;/*rgba(13,27,46, 0.8)*/;
 }
 
 /* The dots/bullets/indicators */
@@ -353,13 +363,13 @@ img {
 @media only screen and (max-width: 600px) {
     .prev, .next, .text {
         font-size: 11px;
+        padding: 10px;
     }
 
     .slideshow-container {
         height: auto;
     }
-
-
+    
     /* Tab Location responsivity */
     #pac-card {
         width: 140px;
@@ -369,13 +379,41 @@ img {
 
 }
 
+  .imageInfo, .imageDisplaying, .imageTitleSection {
+        width: 100%;
+        display: inline-block;
+    }
+
+@media only screen and (max-width: 768px) {
+
+
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
 /* Little hack to fix margin on location tab save button */
 .location-button-row {
     margin-top: 24px;
 }
 
-@media (max-width: 768px) {
+@media only screen and (max-width: 768px) {
     .location-button-row {
         margin-top: 5px;
+    }
+}
+
+@media only screen and (max-width: 475px) {
+    .location-button-row {
+        margin-top: 0px;
     }
 }

@@ -6,12 +6,15 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
 {
     public class TimelineRepository
     {
+        private const int OfflineCacheMinutes = 1;
+
         private readonly ITimelineService _api;
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _config;
@@ -136,7 +139,7 @@ namespace AileronAirwaysWeb.Models
             Timeline timeline = GetTimeline(timelineId);
             timeline.EventsCount++;
             _context.Entry(timeline).State = EntityState.Modified;
-    
+
             // Save
             await _context.SaveChangesAsync();
             return timelineEvent;
@@ -238,18 +241,53 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        private Task AddApiEventAsync(string name)
+        {
+            _context.ApiEvents.Add(new ApiEvent
+            {
+                Id = Guid.NewGuid().ToString(),
+                Name = name,
+                Timestamp = DateTime.Now
+            });
+            return _context.SaveChangesAsync();
+        }
+
+        private Task<ApiEvent> FindRecentOfflineEventAsync()
+        {
+            var span = TimeSpan.FromMinutes(OfflineCacheMinutes);
+            var time = DateTime.Now.Subtract(span);
+            return _context.ApiEvents.Where(a => a.Timestamp > time)
+                .OrderByDescending(a => a.Timestamp)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<bool> IsOfflineAsync()
         {
-            if (!_config.GetValue<bool>("TestReadonlyMode"))
+            if (_config.GetValue<bool>("TestReadonlyMode"))
             {
-                try
-                {
-                    await Timeline.GetTimelinesAsync(_api);
-                    return false;
-                }
-                catch (Exception) { }
+                Debug.WriteLine("Debug offline mode");
+                return true;
             }
-            return true;
+
+            try
+            {
+                var apiEvent = await FindRecentOfflineEventAsync();
+                if (apiEvent != null && apiEvent.Name == "Offline")
+                {
+                    Debug.WriteLine("Using cached offline mode");
+                    return true;
+                }
+
+                // Try and get a timeline.
+                await Timeline.GetTimelinesAsync(_api);
+                return false;
+            }
+            catch (WebException)
+            {
+                Debug.WriteLine("Caching offline");
+                await AddApiEventAsync("Offline");
+                return true;
+            }
         }
     }
 }

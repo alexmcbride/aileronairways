@@ -31,7 +31,7 @@ namespace AileronAirwaysWeb.Controllers
         }
 
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
-        public async Task<ActionResult> Details(string timelineId, string eventId)
+        public async Task<ActionResult> Details(string timelineId, string eventId, string tab)
         {
             Timeline timeline = _repo.GetTimelineWithEvents(timelineId);
             TimelineEvent timelineEvent = _repo.GetTimelineEventWithAttachments(eventId);
@@ -39,6 +39,7 @@ namespace AileronAirwaysWeb.Controllers
             ViewBag.TimelineId = timeline.Id;
             ViewBag.TimelineTitle = timeline.Title;
             ViewBag.EventId = eventId;
+            ViewBag.Tab = string.IsNullOrEmpty(tab) ? "overview" : tab;
 
             // Get next and previous events
             ViewBag.NextEvent = await _repo.GetNextEventAsync(timelineEvent);
@@ -64,7 +65,7 @@ namespace AileronAirwaysWeb.Controllers
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string timelineId, [Bind("Title,Description,EventDateTime")] TimelineEventViewModel vm)
+        public async Task<ActionResult> Create(string timelineId, [Bind("Title,EventDateTime")] TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -103,14 +104,13 @@ namespace AileronAirwaysWeb.Controllers
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,Description,EventDateTime,Location")]  TimelineEventViewModel vm)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,EventDateTime")]  TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 TimelineEvent evt = _repo.GetTimelineEvent(eventId);
                 evt.Title = vm.Title;
                 evt.EventDateTime = vm.EventDateTime;
-                evt.Description = vm.Description;
                 await _repo.EditTimelineEventAsync(evt);
 
                 _flash.Message($"Event '{evt.Title}' edited!");
@@ -236,7 +236,11 @@ namespace AileronAirwaysWeb.Controllers
         [HttpGet]
         public ActionResult FlashMessages()
         {
-            return PartialView("_FlashMessages");
+            if (_flash.HasMessages)
+            {
+                return PartialView("_FlashMessages");
+            }
+            return Ok();
         }
 
         [HttpGet]

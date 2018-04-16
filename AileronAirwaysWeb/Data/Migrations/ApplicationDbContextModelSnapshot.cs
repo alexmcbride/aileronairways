@@ -20,6 +20,20 @@ namespace AileronAirwaysWeb.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.0.1-rtm-125")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AileronAirwaysWeb.Models.ApiEvent", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<DateTime>("Timestamp");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ApiEvents");
+                });
+
             modelBuilder.Entity("AileronAirwaysWeb.Models.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
