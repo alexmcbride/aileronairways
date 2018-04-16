@@ -111,7 +111,6 @@
 
     </div>
 
-
     <!-- Gallery TAB -->
     <div id="gallery" class="tabcontent">
 
@@ -125,13 +124,26 @@
                 {
                     @if (item.IsImage)
                     {
-                        <div class="mySlides" id="attachment-item-@item.Id">
-                            <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
-                            <img src="@Url.AttachmentLink(item)" style="width:100%" object-fit contain>
-                            <div class="text">@item.Title</div>
-                            <br /><br />
-                            <a href="#" data-id="@item.Id" data-tab="gallery" class="deleteAttachmentLink trash_icon"><i class="fas fa-trash " aria-hidden="true"></i>Delete</a>
+
+
+                <div class="mySlides" id="attachment-item-@item.Id">
+                        <div class="numbertext">@i / @Model.AttachmentImagesCount</div>
+
+                        <div class="numbertextRight">
+                            <a href="#" style="color: white;font-size: 12pt;" data-id="@item.Id" data-tab="gallery" class="deleteAttachmentLink trash_icon">
+                                <i class="fas fa-trash fa-xs" aria-hidden="true"></i>
+                            </a>
                         </div>
+
+
+                    <div class="imageDisplaying">
+                        <img src="@Url.AttachmentLink(item)" style="width:100%"><!--object-fit contain-->
+                    </div>
+                    <div class="text imageTitleSection">
+                        @item.Title
+                    </div>
+                    <br /><br />
+                </div>
 
                         i++;
                     }
@@ -185,18 +197,18 @@
     <div id="locationtab" class="tabcontent">
         <p id="geoNonSupport" style="color:red"></p>
         <div class="row">
-            <div class="form-group col-xs-3 col-xs-offset-2">
+            <div class="form-group col-sm-3 col-xs-12">
                 <label for="curlng">Latitude</label>
                 <input type="text" name="longitude" id="curlng" class="form-control" disabled />
             </div>
-            <div class="form-group col-xs-3">
+            <div class="form-group col-sm-3 col-xs-12">
                 <label for="curlat">Longitude</label>
                 <input type="text" name="longitude" id="curlat" class="form-control" disabled />
             </div>
-            <div class="form-group col-xs-2">
+            <div class="form-group col-sm-3 col-xs-12">
 
-                <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
-                    <div class="form-group col-xs-4">
+                <form asp-antiforgery="true" id="edit-location-form" class="location-button-row" style="">
+                    <div class="">
                         <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
                         <button type="submit" id="btnSave" class="btn btn-default">
                             <i class="far fa-edit" aria-hidden="true"></i>
@@ -220,7 +232,7 @@
         </div>
         <div class="text-center">
             <br />
-            <p>Drag map marker to record the location <div id="friendlyaddress"></div></p>
+            <p><strong><em>Drag map marker to record the location </em></strong><div id="friendlyaddress"></div></p>
         </div>
     </div>
 
