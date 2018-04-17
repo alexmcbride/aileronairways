@@ -65,7 +65,7 @@ namespace AileronAirwaysWeb.Controllers
 
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(string timelineId, [Bind("Title,EventDateTime")] TimelineEventViewModel vm)
+        public async Task<ActionResult> Create(string timelineId, [Bind("Title,Description,EventDateTime")] TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
@@ -104,13 +104,14 @@ namespace AileronAirwaysWeb.Controllers
         //POST: Timelines/Edit/5
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,EventDateTime")]  TimelineEventViewModel vm)
+        public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,Description,EventDateTime")]  TimelineEventViewModel vm)
         {
             if (ModelState.IsValid)
             {
                 TimelineEvent evt = _repo.GetTimelineEvent(eventId);
                 evt.Title = vm.Title;
                 evt.EventDateTime = vm.EventDateTime;
+                evt.Description = vm.Description;
                 await _repo.EditTimelineEventAsync(evt);
 
                 _flash.Message($"Event '{evt.Title}' edited!");
