@@ -7,6 +7,7 @@ Design and Develop an Event Timeline tool. Aileron Airways have approached your 
 * William Thomson
 * Jakoob Hayat
 * Mie Tanaka
+* Paul Wilson
 ## Development
 Development of the application was undertaken using the following technologies.
 ### Backend: 
