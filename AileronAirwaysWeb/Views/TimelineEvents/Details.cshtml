@@ -198,22 +198,30 @@
                 <p id="geoNonSupport" style="color:red"></p>
                 <div class="row">
                     <form asp-antiforgery="true" id="edit-location-form" style="padding-top: 25px;">
-                        <div class="form-group col-sm-4 col-xs-12 col-sm-offset-2">
+                        <div class="form-group col-sm-4 col-xs-12 ">
                             <label for="curlat">Latitude</label>
-                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:85(?:(?:\.0{1,15})?)|(?:[0-9]|[1-8][0-5])(?:(?:\.[0-9]{1,15})?))$" />
+                            <input type="text" name="longitude" id="curlat" class="form-control latlnginput" pattern="^(\+|-)?(?:85(?:(?:\.0{1,50})?)|(?:[0-9]|[1-8][0-5])(?:(?:\.[0-9]{1,50})?))$" />
                         </div>
                         <div class="form-group col-sm-4 col-xs-12">
                             <label for="curlng">Longitude</label>
-                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\+|-)?(?:180(?:(?:\.0{1,15})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,15})?))$" />
+                            <input type="text" name="longitude" id="curlng" class="form-control latlnginput" pattern="^(\+|-)?(?:180(?:(?:\.0{1,50})?)|(?:[0-9]|[1-9][0-9]|1[0-7][0-9])(?:(?:\.[0-9]{1,50})?))$" />
                         </div>
 
-                        <div class="form-group col-sm-2 col-xs-12">
+                        <div class="form-group col-sm-4 col-xs-12">
 
-                            <div class="form-group col-xs-4 location-button-row">
+                            <div class="form-group col-xs-6 location-button-row">
+
                                 <input type="hidden" id="locationaddress" asp-for="Location" class="form-control" />
+
                                 <button type="submit" id="btnSavelatlng" class="btn btn-default">
                                     <i class="far fa-edit" aria-hidden="true"></i>
                                     Save
+                                </button>
+                            </div>
+                            <div class="form-group col-xs-6 location-button-row">
+                                <button type="submit" id="btnClearlatlng" class="btn btn-default">
+                                    <i class="far fas fa-eraser" aria-hidden="true"></i>
+                                    Clear
                                 </button>
                             </div>
 
@@ -413,6 +421,19 @@
             }
         });
 
+        $('#btnClearlatlng').on('click', function () {
+            //debugger;
+            document.forms['edit-location-form']['locationaddress'].value = '0,0';
+            //var isValid = true;
+            //infowindow.close();
+            //marker.setVisible(false);
+
+            //marker.setPosition({ lat: parseFloat(dglat), lng: parseFloat(dglng) });
+            //map.setCenter(marker.getPosition());
+
+            //marker.setVisible(true);
+        });
+
         google.maps.event.addListener(marker, 'drag', function (event) {
             var dglat = document.getElementById("curlat").value = String(this.getPosition().lat());
             var dglng = document.getElementById("curlng").value = String(this.getPosition().lng());
@@ -433,11 +454,10 @@
 
         var data = $('#edit-location-form').serialize();
         disableFormElement($('#btnSave'), true);
-        $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+        $.post("/Timelines/@ViewBag.TimelineId/Events/@ViewBag.EventId/EditEventLocation", data, function (response) {
             // If edit was successful post returns with OK
             if (response.startsWith('OK')) {
-                disableFormElement($('#btnSave'), false);
-                loadFlashPartial();
+                location.href = "/Timelines/@ViewBag.TimelineId/Events/@ViewBag.EventId?tab=location";
             }
         }, 'html');
 
@@ -596,7 +616,11 @@
                 $('#add-file-attachment-submit').attr('disabled', 'disabled');
                 $('#add-file-submit-button').attr('disabled', 'disabled');
                 $('#btnSave').attr('disabled', 'disabled');
+                $('#btnClearlatlng').attr('disabled', 'disabled');
                 $('.deleteAttachmentLink').addClass('disabled');
+                $('#btnSavelatlng').attr('disabled', 'disabled');
+                $('#curlng').attr('disabled', 'disabled');
+                $('#curlat').attr('disabled', 'disabled');
             });
 
             // Simulate an event
