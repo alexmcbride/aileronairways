@@ -221,7 +221,7 @@
                             <div class="form-group col-xs-6 location-button-row">
                                 <button type="submit" id="btnClearlatlng" class="btn btn-default">
                                     <i class="far fas fa-eraser" aria-hidden="true"></i>
-                                    clear
+                                    Clear
                                 </button>
                             </div>
 
@@ -422,11 +422,8 @@
         });
 
         $('#btnClearlatlng').on('click', function () {
-            var dglat = document.getElementById("curlat").value = "0";
-            var dglng = document.getElementById("curlng").value = "0";
-            var dgloc = dglat.concat(",", dglng);
             //debugger;
-            document.forms['edit-location-form']['locationaddress'].value = dgloc;
+            document.forms['edit-location-form']['locationaddress'].value = '0,0';
             //var isValid = true;
             //infowindow.close();
             //marker.setVisible(false);
@@ -457,11 +454,10 @@
 
         var data = $('#edit-location-form').serialize();
         disableFormElement($('#btnSave'), true);
-        $.post("/Timelines/" + "@ViewBag.TimelineId" + "/Events/" + "@ViewBag.EventId" +"/EditEventLocation", data, function (response) {
+        $.post("/Timelines/@ViewBag.TimelineId/Events/@ViewBag.EventId/EditEventLocation", data, function (response) {
             // If edit was successful post returns with OK
             if (response.startsWith('OK')) {
-                disableFormElement($('#btnSave'), false);
-                loadFlashPartial();
+                location.href = "/Timelines/@ViewBag.TimelineId/Events/@ViewBag.EventId?tab=location";
             }
         }, 'html');
 
@@ -620,7 +616,11 @@
                 $('#add-file-attachment-submit').attr('disabled', 'disabled');
                 $('#add-file-submit-button').attr('disabled', 'disabled');
                 $('#btnSave').attr('disabled', 'disabled');
+                $('#btnClearlatlng').attr('disabled', 'disabled');
                 $('.deleteAttachmentLink').addClass('disabled');
+                $('#btnSavelatlng').attr('disabled', 'disabled');
+                $('#curlng').attr('disabled', 'disabled');
+                $('#curlat').attr('disabled', 'disabled');
             });
 
             // Simulate an event
