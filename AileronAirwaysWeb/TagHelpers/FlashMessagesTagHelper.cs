@@ -1,9 +1,11 @@
-﻿using AileronAirwaysWeb.Models;
-using AileronAirwaysWeb.Services;
+﻿using AileronAirwaysWeb.Services;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace AileronAirwaysWeb.TagHelpers
 {
+    /// <summary>
+    /// TagHelper for implementing the flash messages tag in layouts
+    /// </summary>
     [HtmlTargetElement("flash-messages")]
     public class FlashMessagesTagHelper : TagHelper
     {

@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Services
 {
+    /// <summary>
+    /// Interface for the web client helper.
+    /// </summary>
     public interface IWebClientHelper
     {        
         Task<string> UploadStringAsync(string url, string body);

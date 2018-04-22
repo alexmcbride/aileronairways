@@ -6,10 +6,17 @@ using System.Linq;
 
 namespace AileronAirwaysWeb.Services
 {
+    /// <summary>
+    /// Services for making those cool little flash messages appear at the top of pages. It stores 
+    /// messages in the temp session data between page loads. TempData automatically gets wiped.
+    /// </summary>
     public class FlashService : IFlashService
     {
         private readonly ITempDataDictionary _tempData;
 
+        /// <summary>
+        /// Gets if there are any messages to display.
+        /// </summary>
         public bool HasMessages
         {
             get
@@ -18,11 +25,18 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Injected constructor.
+        /// </summary>
         public FlashService(ITempDataDictionaryFactory factory, IHttpContextAccessor contextAccessor)
         {
             _tempData = factory.GetTempData(contextAccessor.HttpContext);
         }
 
+        /// <summary>
+        /// Gets a queue of flash messages.
+        /// </summary>
+        /// <returns></returns>
         public Queue<FlashMessage> GetMessages()
         {
             if (_tempData.TryGetValue("flash-queue", out object data))
@@ -32,16 +46,26 @@ namespace AileronAirwaysWeb.Services
             return new Queue<FlashMessage>();
         }
 
+        /// <summary>
+        /// Saves a queue of flash messages to the session.
+        /// </summary>
+        /// <param name="messages"></param>
         public void PutMessages(Queue<FlashMessage> messages)
         {
             _tempData["flash-queue"] = JsonConvert.SerializeObject(messages);
         }
 
+        /// <summary>
+        /// Adds a new flash message.
+        /// </summary>
         public void Message(string text)
         {
             Message(text, FlashType.Success);
         }
 
+        /// <summary>
+        /// Adds a new flash message with optional message type.
+        /// </summary>
         public void Message(string text, FlashType type)
         {
             var messages = GetMessages();
@@ -56,6 +80,9 @@ namespace AileronAirwaysWeb.Services
         }
     }
 
+    /// <summary>
+    /// Flash message type.
+    /// </summary>
     public enum FlashType
     {
         None,
@@ -65,6 +92,9 @@ namespace AileronAirwaysWeb.Services
         Danger
     }
 
+    /// <summary>
+    /// Wee class to store a flash message.
+    /// </summary>
     public class FlashMessage
     {
         public FlashType Type { get; set; }

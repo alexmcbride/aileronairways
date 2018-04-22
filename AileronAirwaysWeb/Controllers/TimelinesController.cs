@@ -3,12 +3,14 @@ using AileronAirwaysWeb.Services;
 using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
+    /// <summary>
+    /// Controller for adding, editing, delete timelines.
+    /// </summary>
     public class TimelinesController : Controller
     {
         private readonly IFlashService _flash;
@@ -26,7 +28,7 @@ namespace AileronAirwaysWeb.Controllers
             return View();
         }
 
-        // GET: Timelines/Details/5
+        // GET: Timelines/Details/<ID>
         public ActionResult Details(string id)
         {
             Timeline timeline = _repo.GetTimelineWithEvents(id);
@@ -61,7 +63,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        // GET: Timelines/Edit/5
+        // GET: Timelines/Edit/<ID>
         public ActionResult Edit(string id)
         {
             var timeline = _repo.GetTimelineWithEvents(id);
@@ -74,7 +76,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        // POST: Timelines/Edit/5
+        // POST: Timelines/Edit/<ID>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(string id, [Bind("Title")] TimelineViewModel vm)
@@ -93,7 +95,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        // GET: Timelines/Delete/5
+        // GET: Timelines/Delete/<ID>
         public ActionResult Delete(string id)
         {
             Timeline timeline = _repo.GetTimelineWithEvents(id);
@@ -106,7 +108,7 @@ namespace AileronAirwaysWeb.Controllers
             });
         }
 
-        // POST: Timelines/Delete/5
+        // POST: Timelines/Delete/<ID>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string id, IFormCollection collection)

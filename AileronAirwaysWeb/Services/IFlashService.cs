@@ -1,8 +1,10 @@
-﻿using AileronAirwaysWeb.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace AileronAirwaysWeb.Services
 {
+    /// <summary>
+    /// Interface for flash service
+    /// </summary>
     public interface IFlashService
     {
         Queue<FlashMessage> GetMessages();
@@ -10,5 +12,4 @@ namespace AileronAirwaysWeb.Services
         void Message(string text, FlashType type);
         bool HasMessages { get; }
     }
-
 }

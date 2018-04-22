@@ -4,6 +4,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AileronAirwaysWeb.ViewModels
 {
+    /// <summary>
+    /// Viewmodel for a timeline.
+    /// </summary>
     public class TimelineViewModel
     {
         [ScaffoldColumn(false)]

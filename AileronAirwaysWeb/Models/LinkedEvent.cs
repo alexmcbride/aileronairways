@@ -1,5 +1,8 @@
 ﻿namespace AileronAirwaysWeb.Models
 {
+    /// <summary>
+    /// Class to represent a linked event, essentially the intersection table between Timeline and Events
+    /// </summary>
     public class LinkedEvent
     {
         public string Id { get; set; }

@@ -1,13 +1,14 @@
 ﻿using AileronAirwaysWeb.Models;
-using AileronAirwaysWeb.Services;
 using AileronAirwaysWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers.Api
 {
+    /// <summary>
+    /// WebAPI controller for providing JSON timeline data.
+    /// </summary>
     [Area("api")]
     [Produces("application/json")]
     [Route("api/timelines")]
@@ -86,12 +87,11 @@ namespace AileronAirwaysWeb.Controllers.Api
             return Ok();
         }
 
+        // DELETE: api/timelines/offline
         [HttpGet("offline")]
         public async Task<IActionResult> Offline()
         {
             bool offline = await _repo.IsOfflineAsync();
-
-            Debug.WriteLine($"API Offline: {offline}");
 
             return Ok(new
             {

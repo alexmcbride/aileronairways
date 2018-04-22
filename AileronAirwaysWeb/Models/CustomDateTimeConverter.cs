@@ -4,13 +4,16 @@ using System;
 
 namespace AileronAirwaysWeb.Models
 {
+    /// <summary>
+    /// A class to handle converting a datetime from ticks into a .NET DateTime object when reading or writing JSON documents.
+    /// </summary>
     public class CustomDateTimeConverter : DateTimeConverterBase
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (value is DateTime dt)
             {
-                // IdeaGen expects the ticks to be surrounded by quotation marks.
+                // Ideagen expects the ticks to be surrounded by quotation marks.
                 writer.WriteRawValue($"\"{dt.Ticks}\"");
             }
             writer.WriteRaw(string.Empty);

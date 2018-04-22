@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
+    /// <summary>
+    /// Controller for uploading and downloading attachments
+    /// </summary>
     [Route("attachments")]
     public class AttachmentsController : Controller
     {
@@ -20,29 +23,7 @@ namespace AileronAirwaysWeb.Controllers
             _flash = flash;
         }
 
-        // GET: Attachments
-        [HttpGet("{eventId}")]
-        public ActionResult Index(string eventId)
-        {
-            var @event = _repo.GetTimelineEventWithAttachments(eventId);
-            var attachments = @event.Attachments.OrderBy(a => a.Title).ToList();
-
-            ViewBag.EventId = eventId;
-            ViewBag.TimelineId = @event.TimelineId;
-
-            return View(attachments);
-        }
-
-        [HttpGet("{eventId}/details/{attachmentId}")]
-        public ActionResult Details(string eventId, string attachmentId)
-        {
-            var attachment = _repo.GetAttachment(attachmentId);
-
-            ViewBag.EventId = eventId;
-
-            return View(attachment);
-        }
-
+        // GET: Attachments/Download/<ID>
         [HttpGet("download/{attachmentId}")]
         public async Task<ActionResult> Download(string attachmentId)
         {
@@ -76,7 +57,7 @@ namespace AileronAirwaysWeb.Controllers
             return RedirectToAction("Details", "TimelineEvents", new { eventId, timelineId = @event.TimelineId, tab });
         }
 
-        // GET: Attachments/Delete/5
+        // GET: Attachments/<ID>/Delete/<ID>
         [HttpGet("{eventId}/delete/{attachmentId}")]
         public ActionResult Delete(string eventId, string attachmentId)
         {
@@ -87,7 +68,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(attachment);
         }
 
-        // POST: Attachments/Delete/5
+        // POST: Attachments/<ID>/Delete/<ID>
         [HttpPost("{eventId}/delete/{attachmentId}")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string eventId, string attachmentId, IFormCollection collection)

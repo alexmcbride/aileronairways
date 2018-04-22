@@ -50,6 +50,7 @@ namespace AileronAirwaysWeb
                     template: "{controller=Timelines}/{action=Index}/{id?}");
             });
 
+            // Init middlewear that writes Exception message to Debug window.
             app.UseInitializeDatabaseMiddleware(Configuration, serviceProvider);
         }
 
@@ -59,19 +60,15 @@ namespace AileronAirwaysWeb
             var serviceProvider = services.BuildServiceProvider();
             var env = serviceProvider.GetService<IHostingEnvironment>();
 
+            // Init DB context.
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<ApplicationDbContext>()
-                .AddDefaultTokenProviders();
 
             // Add application services.
             services.AddTransient<IEmailSender, EmailSender>();
 
             //options is for https connection allows temp data use
-            services.AddMvc(
-            ).AddSessionStateTempDataProvider();
+            services.AddMvc().AddSessionStateTempDataProvider();
 
             services.AddSession();
 
@@ -82,6 +79,7 @@ namespace AileronAirwaysWeb
                 Configuration.GetValue<string>("TenantId"),
                 env.WebRootPath));
 
+            // Add timeline repo
             services.AddTransient<TimelineRepository>();
 
             // Add service for handling flash temp messages.

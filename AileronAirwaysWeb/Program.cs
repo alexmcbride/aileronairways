@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 namespace AileronAirwaysWeb
 {
     public class Program
-    {   //unsecure connection
+    {
         public static void Main(string[] args)
         {
             BuildWebHost(args).Run();
