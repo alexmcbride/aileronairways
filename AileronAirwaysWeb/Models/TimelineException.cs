@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace AileronAirwaysWeb.Models
 {
+    /// <summary>
+    /// An exception that can be thrown by the timeline code.
+    /// </summary>
     [Serializable]
     public class TimelineException : Exception
     {

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWebTests.Services
 {
+    /// <summary>
+    /// Tests for the timeline service, that interacts with Ideagen API.
+    /// </summary>
     [TestClass]
     public class TimelineServiceTests
     {

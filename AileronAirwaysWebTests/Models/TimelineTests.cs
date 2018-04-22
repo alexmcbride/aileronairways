@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWebTests.Models
 {
+    /// <summary>
+    /// Tests for the Timeline model class.
+    /// </summary>
     [TestClass]
     public class TimelineTests
     {

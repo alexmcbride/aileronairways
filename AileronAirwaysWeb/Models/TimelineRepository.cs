@@ -11,9 +11,12 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Models
 {
+    /// <summary>
+    /// Class following repository pattern that encapsulates both connection with the API and the SQL Server cache.
+    /// </summary>
     public class TimelineRepository
     {
-        private const int OfflineCacheMinutes = 1;
+        private const int OfflineCacheMinutes = 1; // Minutes to stop offline cache data.
 
         private readonly ITimelineService _api;
         private readonly ApplicationDbContext _context;
@@ -41,18 +44,9 @@ namespace AileronAirwaysWeb.Models
             _config = config;
         }
 
-        public async Task InitializeAsync()
-        {
-            // If no timelines in DB, then populate from API.
-            if (!await _context.Timelines.AnyAsync())
-            {
-                var timelines = await Timeline.GetAllTimelinesAndEventsAsync(_api);
-
-                await _context.AddRangeAsync(timelines);
-                await _context.SaveChangesAsync();
-            }
-        }
-
+        /// <summary>
+        /// Initializes the database, downloads all timelines, events, and attachments, and inserts them into the database.
+        /// </summary>
         public void Initialize()
         {
             Debug.WriteLine("TimelineRepository: dropping and recreating DB");
@@ -111,6 +105,9 @@ namespace AileronAirwaysWeb.Models
             return _context.TimelineEvents.Include(e => e.Attachments).SingleOrDefault(e => e.Id == id);
         }
 
+        /// <summary>
+        /// Gets next event in the timeline after the one specified.
+        /// </summary>
         public Task<TimelineEvent> GetNextEventAsync(TimelineEvent @event)
         {
             return _context.TimelineEvents
@@ -118,8 +115,11 @@ namespace AileronAirwaysWeb.Models
                 .Where(e => e.EventDateTime > @event.EventDateTime)
                 .Where(e => e.TimelineId == @event.TimelineId)
                 .FirstOrDefaultAsync();
-        }
-
+        }        
+        
+        /// <summary>
+        /// Gets previous event in the timeline before the one specified.
+        /// </summary>
         public Task<TimelineEvent> GetPreviousEventAsync(TimelineEvent @event)
         {
             return _context.TimelineEvents
@@ -129,6 +129,9 @@ namespace AileronAirwaysWeb.Models
                 .LastOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Creates a new timeline.
+        /// </summary>
         public async Task<TimelineEvent> CreateTimelineEventAsync(string title, string description, DateTime eventDateTime, string location, string timelineId)
         {
             var timelineEvent = await TimelineEvent.CreateAndLinkAsync(_api, title, description, eventDateTime, location, timelineId);
@@ -145,6 +148,9 @@ namespace AileronAirwaysWeb.Models
             return timelineEvent;
         }
 
+        /// <summary>
+        /// Edits the specified timeline event, saving it to API and cache.
+        /// </summary>
         public async Task EditTimelineEventAsync(TimelineEvent evt)
         {
             await evt.EditAsync(_api);
@@ -152,6 +158,9 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Edits the specified timeline event location, saving it to API and cache.
+        /// </summary>
         public async Task EditEventLocationAsync(TimelineEvent evt)
         {
             await evt.EditLocationAsync(_api);
@@ -159,6 +168,9 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Deletes the specified timeline event from API and cache.
+        /// </summary>
         public async Task DeleteTimelineEventAsync(TimelineEvent evt)
         {
             await TimelineEvent.UnlinkAndDeleteAsync(_api, evt.TimelineId, evt.Id);
@@ -172,16 +184,29 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Gets the attachment from the cache with the specified ID.
+        /// </summary>
         public Attachment GetAttachment(string attachmentId)
         {
             return _context.Attachments.Find(attachmentId);
         }
 
+        /// <summary>
+        /// Gets all the attachments from the cache for the specified event ID.
+        /// </summary>
         public IQueryable<Attachment> GetAttachments(string eventId)
         {
             return _context.Attachments.Where(a => a.TimelineEventId == eventId);
         }
 
+        /// <summary>
+        /// Creates the attachment on the cache and the API.
+        /// </summary>
+        /// <param name="eventId">The ID of the event to attach the attachment to</param>
+        /// <param name="fileName">The path of the uploaded file on the server</param>
+        /// <param name="stream">A stream object holding the file data</param>
+        /// <returns>An object containing details about the uploaded attachment</returns>
         public async Task<Attachment> CreateAttachmentAsync(string eventId, string fileName, Stream stream)
         {
             var attachment = await Attachment.CreateAndUploadAsync(_api, eventId, Path.GetFileName(fileName), stream);
@@ -190,6 +215,7 @@ namespace AileronAirwaysWeb.Models
             var @event = await _context.TimelineEvents.FindAsync(eventId);
             attachment.TimelineEvent = @event;
 
+            // Increment correct counter value.
             if (attachment.IsImage)
             {
                 @event.AttachmentImagesCount++;
@@ -207,6 +233,9 @@ namespace AileronAirwaysWeb.Models
             return attachment;
         }
 
+        /// <summary>
+        /// Downloads the attachment with the specified ID.
+        /// </summary>
         public async Task<Attachment> DownloadAttachmentAsync(string attachmentId)
         {
             var attachment = GetAttachment(attachmentId);
@@ -214,6 +243,9 @@ namespace AileronAirwaysWeb.Models
             return attachment;
         }
 
+        /// <summary>
+        /// Deletes the attachment with the specified ID.
+        /// </summary>
         public async Task DeleteAttachmentAsync(string attachmentId)
         {
             var attachment = await Attachment.GetAttachmentAsync(_api, attachmentId);
@@ -222,6 +254,8 @@ namespace AileronAirwaysWeb.Models
             // Remove from DB and update counters
             _context.Attachments.Remove(attachment);
             var @event = await _context.TimelineEvents.FindAsync(attachment.TimelineEventId);
+
+            // Decrement the counter values.
             if (attachment.IsImage)
             {
                 @event.AttachmentImagesCount--;
@@ -234,6 +268,9 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Edit the description of a timeline event, saving it to API and cache.
+        /// </summary>
         public async Task EditDescriptionAsync(TimelineEvent @event)
         {
             await @event.EditDescriptionAsync(_api);
@@ -241,6 +278,9 @@ namespace AileronAirwaysWeb.Models
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Adds an API event, used to track issues with the API over time.
+        /// </summary>
         private Task AddApiEventAsync(string name)
         {
             _context.ApiEvents.Add(new ApiEvent
@@ -252,6 +292,9 @@ namespace AileronAirwaysWeb.Models
             return _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Finds the most recent API event in the database.
+        /// </summary>
         private Task<ApiEvent> FindRecentOfflineEventAsync()
         {
             var span = TimeSpan.FromMinutes(OfflineCacheMinutes);
@@ -261,6 +304,9 @@ namespace AileronAirwaysWeb.Models
                 .FirstOrDefaultAsync();
         }
 
+        /// <summary>
+        /// Checks if the API is offline, but trying to download some data and then catching any errors.
+        /// </summary>
         public async Task<bool> IsOfflineAsync()
         {
             if (_config.GetValue<bool>("TestReadonlyMode"))

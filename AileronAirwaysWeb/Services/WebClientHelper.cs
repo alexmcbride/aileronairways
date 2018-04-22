@@ -5,8 +5,14 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Services
 {
+    /// <summary>
+    /// Wrapper for WebClient to make it testable.
+    /// </summary>
     public class WebClientHelper : IWebClientHelper
     {
+        /// <summary>
+        /// Downloads a string from the webclient, while letting you set some header stuff.
+        /// </summary>
         public Task<string> DownloadStringAsync(string url, NameValueCollection headers)
         {
             using (WebClient client = new WebClient())
@@ -16,6 +22,9 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Uploads a string and lets you set the request body.
+        /// </summary>
         public Task<string> UploadStringAsync(string url, string body)
         {
             using (WebClient client = new WebClient())
@@ -24,6 +33,9 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Gets a status code from a WebResponse.
+        /// </summary>
         public HttpStatusCode GetStatusCode(WebResponse response)
         {
             if (response is HttpWebResponse http)
@@ -33,6 +45,9 @@ namespace AileronAirwaysWeb.Services
             return 0;
         }
 
+        /// <summary>
+        /// Gets a message from a WebResponse.
+        /// </summary>
         public string GetResponseMessage(WebResponse response)
         {
             if (response is HttpWebResponse http)
@@ -46,6 +61,9 @@ namespace AileronAirwaysWeb.Services
             return null;
         }
 
+        /// <summary>
+        /// Downloads a file to disk
+        /// </summary>
         public Task DownloadFileAsync(string url, string filename)
         {
             using (var client = new WebClient())
@@ -54,6 +72,9 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Uploads a file from disk.
+        /// </summary>
         public Task UploadFileAsync(string url, string filename)
         {
             using (var client = new WebClient())

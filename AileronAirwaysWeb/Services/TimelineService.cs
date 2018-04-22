@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Services
 {
+    /// <summary>
+    /// Class to represent the Ideagen API, and dealing with attachments.
+    /// </summary>
     public class TimelineService : ITimelineService
     {
         private readonly IWebClientHelper _helper;
@@ -18,6 +21,9 @@ namespace AileronAirwaysWeb.Services
         private readonly string _authToken;
         private readonly string _tenantId;
 
+        /// <summary>
+        /// Gets the folder where cache files are stored.
+        /// </summary>
         public string CacheFolder { get; private set; }
 
         public TimelineService(string baseUrl, string authToken, string tenantId, string rootFolder)
@@ -53,6 +59,9 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Sends an HTTP PUT to the specified resource with the request serialised as JSON, then returns the response.
+        /// </summary>
         public async Task<string> PutJsonAsync(string resource, object request)
         {
             // Turn request into JSON and add auth stuff.
@@ -74,11 +83,17 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Sends an HTTP GET to the specified resource, then returns the response.
+        /// </summary>
         public Task<string> GetJsonAsync(string resource)
         {
             return GetJsonAsync(resource, new NameValueCollection());
         }
 
+        /// <summary>
+        /// Sends an HTTP GET to the specified resource, with the header values in the collection, then returns the response.
+        /// </summary>
         public async Task<string> GetJsonAsync(string resource, NameValueCollection headers)
         {
             // Add auth stuff to headers.
@@ -99,51 +114,52 @@ namespace AileronAirwaysWeb.Services
             }
         }
 
+        /// <summary>
+        /// Uploads a file.
+        /// </summary>
         public Task UploadFileAsync(string url, string filename)
         {
             return _helper.UploadFileAsync(url, filename);
         }
 
+        /// <summary>
+        /// Downloads a file.
+        /// </summary>
         public Task DownloadFileAsync(string url, string filename)
         {
             return _helper.DownloadFileAsync(url, filename);
         }
 
+        /// <summary>
+        /// Checks if a file exists.
+        /// </summary>
         public bool FileExists(string filename)
         {
             return File.Exists(filename);
         }
 
+        /// <summary>
+        /// Deletes a file.
+        /// </summary>
         public void FileDelete(string filename)
         {
             File.Delete(filename);
         }
 
+        /// <summary>
+        /// Opens a stream for writing a file.
+        /// </summary>
         public Stream FileOpenWrite(string filename)
         {
             return File.OpenWrite(filename);
         }
 
+        /// <summary>
+        /// Disposes a stream.
+        /// </summary>
         public void DisposeStream(Stream stream)
         {
             stream.Dispose();
-        }
-
-        public async Task<bool> IsOfflineAsync()
-        {
-            const int timeout = 1024;
-            using (Ping ping = new Ping())
-            {
-                var url = new Uri(_baseUrl);
-                var buffer = Encoding.ASCII.GetBytes("ping");
-                var reply = await ping.SendPingAsync(url.Host, timeout, buffer, new PingOptions
-                {
-                    Ttl = 64,
-                    DontFragment = false,
-                });
-                Debug.WriteLine(reply.Status);
-                return reply.Status != IPStatus.Success;
-            }
         }
     }
 }

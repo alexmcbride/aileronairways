@@ -10,18 +10,21 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWeb.Controllers
 {
+    /// <summary>
+    /// Controller for adding, editing, deleting timeline events.
+    /// </summary>
     public class TimelineEventsController : Controller
     {
         private readonly TimelineRepository _repo;
         private readonly IFlashService _flash;
 
-
-        public TimelineEventsController(TimelineRepository repo, IFlashService flash, ITimelineService api)
+        public TimelineEventsController(TimelineRepository repo, IFlashService flash)
         {
             _repo = repo;
             _flash = flash;
         }
 
+        // GET: Timelines/<ID>/Events
         [HttpGet("Timelines/{timelineId}/Events")]
         public ActionResult Index(string timelineId)
         {
@@ -30,6 +33,7 @@ namespace AileronAirwaysWeb.Controllers
             return View(events);
         }
 
+        // GET: Timelines/<ID>/Events/<ID>
         [HttpGet("Timelines/{timelineId}/Events/{eventId}")]
         public async Task<ActionResult> Details(string timelineId, string eventId, string tab)
         {
@@ -52,6 +56,7 @@ namespace AileronAirwaysWeb.Controllers
             return View(timelineEvent);
         }
 
+        // GET: Timelines/<ID>/Events/Create
         [HttpGet("Timelines/{timelineId}/Events/Create")]
         public ActionResult Create(string timelineId)
         {
@@ -63,6 +68,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
+        // GET: Timelines/<ID>/Events/Create
         [HttpPost("Timelines/{timelineId}/Events/Create")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(string timelineId, [Bind("Title,Description,EventDateTime")] TimelineEventViewModel vm)
@@ -84,7 +90,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        //GET: Timelines/Edit/5
+        // GET: Timelines/<ID>/Events/<ID>/Edit
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Edit")]
         public ActionResult Edit(string timelineId, string eventId)
         {
@@ -101,7 +107,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        //POST: Timelines/Edit/5
+        //POST: Timelines/<ID>/Events/<ID>/Edit
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Edit")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(string timelineId, string eventId, [Bind("Title,Description,EventDateTime")]  TimelineEventViewModel vm)
@@ -122,7 +128,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
-        // GET: Timelines/Delete/5
+        // GET: Timelines/<ID>/Events/<ID>/Delete
         [HttpGet("Timelines/{timelineId}/Events/{eventId}/Delete")]
         public ActionResult Delete(string timelineId, string eventId)
         {
@@ -139,7 +145,7 @@ namespace AileronAirwaysWeb.Controllers
             });
         }
 
-        // POST: Timelines/Delete/5
+        // POST: Timelines/<ID>/Events/<ID>/Delete
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Delete(string timelineId, string eventId, IFormCollection collection)
@@ -152,6 +158,7 @@ namespace AileronAirwaysWeb.Controllers
             return Ok("OK " + eventId);
         }
 
+        // Partial GET: /TimelineEvents/Description/<ID>
         [HttpGet]
         public ActionResult Description(string id)
         {
@@ -160,6 +167,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView("Description", @event);
         }
 
+        // Partial GET: /TimelineEvents/DescriptionEdit/<ID>
         [HttpGet]
         public ActionResult DescriptionEdit(string id)
         {
@@ -172,6 +180,7 @@ namespace AileronAirwaysWeb.Controllers
             });
         }
 
+        // Partial POST: /TimelineEvents/DescriptionEditPost/<ID>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DescriptionEditPost(string id, [Bind("Id,Description")] EditDescriptionViewModel vm)
@@ -187,7 +196,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView("DescriptionEdit", vm);
         }
 
-        //POST: Timelines/Edit/5
+        // Partial POST: Timelines/<ID>/Events/<ID>/EditEventLocation
         [HttpPost("Timelines/{timelineId}/Events/{eventId}/EditEventLocation")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> EditEventLocation(string eventId, [Bind("Location")]  TimelineEventLocationViewModel vm)
@@ -206,6 +215,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView(vm);
         }
 
+        // Partial GET: TimelineEvents/TimelineZoomedInPartial/<ID>
         [HttpGet]
         public ActionResult TimelineZoomedInPartial(string id)
         {
@@ -214,6 +224,7 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView("_TimelineZoomedIn", events);
         }
 
+        // Partial GET: TimelineEvents/TimelineZoomedOutPartial/<ID>
         [HttpGet]
         public ActionResult TimelineZoomedOutPartial(string id)
         {
@@ -222,6 +233,9 @@ namespace AileronAirwaysWeb.Controllers
             return PartialView("_TimelineZoomedOut", events);
         }
 
+        /// <summary>
+        /// Prepares the timeline event stuff used by zoomed in and out partials
+        /// </summary>
         private IEnumerable<TimelineEvent> LoadTimelineEventsFromRepo(string id)
         {
             var timeline = _repo.GetTimelineWithEvents(id);
@@ -234,6 +248,7 @@ namespace AileronAirwaysWeb.Controllers
             return events;
         }
 
+        // Partial GET: TimelineEvents/FlashMessages
         [HttpGet]
         public ActionResult FlashMessages()
         {
@@ -244,6 +259,7 @@ namespace AileronAirwaysWeb.Controllers
             return Ok();
         }
 
+        // Partial GET: TimelineEvents/EventsSidebar/<ID>
         [HttpGet]
         public ActionResult EventsSidebar(string id)
         {

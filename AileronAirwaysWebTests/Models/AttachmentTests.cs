@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AileronAirwaysWebTests.Models
 {
+    /// <summary>
+    /// Tests for the Attachment model class.
+    /// </summary>
     [TestClass]
     public class AttachmentTests
     {

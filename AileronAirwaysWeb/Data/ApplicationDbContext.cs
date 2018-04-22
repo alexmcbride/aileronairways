@@ -1,10 +1,12 @@
 ﻿using AileronAirwaysWeb.Models;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace AileronAirwaysWeb.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    /// <summary>
+    /// Context for communicating with the database.
+    /// </summary>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
